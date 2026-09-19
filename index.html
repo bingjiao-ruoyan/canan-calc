@@ -16,7 +16,7 @@
 
 <link rel="manifest" href="manifest.webmanifest" data-page-node-id="Ujjb7vN2J2zFun44wCBIv8">
 
-<title>陪伴服3.2.4版本 · 残梦伤害计算器 · 心象 / 藏品 / 源质库</title>
+<title>陪伴服3.3.0版本 · 残梦伤害计算器 · 心象 / 藏品 / 源质库</title>
 
 <style>
 
@@ -838,6 +838,9 @@
 #authGate .ag-msg{min-height:18px;margin-top:10px;font-size:12px;color:#ef4444}
 #authGate .ag-foot{margin-top:14px;padding-top:12px;border-top:1px dashed #e3e9f5;font-size:11px;color:#94a3b8;line-height:1.7}
 #authGate .ag-dev{font-family:ui-monospace,Consolas,monospace;color:#64748b;letter-spacing:.5px}
+#authBadge{display:inline-flex;align-items:center;margin-left:8px;padding:3px 9px;font-size:11px;font-weight:600;color:#475569;background:#f1f5f9;border:1px solid #e2e8f0;border-radius:999px;cursor:default;vertical-align:middle;white-space:nowrap;font-family:"Microsoft YaHei","PingFang SC","Hiragino Sans GB","Source Han Sans SC",system-ui,-apple-system,sans-serif}
+#authBadge.warn{color:#b45309;background:#fffbeb;border-color:#fde68a}
+#authBadge.exp{color:#dc2626;background:#fef2f2;border-color:#fecaca}
 </style>
 <div id="authGate" data-page-node-id="authGate">
   <div class="ag-card">
@@ -852,8 +855,8 @@
     <button id="authBtn" type="button" data-page-node-id="authBtn">进入</button>
     <div class="ag-msg" id="authMsg"></div>
     <div class="ag-foot">
-      本设备激活码 <span class="ag-dev" id="authDev">····</span><br>
-      更换设备或激活到期后需重新输入口令
+      授权由服务器校验 <span class="ag-dev" id="authDev">····</span><br>
+      <span id="authRemain">首次使用需联网校验一次</span>
     </div>
   </div>
 </div>
@@ -867,7 +870,7 @@
 
     <div data-page-node-id="U3DQMnMQczfqNwA08GXIhj">
 
-      <h1 id="title" data-page-node-id="efK7lKccgtoypss7lhPAmx">残梦伤害计算器 <span style="font-size:12px;font-weight:700;color:#fff;background:#c0392b;border-radius:4px;padding:2px 7px;vertical-align:middle" data-page-node-id="8L10itvWf3BpMcGnSmAd9b">陪伴服3.2.4版本</span> <span style="font-size:12px;font-weight:700;color:#fff;background:#7c3aed;border-radius:4px;padding:2px 7px;vertical-align:middle" data-page-node-id="blIaQao7a9SrQ0lYXyABBd">含武装</span> <span style="font-size:11px;color:#7c3aed;vertical-align:middle" title="v1.0.7：修复出招表武装列乱码；新增角色组后武装配置区；武装增益已完整接入伤害公式（主战主动窗口 + 护卫被动条件触发 + 暴击分段结算）" data-page-node-id="1trZvOMvaDdDGFqf7a0bwj">v1.0.7</span></h1>
+      <h1 id="title" data-page-node-id="efK7lKccgtoypss7lhPAmx">残梦伤害计算器 <span style="font-size:12px;font-weight:700;color:#fff;background:#c0392b;border-radius:4px;padding:2px 7px;vertical-align:middle" data-page-node-id="8L10itvWf3BpMcGnSmAd9b">陪伴服3.3.0版本</span> <span style="font-size:12px;font-weight:700;color:#fff;background:#7c3aed;border-radius:4px;padding:2px 7px;vertical-align:middle" data-page-node-id="blIaQao7a9SrQ0lYXyABBd">含武装</span> <span style="font-size:11px;color:#7c3aed;vertical-align:middle" title="v1.0.7：修复出招表武装列乱码；新增角色组后武装配置区；武装增益已完整接入伤害公式（主战主动窗口 + 护卫被动条件触发 + 暴击分段结算）" data-page-node-id="1trZvOMvaDdDGFqf7a0bwj">v1.0.7</span></h1>
 
     </div>
 
@@ -878,7 +881,7 @@
 
       <button class="btn danger" onclick="resetAll()" data-page-node-id="OkbsuyOPXHN6p8PhIKSPWc">重置</button>
       <button class="btn" onclick="showChangelog()" title="查看近期版本更新重点（按版本条目罗列）" data-page-node-id="v243ChangelogBtn">📋 更新日志</button>
-      <span style="font-size:11px;color:#b45309;vertical-align:middle" title="v2.3.7 起（沿用至 3.2.4）：每个版本使用独立的本地存档，打开新版本会自动使用全新默认数据（无需重置）；旧版本文件仍读自己的存档。若当前界面数据异常，点击「重置」可手动恢复为本版本默认值。" data-page-node-id="OkbsuyOPXHN6p8PhIKSPWc2">⚠️ 使用前先点击「重置」刷新为最新版本</span>
+      <span style="font-size:11px;color:#b45309;vertical-align:middle" title="v2.3.7 起（沿用至 3.3.0）：每个版本使用独立的本地存档，打开新版本会自动使用全新默认数据（无需重置）；旧版本文件仍读自己的存档。若当前界面数据异常，点击「重置」可手动恢复为本版本默认值。" data-page-node-id="OkbsuyOPXHN6p8PhIKSPWc2">⚠️ 使用前先点击「重置」刷新为最新版本</span>
 
     </div>
 
@@ -1812,32 +1815,19 @@ const ROLE_GROUPS_DEFAULT = [
 
 
 /* 当前程序版本：页眉徽标、模式标题、导出页脚戳统一读取此常量 */
-const APP_VER = '3.2.4';
+const APP_VER = '3.3.0';
 
 /* v2.4.3：更新日志数据（按版本条目罗列近期更新重点）。点击「📋 更新日志」按钮弹出公告框。 */
 const CHANGELOG = [
-  {ver:'3.2.4', date:'2026-09-19', items:[
-    '【补录】浅间智心象「θ9-射杀巫女」入册（第 54 张 · Lv20 推算口径），归属浅间智并附卡面；属性 / 被动 / 四技能按标定曲线换算。',
-    '【改名】食蜂操祈按游戏原文更名：技能2 类别改「群体纯净」、技能3 类别改「前排攻击」、专属天赋「精神抑制」改「精神压制」；群体命中排数白名单补入「群体纯净」，打分口径零漂移。',
-    '【术语】食蜂操祈技能1 与觉醒段的「精神疲劳」统一更正为「精神耗弱」。',
+  {ver:'3.3.0', date:'2026-09-19', items:[
+    '【授权】启动校验改为服务端验证：本机不再内嵌任何凭据，改为保存服务端签发的授权令牌；离线仍可进入（宽限 3 天），超期后自动联网复核。',
+    '【维护】管理员可对单个授权单独停用、改期或吊销，不必更换主凭据；调整即时生效，其他使用者不受影响。',
+    '【体验】校验卡片与页眉徽标改按服务端返回的到期日显示剩余天数（≤7 天转黄、≤3 天转红），并提示本机离线可用天数。',
   ]},
-  {ver:'3.2.3', date:'2026-09-19', items:[
-    '【更新日志】已归档的四段里程碑（3.1 / 3.0 / 2.6.6.x / 2.3.7~2.6.6）由逐版本条目缩编为「系列总述」：只留版本范围、口径反转与里程碑级结论，条目 80 → 31、字符 6436 → 3157。',
-    '【回归口径】历史套件对归档日志的「逐版本前缀定位」统一改为「系列级定位」，主旨关键词断言保留；现役段仍受均值 ≤80 / 单条 ≤150 约束，归档总述不计入均值。',
-  ]},
-  {ver:'3.2.2', date:'2026-09-19', items:[
-    '【木桩环境】新增打木桩假设：满血、不会被击杀、不会攻击、无增益；条件增伤按此逐条判定，不再一律计入。',
-    '【觉醒条件闸门】补齐「敌方无增益 / 自身处于增益 / 自身拥有护盾 / 自身持有宝珠」四类；「未处于增益」反向单独分流；击杀类因木桩不死亡不计入。',
-    '【天赋条件求值】改逐条求值：敌方血量高于X%类恢复计入（木桩满血），「受到攻击」类不再误计入，「使用升华技后」改窗口判定。',
-    '【口径边界】「使用某技能后」型按排表窗口判定（黑猫·夜魔女王 需先放「黑暗献祭」）；觉醒「提升至X%」覆写继承基础条件，否则归零。',
-  ]},
-  {ver:'3.2.1', date:'2026-09-19', items:[
-    '【觉醒·双刀桐人】「水平扇形斩」原按无条件计入，现按原文限定：仅 3 敌计入，1/2 敌不加成。',
-    '【发布】本版已上线 Cloudflare Pages（canan-calc.pages.dev），线上即最新版本。',
-  ]},
-  {ver:'3.2.0b', date:'2026-09-19', items:[
-    '【天赋】食蜂操祈「精神抑制」改按原文时序：20% 易伤自首次出手【之后】逐拍计入（当拍不吃）；常驻型（和服亚丝娜等）逐位不变。',
-    '【更新日志】3.1 系列（11 段 / 23 条）归并为 1 条里程碑「3.1 ~ 3.1.10」。',
+  {ver:'3.2.0 ~ 3.2.5', date:'2026-09-19', archived:true, items:[
+    '【口径】3.2.2 确立木桩环境四假设（满血 / 不被击杀 / 不攻击 / 无增益）并改天赋逐条求值，补齐四类觉醒条件闸门；3.2.0b 食蜂操祈「精神抑制」改按首次出手之后逐拍计入。',
+    '【数据】3.2.4 浅间智心象「θ9-射杀巫女」入册（第 54 张）并按游戏原文更名食蜂操祈（技能2 类别改「群体纯净」、同步群体命中排数白名单）；3.2.1 双刀桐人「水平扇形斩」按原文限定仅 3 敌计入。',
+    '【日志与授权】3.2.3 已归档四段里程碑缩编为「系列总述」；3.2.5 新增本机授权剩余天数显示（页眉徽标 + 卡片页脚）并扩充一条备用凭据。',
   ]},
   {ver:'3.1 ~ 3.1.10', date:'2026-09-17 ~ 09-19', archived:true, items:[
     '【群体技】3.1.7 定「群体攻击每敌恒定 ÷3、群体分担按现存敌数均摊」并取消均摊豁免；3.1.9 按命中排数补全（前中攻击双体 ÷2、其它群体类 ÷3），算分改「总伤害」＝总倍率 × min(敌数,命中排数) ÷ 命中排数。',
@@ -32383,121 +32373,91 @@ window.__build = buildDefaultCharDB;
 </script>
 
 <script data-auth-gate="1">
-/* ===== v3.2.2 访问口令闸门（B 方案：口令 + 设备绑定）=====
-   设计
-     · 口令只以 SHA-256(盐 + '|pw|' + 口令) 的十六进制形式内嵌 —— 明文口令不写入文件；
-     · 首次在本设备输对口令 → 写入 localStorage 激活记录（设备指纹 + 口令哈希 + 时间戳）；
-     · 激活记录与设备指纹绑定 ⇒ 换设备需重新激活（重新输口令即可）；
-     · 口令变更（内嵌哈希变了）或超过 AUTH_DAYS 天 ⇒ 记录自动失效，需重新激活。
-     · 口令为纯 ASCII（英文 / 数字 / 连字符）—— 密码型输入框不弹输入法候选框，中文口令无法录入。
-     · 口令支持多条（AUTH_HASHES 白名单）：主口令与备用口令均可激活本机，激活记录里存的是命中的那一条哈希。
+/* ============================================================================
+   残梦计算器 · 访问口令闸门（v3.3.0 · 服务端校验版）
+   ---------------------------------------------------------------------------
+   机制
+     · 口令由服务端校验（Cloudflare Pages Functions：/api/auth 与 /api/verify）；
+       口令与任何可离线比对的凭据都【不写入本文件】—— 本文件里不存在任何口令哈希。
+     · 输对口令 → 服务端签发 HMAC 签名 token → 本机只保存 token / 身份标签 /
+       到期日 / 上次成功联网校验时间。
+     · 本地宽限 GRACE_DAYS 天：距上次成功联网校验未超宽限、且未到到期日 ⇒ 可离线进入；
+       超宽限或本机无记录 ⇒ 必须联网复核一次。
+     · 管理员在口令后台「吊销 / 暂停 / 改期」即时生效：本机一旦联网复核即被拦下。
+     · 口令为纯 ASCII（英文 / 数字 / 连字符）—— 密码型输入框不弹输入法候选框。
    诚实说明
-     这是纯前端闸门，用途是挡「随手打开 / 随意转发」，不是密码学意义上的安全边界：
-     能读到源码的人可以删掉本段绕过。要真正控制分发必须上服务端。
-   ★ 盐值与口令哈希（多条）均已注入实际值；明文不落本文件。 */
+     本闸门保护的是「入口」，不是「内容」：页面源码可被完整下载，删掉本段即可绕过。
+     用途是挡「随手打开 / 随意转发」，不是密码学意义上的安全边界。
+   ★ 服务端地址见下方 AUTH_API；GitHub Pages 侧为跨域调用（服务端已配 CORS 白名单）。 */
+
 (function(){
   'use strict';
-  var AUTH_SALT = 'e69277bf01becf84b0efaf01aa385d58';
-  var AUTH_HASH  = 'c2d2e967c64e1532903b443d2225734bc84081cf432677412100c15747dfe29f';
-  var AUTH_HASH2 = 'bfa321ecc8e43c493ae8b37bdf6a1f0a9cd0f5e7acd999d9b94cb42795daba46';
-  /* 口令白名单：任一命中即可激活（数组顺序无优先级含义） */
-  var AUTH_HASHES = [AUTH_HASH, AUTH_HASH2];
-  var AUTH_DAYS = 30;                 /* 免登录有效期（天）；<=0 表示永久有效 */
-  var AUTH_KEY  = 'czy_auth_dev';     /* 与版本号无关：升级版本不强制重新登录 */
+  /* v3.3.0：口令改由服务端校验 —— 本文件不再内嵌任何口令哈希，也不做本地口令比对。
+     本机只保存服务端签发的 token 与「上次成功联网校验时间」；口令明文一律不落盘。 */
+  var AUTH_API    = 'https://canan-calc.pages.dev/api';  /* 服务端接口（GitHub Pages 侧为跨域） */
+  var AUTH_KEY    = 'czy_auth_tok';   /* 与版本号无关：升级版本不强制重新登录（键名变更 ⇒ 老格式记录自动作废一次） */
+  var GRACE_DAYS  = 3;                /* 本地宽限天数：0 = 每次打开都联网 */
+  var NET_TIMEOUT = 9000;             /* 单次请求超时（毫秒） */
 
-  /* ---------- SHA-256（纯 JS，UTF-8 输入；不依赖 crypto.subtle，file:// 下同样可用） ---------- */
-  var _K = [
-    0x428a2f98,0x71374491,0xb5c0fbcf,0xe9b5dba5,0x3956c25b,0x59f111f1,0x923f82a4,0xab1c5ed5,
-    0xd807aa98,0x12835b01,0x243185be,0x550c7dc3,0x72be5d74,0x80deb1fe,0x9bdc06a7,0xc19bf174,
-    0xe49b69c1,0xefbe4786,0x0fc19dc6,0x240ca1cc,0x2de92c6f,0x4a7484aa,0x5cb0a9dc,0x76f988da,
-    0x983e5152,0xa831c66d,0xb00327c8,0xbf597fc7,0xc6e00bf3,0xd5a79147,0x06ca6351,0x14292967,
-    0x27b70a85,0x2e1b2138,0x4d2c6dfc,0x53380d13,0x650a7354,0x766a0abb,0x81c2c92e,0x92722c85,
-    0xa2bfe8a1,0xa81a664b,0xc24b8b70,0xc76c51a3,0xd192e819,0xd6990624,0xf40e3585,0x106aa070,
-    0x19a4c116,0x1e376c08,0x2748774c,0x34b0bcb5,0x391c0cb3,0x4ed8aa4a,0x5b9cca4f,0x682e6ff3,
-    0x748f82ee,0x78a5636f,0x84c87814,0x8cc70208,0x90befffa,0xa4506ceb,0xbef9a3f7,0xc67178f2];
-  function rrot(x, n){ return (x >>> n) | (x << (32 - n)); }
-  function utf8Bytes(str){
-    var out = [], i, c, c2, cp;
-    for(i = 0; i < str.length; i++){
-      c = str.charCodeAt(i);
-      if(c < 0x80){ out.push(c); }
-      else if(c < 0x800){ out.push(0xc0 | (c >> 6), 0x80 | (c & 63)); }
-      else if(c >= 0xd800 && c <= 0xdbff && i + 1 < str.length){
-        c2 = str.charCodeAt(i + 1);
-        cp = 0x10000 + ((c - 0xd800) << 10) + (c2 - 0xdc00);
-        out.push(0xf0 | (cp >> 18), 0x80 | ((cp >> 12) & 63), 0x80 | ((cp >> 6) & 63), 0x80 | (cp & 63));
-        i++;
-      }
-      else { out.push(0xe0 | (c >> 12), 0x80 | ((c >> 6) & 63), 0x80 | (c & 63)); }
-    }
-    return out;
+  /* ---------- 本机授权记录（token 版） ----------
+     只存：服务端 token / 身份标签 / 到期日(unix 秒，0=永久) / 写入时间 / 上次成功联网校验时间。
+     不存口令、不存任何可离线比对的凭据；清掉浏览器数据 ⇒ 重新输口令即可。 */
+  function rec(){
+    var raw;
+    try{ raw = localStorage.getItem(AUTH_KEY); }catch(e){ return null; }
+    if(!raw) return null;
+    try{ var o = JSON.parse(raw); return (o && typeof o === 'object' && o.tok) ? o : null; }catch(e){ return null; }
   }
-  function sha256hex(msg){
-    var H = [0x6a09e667,0xbb67ae85,0x3c6ef372,0xa54ff53a,0x510e527f,0x9b05688c,0x1f83d9ab,0x5be0cd19];
-    var b = utf8Bytes(String(msg)), l = b.length, i, t, off, w;
-    b.push(0x80);
-    while(b.length % 64 !== 56) b.push(0);
-    var hi = Math.floor(l / 536870912), lo = (l * 8) >>> 0;
-    b.push((hi >>> 24) & 255, (hi >>> 16) & 255, (hi >>> 8) & 255, hi & 255);
-    b.push((lo >>> 24) & 255, (lo >>> 16) & 255, (lo >>> 8) & 255, lo & 255);
-    w = new Array(64);
-    for(off = 0; off < b.length; off += 64){
-      for(t = 0; t < 16; t++){
-        w[t] = (b[off + t*4] << 24) | (b[off + t*4 + 1] << 16) | (b[off + t*4 + 2] << 8) | b[off + t*4 + 3];
-      }
-      for(t = 16; t < 64; t++){
-        var x15 = w[t-15], x2 = w[t-2];
-        var s0 = rrot(x15,7) ^ rrot(x15,18) ^ (x15 >>> 3);
-        var s1 = rrot(x2,17) ^ rrot(x2,19) ^ (x2 >>> 10);
-        w[t] = (w[t-16] + s0 + w[t-7] + s1) | 0;
-      }
-      var a = H[0], bb = H[1], c = H[2], d = H[3], e = H[4], f = H[5], g = H[6], h = H[7];
-      for(t = 0; t < 64; t++){
-        var S1 = rrot(e,6) ^ rrot(e,11) ^ rrot(e,25);
-        var ch = (e & f) ^ ((~e) & g);
-        var t1 = (h + S1 + ch + _K[t] + w[t]) | 0;
-        var S0 = rrot(a,2) ^ rrot(a,13) ^ rrot(a,22);
-        var mj = (a & bb) ^ (a & c) ^ (bb & c);
-        var t2 = (S0 + mj) | 0;
-        h = g; g = f; f = e; e = (d + t1) | 0; d = c; c = bb; bb = a; a = (t1 + t2) | 0;
-      }
-      H[0] = (H[0] + a) | 0; H[1] = (H[1] + bb) | 0; H[2] = (H[2] + c) | 0; H[3] = (H[3] + d) | 0;
-      H[4] = (H[4] + e) | 0; H[5] = (H[5] + f) | 0; H[6] = (H[6] + g) | 0; H[7] = (H[7] + h) | 0;
-    }
-    var out = '';
-    for(i = 0; i < 8; i++) out += ('00000000' + ((H[i] >>> 0).toString(16))).slice(-8);
-    return out;
-  }
-  function pwHash(pw){ return sha256hex(AUTH_SALT + '|pw|' + String(pw)); }
+  function saveRec(o){ try{ localStorage.setItem(AUTH_KEY, JSON.stringify(o)); }catch(e){} }
+  function clearRec(){ try{ localStorage.removeItem(AUTH_KEY); }catch(e){} }
 
-  /* ---------- 设备指纹（同机稳定；不用 canvas 之类易变特征） ---------- */
-  function devId(){
-    var p = [], nz = (typeof navigator !== 'undefined') ? navigator : {}, sc = (typeof screen !== 'undefined') ? screen : {};
-    var tz = '', off = 0;
-    try { tz = (typeof Intl !== 'undefined') ? (Intl.DateTimeFormat().resolvedOptions().timeZone || '') : ''; } catch(e){}
-    try { off = new Date().getTimezoneOffset(); } catch(e){}
-    p.push(nz.userAgent || '', nz.platform || '', nz.language || '', (nz.languages || []).join(','),
-           String(nz.hardwareConcurrency || 0), String(nz.deviceMemory || 0), String(nz.maxTouchPoints || 0),
-           (sc.width || 0) + 'x' + (sc.height || 0) + 'x' + (sc.colorDepth || 0),
-           (sc.availWidth || 0) + 'x' + (sc.availHeight || 0), String(off), tz);
-    return sha256hex(AUTH_SALT + '|dev|' + p.join('|')).slice(0, 16);
+  /* ---------- 网络层（Promise；任何异常都解析为 null，绝不抛错卡住页面） ---------- */
+  function post(path, body){
+    return new Promise(function(resolve){
+      var done = false;
+      var timer = setTimeout(function(){ if(!done){ done = true; resolve(null); } }, NET_TIMEOUT);
+      function fin(v){ if(!done){ done = true; try{ clearTimeout(timer); }catch(e){} resolve(v); } }
+      try{
+        fetch(AUTH_API + path, {
+          method: 'POST',
+          headers: { 'content-type': 'application/json' },
+          body: JSON.stringify(body || {})
+        }).then(function(r){ return r.json(); })
+          .then(function(j){ fin(j || null); })
+          .catch(function(){ fin(null); });
+      }catch(e){ fin(null); }
+    });
   }
 
-  /* ---------- 激活记录 ---------- */
-  function store(h){
-    var _h = h || AUTH_HASH;   /* 兼容无参调用：默认记主口令 */
-    try{ localStorage.setItem(AUTH_KEY, JSON.stringify({ dev: devId(), h: _h, ts: Date.now() })); }catch(e){}
-  }
-  function unlocked(){
-    var raw, o;
-    try{ raw = localStorage.getItem(AUTH_KEY); }catch(e){ return false; }
-    if(!raw) return false;
-    try{ o = JSON.parse(raw); }catch(e){ return false; }
-    if(!o || typeof o !== 'object') return false;
-    if(o.dev !== devId()) return false;                    /* 换设备 ⇒ 重新激活 */
-    if(AUTH_HASHES.indexOf(o.h) < 0) return false;         /* 口令已更换（白名单内一条都不匹配）⇒ 重新激活 */
-    if(AUTH_DAYS > 0 && (Date.now() - (+o.ts || 0)) > AUTH_DAYS * 86400000) return false;  /* 到期 ⇒ 重新激活 */
+  /* ---------- 三个语义动作 ---------- */
+  /* 本地判定：有 token + 未到服务端给的到期日 + 未超宽限 ⇒ 可离线放行 */
+  function localOk(){
+    var o = rec(); if(!o) return false;
+    if(o.exp && Date.now() > o.exp * 1000) return false;
+    if(GRACE_DAYS > 0 && (Date.now() - (+o.ok || 0)) > GRACE_DAYS * 86400000) return false;
     return true;
+  }
+  /* 登录：口令 → 服务端换 token（成功即落盘） */
+  function login(pw){
+    return post('/auth', { p: pw }).then(function(j){
+      if(!j) return { ok:false, err:'net' };
+      if(!j.ok) return { ok:false, err:j.err || 'unknown' };
+      saveRec({ tok:j.token, label:j.label || '', exp:j.exp || 0, ts:Date.now(), ok:Date.now() });
+      return { ok:true, label:j.label, days:j.days };
+    });
+  }
+  /* 复核：拿本地 token 问服务端 —— 通过则续宽限；被吊销 / 停用 / 到期则就地清除 */
+  function revalidate(){
+    var o = rec(); if(!o) return Promise.resolve(false);
+    return post('/verify', { t:o.tok }).then(function(j){
+      if(!j) return null;                        /* 网络失败 ⇒ 维持现状，本地宽限继续生效 */
+      if(!j.ok){ clearRec(); return false; }     /* 服务端明确拒绝 ⇒ 立即失效 */
+      var o2 = rec() || {};
+      o2.ok = Date.now(); o2.exp = j.exp || 0; o2.days = j.days;
+      if(j.label) o2.label = j.label;
+      saveRec(o2);
+      return true;
+    });
   }
 
   /* ---------- 闸门 ---------- */
@@ -32519,16 +32479,88 @@ window.__build = buildDefaultCharDB;
   }
   if(eye) eye.addEventListener('click', function(){ setPlain(!_plain); });
   function fail(t){ if(msg) msg.textContent = t; if(pwEl){ pwEl.value = ''; try{ pwEl.focus(); }catch(e){} } }
+  var busy = false;
+  function note(t){ if(msg) msg.textContent = t; }
   function submit(){
     var v = pwEl ? String(pwEl.value || '').trim() : '';
     if(!v){ fail('请输入访问口令'); return; }
-    var ph = pwHash(v);
-    if(AUTH_HASHES.indexOf(ph) >= 0){ try{ store(ph); }catch(e){} pass(); }
-    else fail('口令不正确，请重试');
+    if(busy) return;
+    busy = true;
+    if(btn) btn.disabled = true;
+    note('正在校验…');
+    login(v).then(function(r){
+      busy = false;
+      if(btn) btn.disabled = false;
+      if(r.ok){ pass(); paintFoot(); paintBadge(); return; }
+      if(r.err === 'net') fail('无法连接服务器，请检查网络后重试');
+      else if(r.err === 'bad_pw') fail('口令不正确，请重试');
+      else if(r.err === 'expired') fail('这个口令已过期');
+      else if(r.err === 'disabled') fail('这个口令已被暂停使用');
+      else if(r.err === 'origin_not_allowed') fail('当前访问地址未被授权，请联系管理员');
+      else fail('校验失败（' + r.err + '），请稍后再试');
+    });
   }
-  if(devEl) devEl.textContent = devId();
-  if(unlocked()){ pass(); }
-  else{
+  if(devEl){
+    var _r0 = rec();
+    devEl.textContent = _r0 ? ('身份 ' + (_r0.label || '—') + ' · 已校验') : '未验证';
+  }
+
+  /* ---------- 有效期可视化（v3.2.5 立 · v3.3.0 改按服务端给的到期日）----------
+     两处落点：① 校验卡片页脚 —— 本机授权剩余天数与到期日；
+               ② 页眉常驻徽标 —— 已激活时注入，剩余 ≤7 天转黄、≤3 天转红。 */
+  function remainingDays(){
+    var o = rec(); if(!o) return null;
+    if(!o.exp) return Infinity;
+    return Math.max(0, Math.ceil((o.exp * 1000 - Date.now()) / 86400000));
+  }
+  function expiryText(){
+    var o = rec(); if(!o || !o.exp) return '';
+    var d = new Date(o.exp * 1000);
+    if(isNaN(d.getTime())) return '';
+    return d.getFullYear() + '-' + ('0' + (d.getMonth() + 1)).slice(-2) + '-' + ('0' + d.getDate()).slice(-2);
+  }
+  function graceNote(){
+    var o = rec(); if(!o) return '';
+    if(GRACE_DAYS <= 0) return '每次打开都联网校验';
+    var left = Math.max(0, Math.ceil((GRACE_DAYS * 86400000 - (Date.now() - (+o.ok || 0))) / 86400000));
+    return '本机离线可用 ' + left + ' 天';
+  }
+  function paintFoot(){
+    var el = document.getElementById('authRemain'); if(!el) return;
+    if(!localOk()){ el.textContent = '本机授权需联网复核或已到期'; el.style.color = ''; return; }
+    var n = remainingDays();
+    if(n === Infinity || n === null){ el.textContent = '本机长期授权 · 无到期日'; el.style.color = ''; return; }
+    var t = expiryText();
+    el.textContent = '本机授权剩余 ' + n + ' 天' + (t ? '（至 ' + t + '）' : '') + ' · ' + graceNote();
+    el.style.color = (n <= 3) ? '#dc2626' : ((n <= 7) ? '#b45309' : '');
+  }
+  function paintBadge(){
+    if(!localOk()) return;
+    var host = document.querySelector('.toolbar'); if(!host) return;
+    var el = document.getElementById('authBadge');
+    if(!el){
+      el = document.createElement('span');
+      el.id = 'authBadge';
+      el.setAttribute('data-page-node-id', 'authBadge');
+      host.appendChild(el);
+    }
+    var o = rec() || {};
+    var n = remainingDays();
+    if(n === Infinity || n === null){
+      el.textContent = '授权 · 长期';
+      el.className = '';
+      el.title = '本机长期授权 · 无到期日' + (o.label ? '　身份 ' + o.label : '') + '\n' + graceNote();
+      return;
+    }
+    el.textContent = '授权 · 剩余 ' + n + ' 天';
+    el.className = (n <= 3) ? 'exp' : ((n <= 7) ? 'warn' : '');
+    el.title = (o.label ? '身份 ' + o.label + '\n' : '') + '到期日 ' + (expiryText() || '—') +
+               '\n剩余 ' + n + ' 天\n' + graceNote();
+  }
+  paintFoot();
+  paintBadge();
+  function showGate(msg0){
+    if(msg0) note(msg0);
     if(btn) btn.addEventListener('click', submit);
     if(pwEl){
       pwEl.addEventListener('keydown', function(e){
@@ -32538,12 +32570,40 @@ window.__build = buildDefaultCharDB;
       try{ pwEl.focus(); }catch(e){}
     }
   }
-  /* 测试钩子（与 __TEST__ 同规约）：供 node 侧校验哈希向量与闸门语义 */
+  /* 本机有记录、但已超宽限（或未到期但需复核）⇒ 必须联网复核一次 */
+  function mustRecheck(){
+    showGate('正在联网复核授权…');
+    revalidate().then(function(r){
+      if(r === true){ pass(); paintFoot(); paintBadge(); }
+      else if(r === null){ fail('网络不可用，无法复核授权。请联网后重试，或直接输入口令。'); }
+      else { clearRec(); fail('授权已失效，请重新输入口令。'); }
+    });
+  }
+
+  if(localOk()){
+    pass();                                   /* 秒开：先放行 */
+    revalidate().then(function(r){            /* 后台静默复核；被吊销则立即收回 */
+      if(r === false){ location.reload(); }
+      else { paintFoot(); paintBadge(); }
+    });
+  } else if(rec()){
+    mustRecheck();
+  } else {
+    showGate();
+  }
+
+  /* 测试钩子（与 __TEST__ 同规约）：供 node 侧校验闸门语义；api 可重定向到本地 mock */
   try{
-    window.__AUTH = { sha256hex: sha256hex, pwHash: pwHash, devId: devId, unlocked: unlocked,
-                      submit: submit, store: store, pass: pass,
-                      AUTH_HASH: AUTH_HASH, AUTH_HASH2: AUTH_HASH2, AUTH_HASHES: AUTH_HASHES,
-                      AUTH_SALT: AUTH_SALT, AUTH_DAYS: AUTH_DAYS, AUTH_KEY: AUTH_KEY };
+    window.__AUTH = {
+      AUTH_KEY: AUTH_KEY, GRACE_DAYS: GRACE_DAYS, NET_TIMEOUT: NET_TIMEOUT,
+      getApi: function(){ return AUTH_API; },
+      setApi: function(u){ AUTH_API = u; },
+      rec: rec, saveRec: saveRec, clearRec: clearRec,
+      localOk: localOk, login: login, revalidate: revalidate,
+      submit: submit, pass: pass, showGate: showGate, mustRecheck: mustRecheck,
+      remainingDays: remainingDays, expiryText: expiryText, graceNote: graceNote,
+      paintFoot: paintFoot, paintBadge: paintBadge
+    };
   }catch(e){}
 })();
 </script>
