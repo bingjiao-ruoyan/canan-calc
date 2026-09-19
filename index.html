@@ -16,7 +16,7 @@
 
 <link rel="manifest" href="manifest.webmanifest" data-page-node-id="Ujjb7vN2J2zFun44wCBIv8">
 
-<title>陪伴服3.3.1版本 · 残梦伤害计算器 · 心象 / 藏品 / 源质库</title>
+<title>陪伴服3.3.2版本 · 残梦伤害计算器 · 心象 / 藏品 / 源质库</title>
 
 <style>
 
@@ -841,12 +841,16 @@
 #authBadge{display:inline-flex;align-items:center;margin-left:8px;padding:3px 9px;font-size:11px;font-weight:600;color:#475569;background:#f1f5f9;border:1px solid #e2e8f0;border-radius:999px;cursor:default;vertical-align:middle;white-space:nowrap;font-family:"Microsoft YaHei","PingFang SC","Hiragino Sans GB","Source Han Sans SC",system-ui,-apple-system,sans-serif}
 #authBadge.warn{color:#b45309;background:#fffbeb;border-color:#fde68a}
 #authBadge.exp{color:#dc2626;background:#fef2f2;border-color:#fecaca}
+.ag-week{background:#eef6ff;border:1px solid #cfe4fb;border-radius:9px;padding:9px 12px;margin:0 0 13px;font-size:13.5px;color:#1e3a5f;line-height:1.6;text-align:center}
+.ag-week b{color:#1d4ed8;font-weight:700;font-size:15px;letter-spacing:.5px}
+.ag-week .ag-week-sub{color:#64748b;font-size:12.5px}
 </style>
 <div id="authGate" data-page-node-id="authGate">
   <div class="ag-card">
     <div class="ag-logo">残</div>
     <div class="ag-t">残梦伤害计算器</div>
     <div class="ag-s">请输入访问口令以继续</div>
+    <div class="ag-week" id="authWeek" data-page-node-id="authWeek"></div>
     <label class="ag-lab" for="authPw">访问口令（英文 / 数字 / 连字符，请直接用英文键盘输入）</label>
     <div class="ag-row">
       <input id="authPw" type="password" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" inputmode="latin" placeholder="请输入口令" data-page-node-id="authPw">
@@ -870,7 +874,7 @@
 
     <div data-page-node-id="U3DQMnMQczfqNwA08GXIhj">
 
-      <h1 id="title" data-page-node-id="efK7lKccgtoypss7lhPAmx">残梦伤害计算器 <span style="font-size:12px;font-weight:700;color:#fff;background:#c0392b;border-radius:4px;padding:2px 7px;vertical-align:middle" data-page-node-id="8L10itvWf3BpMcGnSmAd9b">陪伴服3.3.1版本</span> <span style="font-size:12px;font-weight:700;color:#fff;background:#7c3aed;border-radius:4px;padding:2px 7px;vertical-align:middle" data-page-node-id="blIaQao7a9SrQ0lYXyABBd">含武装</span> <span style="font-size:11px;color:#7c3aed;vertical-align:middle" title="v1.0.7：修复出招表武装列乱码；新增角色组后武装配置区；武装增益已完整接入伤害公式（主战主动窗口 + 护卫被动条件触发 + 暴击分段结算）" data-page-node-id="1trZvOMvaDdDGFqf7a0bwj">v1.0.7</span></h1>
+      <h1 id="title" data-page-node-id="efK7lKccgtoypss7lhPAmx">残梦伤害计算器 <span style="font-size:12px;font-weight:700;color:#fff;background:#c0392b;border-radius:4px;padding:2px 7px;vertical-align:middle" data-page-node-id="8L10itvWf3BpMcGnSmAd9b">陪伴服3.3.2版本</span> <span style="font-size:12px;font-weight:700;color:#fff;background:#7c3aed;border-radius:4px;padding:2px 7px;vertical-align:middle" data-page-node-id="blIaQao7a9SrQ0lYXyABBd">含武装</span> <span style="font-size:11px;color:#7c3aed;vertical-align:middle" title="v1.0.7：修复出招表武装列乱码；新增角色组后武装配置区；武装增益已完整接入伤害公式（主战主动窗口 + 护卫被动条件触发 + 暴击分段结算）" data-page-node-id="1trZvOMvaDdDGFqf7a0bwj">v1.0.7</span></h1>
 
     </div>
 
@@ -881,7 +885,7 @@
 
       <button class="btn danger" onclick="resetAll()" data-page-node-id="OkbsuyOPXHN6p8PhIKSPWc">重置</button>
       <button class="btn" onclick="showChangelog()" title="查看近期版本更新重点（按版本条目罗列）" data-page-node-id="v243ChangelogBtn">📋 更新日志</button>
-      <span style="font-size:11px;color:#b45309;vertical-align:middle" title="v2.3.7 起（沿用至 3.3.1）：每个版本使用独立的本地存档，打开新版本会自动使用全新默认数据（无需重置）；旧版本文件仍读自己的存档。若当前界面数据异常，点击「重置」可手动恢复为本版本默认值。" data-page-node-id="OkbsuyOPXHN6p8PhIKSPWc2">⚠️ 使用前先点击「重置」刷新为最新版本</span>
+      <span style="font-size:11px;color:#b45309;vertical-align:middle" title="v2.3.7 起（沿用至 3.3.2）：每个版本使用独立的本地存档，打开新版本会自动使用全新默认数据（无需重置）；旧版本文件仍读自己的存档。若当前界面数据异常，点击「重置」可手动恢复为本版本默认值。" data-page-node-id="OkbsuyOPXHN6p8PhIKSPWc2">⚠️ 使用前先点击「重置」刷新为最新版本</span>
 
     </div>
 
@@ -1815,10 +1819,17 @@ const ROLE_GROUPS_DEFAULT = [
 
 
 /* 当前程序版本：页眉徽标、模式标题、导出页脚戳统一读取此常量 */
-const APP_VER = '3.3.1';
+const APP_VER = '3.3.2';
 
 /* v2.4.3：更新日志数据（按版本条目罗列近期更新重点）。点击「📋 更新日志」按钮弹出公告框。 */
 const CHANGELOG = [
+  {ver:'3.3.2', date:'2026-09-20', items:[
+    '【访问体验】新增「每周临时码」：入口直接提示本周值守角色，以她的英文罗马字（全小写）即可进入，下线一周自动换人、无需人工维护。',
+    '【素材池】取自角色库罗马字、并入同作品其他角色（共 253 位）；角色库角色优先轮值，同一角色至少隔 9 周才重现，提示语即该条目自己的中文名。',
+    '【易用性】输入不区分大小写、自动去首尾空格；提示语末尾给出长度与首字母（如 K···········），照着手打即可。',
+    '【兜底】原有固定凭据全部保留，二者任一可用；临时码持有者本机自动续期 7 天；素材池已排除与固定凭据同串的条目，两者绝不撞车。',
+    '【零口径漂移】本次只动访问层，不碰任何伤害公式 / 乘区 / 技能库 / 连携数据。'
+  ]},
   {ver:'3.3.1', date:'2026-09-19', items:[
     '【数值口径】角色默认暴击率由 30% 上调为 35%（新档与「重置」同步；暴击率只进暴击分/突破分，不入增伤区）。',
   ]},
@@ -32377,7 +32388,7 @@ window.__build = buildDefaultCharDB;
 
 <script data-auth-gate="1">
 /* ============================================================================
-   残梦计算器 · 访问口令闸门（v3.3.0 · 服务端校验版）
+   残梦计算器 · 访问口令闸门（v3.3.2 · 服务端校验 + 周临时口令）
    ---------------------------------------------------------------------------
    机制
      · 口令由服务端校验（Cloudflare Pages Functions：/api/auth 与 /api/verify）；
@@ -32401,6 +32412,222 @@ window.__build = buildDefaultCharDB;
   var AUTH_KEY    = 'czy_auth_tok';   /* 与版本号无关：升级版本不强制重新登录（键名变更 ⇒ 老格式记录自动作废一次） */
   var GRACE_DAYS  = 3;                /* 本地宽限天数：0 = 每次打开都联网 */
   var NET_TIMEOUT = 9000;             /* 单次请求超时（毫秒） */
+
+  /* ---------- 本周口令（按周自动轮换）----------
+     口令从角色库的罗马字池中按周派生：同一周全球只有一把，下周自动换人。
+     派生完全在本机完成（无需联网、无需维护口令表）—— 服务端用同一套算法复核。
+     ★池与派生算法必须与服务端 _worker.js 完全同源，改一处必改两处。
+     ★散列用下方纯 JS SHA-256（不用 crypto.subtle）：subtle 仅在安全上下文可用，
+       而本档常以 file:// 双击打开；纯 JS 实现无此限制，且能保证与服务端逐位一致。 */
+  var WEEK_EPOCH  = Date.UTC(2026, 0, 5) / 1000;   /* 纪元锚点：2026-01-05（周一） */
+  var WEEK_CYCLE  = 7;                             /* 每 7 天换一位 */
+  var WEEK_SALT   = 'canan|weekly|v1';             /* 派生盐（与版本号无关，改了全池重排） */
+  var WEEK_AVOID  = 8;                             /* 与最近 N 周避让，避免短期重复 */
+  var WEEK_BASE_W = 4;                             /* ★角色库段优先：每条独占 4 个下标槽 */
+  /* ★WEEK_BLOCK：从池中彻底剔除的拼音（同时作用于角色库段与扩展段）。
+     唯一的加入理由 = 该串与某条【固定口令】完全相同 —— 某周抽中它会让入口公开提示
+     其中文名，玩家反推即得该固定口令 ⇒ 长期凭据被示众。
+     实测：shana（角色库段 · Shana）与固定口令「夏娜」同串 ⇒ 剔除。
+     ★与 _tools/auth/_extra_chars.js 的 BLOCK 必须逐位一致（build.js 会比对，不一致直接 die）。 */
+  var WEEK_BLOCK  = ['shana'];
+  var WEEK_BASE_N = 0;                             /* weekPool() 写入：角色库段长度（加权分段点） */
+  /* ★分段点自愈：WEEK_BASE_N 仅由 weekPool() 写入；若调用方直接喂入池而未经 weekPool()，
+     则退化为下面的「自池首扫描第一个属于扩展段的条目」—— 池构序恒为角色库段在前、
+     扩展段在后且两段无交集，故扫描结果精确。避免「加权静默失效」这类难查缺陷。 */
+  function weekBaseN(pool){
+    if(!pool || !pool.length) return 0;
+    if(WEEK_BASE_N > 0 && WEEK_BASE_N <= pool.length) return WEEK_BASE_N;
+    var ext = {};
+    for(var i = 0; i < WEEK_EXTRA.length; i++){ ext[WEEK_EXTRA[i][0]] = 1; }
+    for(var k = 0; k < pool.length; k++){ if(ext[pool[k].p]) return k; }
+    return pool.length;
+  }
+  function weekIndexOf(ms){ return Math.floor((ms / 1000 - WEEK_EPOCH) / 86400 / WEEK_CYCLE); }
+  /* 罗马字清洗：去尾注（" (Support)" / " (Main) [Limit Broken]"）与一切非字母数字 */
+  function weekNormEn(s){ return String(s == null ? '' : s).replace(/\s*[\\(\\[].*$/, '').replace(/[^A-Za-z0-9]/g, ''); }
+
+  function sha256Bytes(str){
+    var K = [
+      0x428a2f98,0x71374491,0xb5c0fbcf,0xe9b5dba5,0x3956c25b,0x59f111f1,0x923f82a4,0xab1c5ed5,
+      0xd807aa98,0x12835b01,0x243185be,0x550c7dc3,0x72be5d74,0x80deb1fe,0x9bdc06a7,0xc19bf174,
+      0xe49b69c1,0xefbe4786,0x0fc19dc6,0x240ca1cc,0x2de92c6f,0x4a7484aa,0x5cb0a9dc,0x76f988da,
+      0x983e5152,0xa831c66d,0xb00327c8,0xbf597fc7,0xc6e00bf3,0xd5a79147,0x06ca6351,0x14292967,
+      0x27b70a85,0x2e1b2138,0x4d2c6dfc,0x53380d13,0x650a7354,0x766a0abb,0x81c2c92e,0x92722c85,
+      0xa2bfe8a1,0xa81a664b,0xc24b8b70,0xc76c51a3,0xd192e819,0xd6990624,0xf40e3585,0x106aa070,
+      0x19a4c116,0x1e376c08,0x2748774c,0x34b0bcb5,0x391c0cb3,0x4ed8aa4a,0x5b9cca4f,0x682e6ff3,
+      0x748f82ee,0x78a5636f,0x84c87814,0x8cc70208,0x90befffa,0xa4506ceb,0xbef9a3f7,0xc67178f2];
+    var H = [0x6a09e667,0xbb67ae85,0x3c6ef372,0xa54ff53a,0x510e527f,0x9b05688c,0x1f83d9ab,0x5be0cd19];
+    /* UTF-8 编码 */
+    var b = [], i, c;
+    for (i = 0; i < str.length; i++){
+      c = str.charCodeAt(i);
+      if (c < 0x80) b.push(c);
+      else if (c < 0x800){ b.push(0xc0 | (c >> 6), 0x80 | (c & 63)); }
+      else if (c < 0xd800 || c >= 0xe000){ b.push(0xe0 | (c >> 12), 0x80 | ((c >> 6) & 63), 0x80 | (c & 63)); }
+      else { i++; var c2 = str.charCodeAt(i); c = 0x10000 + (((c & 0x3ff) << 10) | (c2 & 0x3ff));
+        b.push(0xf0 | (c >> 18), 0x80 | ((c >> 12) & 63), 0x80 | ((c >> 6) & 63), 0x80 | (c & 63)); }
+    }
+    var bl = b.length * 8;
+    b.push(0x80);
+    while (b.length % 64 !== 56) b.push(0);
+    /* 64 位大端长度（高 32 位在此场景恒 0） */
+    b.push(0, 0, 0, 0, (bl >>> 24) & 255, (bl >>> 16) & 255, (bl >>> 8) & 255, bl & 255);
+    var w = new Array(64);
+    var rotr = function (x, n){ return (x >>> n) | (x << (32 - n)); };
+    for (var off = 0; off < b.length; off += 64){
+      for (i = 0; i < 16; i++)
+        w[i] = (b[off + i * 4] << 24) | (b[off + i * 4 + 1] << 16) | (b[off + i * 4 + 2] << 8) | (b[off + i * 4 + 3]);
+      for (i = 16; i < 64; i++){
+        var s0 = rotr(w[i - 15], 7) ^ rotr(w[i - 15], 18) ^ (w[i - 15] >>> 3);
+        var s1 = rotr(w[i - 2], 17) ^ rotr(w[i - 2], 19) ^ (w[i - 2] >>> 10);
+        w[i] = (w[i - 16] + s0 + w[i - 7] + s1) | 0;
+      }
+      var a = H[0], bb = H[1], cc = H[2], d = H[3], e = H[4], f = H[5], g = H[6], hh = H[7];
+      for (i = 0; i < 64; i++){
+        var S1 = rotr(e, 6) ^ rotr(e, 11) ^ rotr(e, 25);
+        var ch = (e & f) ^ ((~e) & g);
+        var t1 = (hh + S1 + ch + K[i] + w[i]) | 0;
+        var S0 = rotr(a, 2) ^ rotr(a, 13) ^ rotr(a, 22);
+        var maj = (a & bb) ^ (a & cc) ^ (bb & cc);
+        var t2 = (S0 + maj) | 0;
+        hh = g; g = f; f = e; e = (d + t1) | 0; d = cc; cc = bb; bb = a; a = (t1 + t2) | 0;
+      }
+      H[0] = (H[0] + a) | 0; H[1] = (H[1] + bb) | 0; H[2] = (H[2] + cc) | 0; H[3] = (H[3] + d) | 0;
+      H[4] = (H[4] + e) | 0; H[5] = (H[5] + f) | 0; H[6] = (H[6] + g) | 0; H[7] = (H[7] + hh) | 0;
+    }
+    var out = new Uint8Array(32);
+    for (i = 0; i < 8; i++){
+      out[i * 4] = (H[i] >>> 24) & 255; out[i * 4 + 1] = (H[i] >>> 16) & 255;
+      out[i * 4 + 2] = (H[i] >>> 8) & 255; out[i * 4 + 3] = H[i] & 255;
+    }
+    return out;
+  }
+
+  /* ---------- 池：角色库段 + 扩展段 ----------
+     ① 角色库段：EMBED_CHARS 按 label 排序 → 罗马字清洗 → 同名只留首见；
+     ② 扩展段：同作品「其他角色」（未入册但玩家熟悉），全名 + 简称并存、直接拼接无连接符。
+        ★扩展段由 _tools/auth/_extra_chars.js 维护，经 syncpool.js 落到
+          _tools/auth/_weekpool.json 后「原样复制」进本表（离线也算得出来）。
+     ③ 两段合并后仍按口令去重；扩展里与角色库撞车者已在生成期剔除。
+     与服务端 _worker.js 的 WEEK_POOL 必须逐位同源 —— 改一处必改两处（跑 _check_pipe.js 验）。 */
+  var WEEK_EXTRA = [
+    ['sakaijyuyuji','坂井悠二'],['yoshidakazumi','吉田一美'],['alastor','阿拉斯托尔'],['margeritalg','玛格丽·朵'],['fecchan','菲蕾丝'],
+    ['tanakaeri','田中荣太'],['ogatamadoka','绪方真竹'],['satenruiko','佐天泪子'],['lastorder','最后之作'],['stiylmagnus','史提尔'],
+    ['kanzakikaori','神裂火织'],['tsuchimikadokaori','土御门元春'],['aqualette','水之守护者'],['hyoukakazakiri','风斩冰华'],['awaki','结标淡希'],
+    ['kinuhata','绢旗最爱'],['frendaseivelun','芙兰达'],['takitsubo','泷壶理后'],['mugino','麦野沉利'],['hamazura','滨面仕上'],
+    ['kakine','垣根帝督'],['gunha','削板军霸'],['willow','意志'],['eternal','艾扎力'],['maika','舞夏'],
+    ['misakaworst','御坂妹妹'],['kirigayasuguha','桐ヶ谷直叶'],['yui','结衣'],['silica','西莉卡'],['lizbeth','莉兹贝特'],
+    ['klein','克莱因'],['agil','艾基尔'],['heathcliff','希兹克利夫'],['kayaba','茅场晶彦'],['deathgun','死枪'],
+    ['eiji','瑛二'],['yuuna','尤娜'],['sion','希翁'],['strea','斯翠雅'],['philia','菲利亚'],
+    ['alicezuberg','爱丽丝·滋贝鲁库'],['sortiliena','索尔缇莉娜'],['ronie','罗妮耶'],['tieze','缇洁'],['medina','梅蒂娜'],
+    ['kurasakichiyuri','仓崎千百合'],['mayuzumitakumu','黛拓武'],['kurasakifuuko','仓崎枫子'],['silvercrow','银鸦'],['niiko','上月由仁子'],
+    ['seiji','能美征二'],['kuroba','黑羽早雪'],['kousakakyousuke','高坂京介'],['aragakiayase','新垣绫濑'],['makishimasaori','槙岛沙织'],
+    ['gokoururi','五更琉璃'],['tamuramanami','田村麻奈实'],['kandahisatake','神田空太'],['aoyamananami','青山七海'],['kamikurusaki','上井草美咲'],
+    ['mitakajin','三鹰仁'],['akasakaryuunosuke','赤坂龙之介'],['sengokuchihiro','千石千寻'],['kushiedaminori','栉枝实乃梨'],['kawashimaami','川岛亚美'],
+    ['takasuyasuko','高须泰子'],['kitamura','北村祐作'],['ryuugamikemikado','龙之峰帝人'],['kidaaomasaomi','纪田正臣'],['sonoharaanri','园原杏里'],
+    ['kishidanoshinra','岸谷新罗'],['stalker','赛尔提'],['walker','游马崎沃尔克'],['erika','狩泽绘理华'],['saki','张间美香'],
+    ['kishidanoshizuo','岸谷森严'],['kraftlawrence','克拉福·罗伦斯'],['nora','诺儿拉'],['chloe','克罗艾'],['fermil','费米·阿玛提'],
+    ['dianrubens','狄安娜'],['shibamizuki','柴田美月'],['chibaerika','千叶艾莉卡'],['kitayamashizuku','北山雫'],['mitsuihonoka','光井穗香'],
+    ['nanakusamayumi','七草真由美'],['juumonjikatsuto','十文字克人'],['watanabemari','渡边摩利'],['kanbarakihito','神原秋人'],['nasehiroomi','名濑博臣'],
+    ['nasemitsuki','名濑美月'],['naseizumi','名濑泉'],['shindouai','新堂爱'],['kuriyamamirai','栗山未来'],['sasakichiho','佐佐木千穗'],
+    ['urushihara','漆原半藏'],['alsiel','艾尔西尔'],['suzuno','铃乃'],['asuhasuzuno','铃木梨香'],['aibasumi','蓝羽浅葱'],
+    ['kizakikisayaka','煌坂纱矢华'],['laforia','拉·芙利亚'],['akatsukinagisa','晓凪沙'],['yasekimotoki','矢濑基树'],['astarte','亚丝塔露蒂'],
+    ['haseyuuma','叶濑夏音'],['nagi','薙'],['aobatsugumi','青叶鸫'],['mikuriyahiro','御厨仁'],['nyaruko','奈亚子'],
+    ['kuuko','克子'],['tsuruko','鹤子'],['yasakamahiro','八坂真寻'],['yasakayuka','八坂赖子'],['sanzeninnagi','三千院凪'],
+    ['katsurahinagiku','桂雏菊'],['ayasaki','绫崎飒'],['maria','玛莉亚'],['saginomiyaisumi','鹭之宫伊澄'],['sakuya','春鸟'],
+    ['hikitaniyahachiman','比企谷八幡'],['yukinoshitayukino','雪之下雪乃'],['yubihamayui','由比滨结衣'],['isshiki','一色伊吕波'],['hikitani','比企谷小町'],
+    ['hiratsukashizuka','平冢静'],['totsuka','户冢彩加'],['aniya','安艺伦也'],['katoumegumi','加藤惠'],['sawamuraeriri','泽村英梨梨'],
+    ['kasumigaokautaha','霞之丘诗羽'],['hyoudoumichiru','冰堂美智留'],['orekihoutarou','折木奉太郎'],['chitandaeru','千反田爱瑠'],['fukubesatoshi','福部里志'],
+    ['ibaramayaka','伊原摩耶花'],['togashiyuuta','富樫勇太'],['takanashirikka','小鸟游六花'],['nibutanashinka','丹生谷森夏'],['itsukisanae','五月七日茴香'],
+    ['tsuyurikumin','凸守早苗'],['takanashitouka','小鸟游十花'],['natsukisubaru','菜月昴'],['emilia','爱蜜莉雅'],['rem','雷姆'],
+    ['ram','拉姆'],['beatrice','贝蒂'],['puck','帕克'],['roswaal','罗兹瓦尔'],['julius','尤里乌斯'],
+    ['shaula','夏乌拉'],['ferris','菲利斯'],['ottosu','奥托'],['garfiel','加菲尔'],['satoukazuma','佐藤和真'],
+    ['aqua','阿克娅'],['megumin','惠惠'],['darkness','达克妮斯'],['wiz','维兹'],['yunyun','云云'],
+    ['itsukashido','五河士道'],['yatonokamitohka','夜刀神十香'],['yoshino','四糸乃'],['tokisakikurumi','时崎狂三'],['itsukakotori','五河琴里'],
+    ['yamai','八舞耶倶矢'],['natsumi','七罪'],['tobiichi','鸢一折纸'],['hotocoa','保登心爱'],['kafuuchino','香风智乃'],
+    ['utsumatsuchiya','宇治松千夜'],['kirimasyaro','桐间纱路'],['tederamize','天天座理世'],['gotoubocchi','后藤一里'],['ijichinijika','伊地知虹夏'],
+    ['yamadaryo','山田凉'],['kitakita','喜多郁代'],['kagamiharanadeshiko','各务原抚子'],['shimarin','志摩凛'],['oogakichiaki','大垣千明'],
+    ['inuyamaaoi','犬山葵'],['saitouena','齐藤惠那'],['meiko','MEIKO'],['kaito','KAITO'],['gumi','GUMI'],
+    ['iabrown','IA'],['yukari','结月缘'],['tetokasane','重音テト'],['kobeni','小红'],['shirahaku','白夜'],
+    ['shion','紫苑'],['nogizakaharuka','乃木坂春香'],['amamiyamizuki','天宫椎菜'],['sakurabashina','樱坂叶月']
+  ];
+  /* ★BLOCK 判定：命中即从池中彻底剔除（角色库段与扩展段同时生效）。
+     原 DROP 表只作用于扩展段，挡不住角色库段里的 shana —— 这正是本轮实测的安全缺口。 */
+  function weekBlocked(p){
+    for(var i = 0; i < WEEK_BLOCK.length; i++){ if(WEEK_BLOCK[i] === p) return true; }
+    return false;
+  }
+  function weekPool(){
+    var rows = [], seen = {}, out = [];
+    try{
+      for(var i = 0; i < EMBED_CHARS.length; i++){
+        var c = EMBED_CHARS[i], en = weekNormEn(c && c.nameEn);
+        if(en) rows.push({ label: String((c && c.label) || ''), en: en });
+      }
+    }catch(e){ return []; }
+    rows.sort(function(a, b){ return a.label < b.label ? -1 : (a.label > b.label ? 1 : 0); });
+    for(var k = 0; k < rows.length; k++){
+      var key = rows[k].en.toLowerCase();
+      if(seen[key]) continue;
+      seen[key] = 1;
+      if(weekBlocked(key)) continue;          /* ★BLOCK：角色库段同受约束 */
+      out.push({ p: key, n: rows[k].label });
+    }
+    /* ★分段点：角色库段长度（加权派生的分界；扩展段全部排在它之后） */
+    WEEK_BASE_N = out.length;
+    /* 扩展段：直接拼接在角色库段之后（顺序即语义，不可重排） */
+    for(var j = 0; j < WEEK_EXTRA.length; j++){
+      var ep = WEEK_EXTRA[j][0], en2 = WEEK_EXTRA[j][1];
+      if(seen[ep]) continue;
+      seen[ep] = 1;
+      if(weekBlocked(ep)) continue;
+      out.push({ p: ep, n: en2 });
+    }
+    return out;
+  }
+  /* 无避让的原始下标：SHA-256(WEEK_SALT + '|' + wi) 前 4 字节大端 → 加权槽位 → 池下标
+     ★角色库段优先（「优先从角色库角色开始轮」）：池首 WEEK_BASE_N 条每条独占 WEEK_BASE_W
+       个槽，扩展段每条只占 1 个 ⇒ 角色库角色出现概率为扩展位的 WEEK_BASE_W 倍。
+       槽位 → 下标为单调满射，下标仍落在 [0, pool.length) 且每个下标均可取到，
+       避让（idx+step 顺延）语义不变。
+     ★与服务端 _worker.js 的 weekPickRaw 必须逐位同源（跑 _check_pipe.js 验）。 */
+  function weekPickSyncRaw(pool, wi){
+    if(!pool.length) return null;
+    var h = sha256Bytes(WEEK_SALT + '|' + wi);
+    var n = ((h[0] << 24) | (h[1] << 16) | (h[2] << 8) | h[3]) >>> 0;
+    var B = weekBaseN(pool);
+    var m = n % (B * WEEK_BASE_W + (pool.length - B));
+    return m < B * WEEK_BASE_W ? (m % B) : (B + (m - B * WEEK_BASE_W));
+  }
+  /* 带避让的最终下标：与最近 WEEK_AVOID 周任一周撞车则顺延（与服务端同源） */
+  function weekPickSync(pool, wi){ return weekResolve(pool, wi); }
+  /* 递推求解：第 wi 周的答案依赖前 WEEK_AVOID 周 ⇒ 自底向上递推 + 记忆化。
+     ★两个必守点（都曾实测踩中）：
+       ① 不可用朴素递归 —— 深度按 AVOID 指数膨胀，浏览器会爆栈；
+       ② 避让窗口不可「滑出即忽略」—— 一旦忽略，同一位可能在相邻两周连庄。
+          故窗口下界恒取 0（自纪元起递推），保证「任一位至少隔 WEEK_AVOID+1 周」。
+          池 60 / 窗口 9 ⇒ 递推代价可忽略（亚毫秒）。 */
+  function weekResolve(pool, wi){
+    if(!pool.length) return null;
+    var memo = {};
+    for(var w = 0; w <= wi; w++){
+      var idx = weekPickSyncRaw(pool, w);
+      if(WEEK_AVOID > 0){
+        var used = [];
+        for(var j = 1; j <= WEEK_AVOID; j++){
+          var pw2 = w - j;
+          if(pw2 < 0) break;
+          used.push(memo[pw2]);
+        }
+        for(var step = 0; step < WEEK_AVOID && step < pool.length; step++){
+          var cand = (idx + step) % pool.length;
+          if(used.indexOf(cand) < 0){ idx = cand; break; }
+        }
+      }
+      memo[w] = idx;
+    }
+    return memo[wi];
+  }
 
   /* ---------- 本机授权记录（token 版） ----------
      只存：服务端 token / 身份标签 / 到期日(unix 秒，0=永久) / 写入时间 / 上次成功联网校验时间。
@@ -32430,6 +32657,30 @@ window.__build = buildDefaultCharDB;
           .catch(function(){ fin(null); });
       }catch(e){ fin(null); }
     });
+  }
+
+  /* ---------- 本周口令（本地直通）---------
+     命中本周口令 ⇒ 直接本机自签一张 7 天有效期的本地凭证，无需联网、无需口令表。
+     判定走纯 JS SHA-256（与 worker 同源、同步可用）；提示与放行都在本机完成。 */
+  function weeklyInfo(pool){
+    var wi = weekIndexOf(Date.now());
+    var idx = weekResolve(pool, wi);
+    var out = { wi: wi, pw: null, name: null, next: null };
+    if(idx === null) return out;
+    out.pw = pool[idx] ? pool[idx].p : null;
+    out.name = pool[idx] ? pool[idx].n : null;
+    var ni = weekResolve(pool, wi + 1);
+    out.next = pool[ni] ? pool[ni].n : null;
+    return out;
+  }
+  /* 本周口令命中 ⇒ 本机自签（有效期至下周一），不请求服务器 */
+  function weeklyLocalPass(pw){
+    var pool = weekPool(); if(!pool.length) return null;
+    var wk = weeklyInfo(pool); if(!wk.pw) return null;
+    if(String(pw == null ? '' : pw).trim().toLowerCase() !== wk.pw) return null;
+    var expSec = Math.floor((wk.wi + 1) * WEEK_CYCLE * 86400 + WEEK_EPOCH);
+    saveRec({ tok: 'local-week-' + wk.wi, label: wk.name, exp: expSec, ts: Date.now(), ok: Date.now() });
+    return { ok: true, label: wk.name, days: 7 };
   }
 
   /* ---------- 三个语义动作 ---------- */
@@ -32485,18 +32736,22 @@ window.__build = buildDefaultCharDB;
   var busy = false;
   function note(t){ if(msg) msg.textContent = t; }
   function submit(){
-    var v = pwEl ? String(pwEl.value || '').trim() : '';
+    /* ★口令一律小写归一：周口令池本身全小写，玩家大小写混打也认；
+       固定口令的用户名风格口令（如 bingjiao-ruoyan）本也全小写，归一无副作用。 */
+    var v = pwEl ? String(pwEl.value || '').trim().toLowerCase() : '';
     if(!v){ fail('请输入访问口令'); return; }
     if(busy) return;
     busy = true;
     if(btn) btn.disabled = true;
+    var wl = weeklyLocalPass(v);
+    if(wl){ busy = false; if(btn) btn.disabled = false; pass(); paintFoot(); paintBadge(); return; }
     note('正在校验…');
     login(v).then(function(r){
       busy = false;
       if(btn) btn.disabled = false;
       if(r.ok){ pass(); paintFoot(); paintBadge(); return; }
       if(r.err === 'net') fail('无法连接服务器，请检查网络后重试');
-      else if(r.err === 'bad_pw') fail('口令不正确，请重试');
+      else if(r.err === 'bad_pw') fail('口令不正确（不区分大小写），请重试');
       else if(r.err === 'expired') fail('这个口令已过期');
       else if(r.err === 'disabled') fail('这个口令已被暂停使用');
       else if(r.err === 'origin_not_allowed') fail('当前访问地址未被授权，请联系管理员');
@@ -32527,6 +32782,26 @@ window.__build = buildDefaultCharDB;
     if(GRACE_DAYS <= 0) return '每次打开都联网校验';
     var left = Math.max(0, Math.ceil((GRACE_DAYS * 86400000 - (Date.now() - (+o.ok || 0))) / 86400000));
     return '本机离线可用 ' + left + ' 天';
+  }
+  /* ---------- 本周口令提示行（v3.3.2）----------
+     入口处明示「本周口令提示：<角色名>」—— 玩家拿中文名反推罗马字即可进入。
+     ★必须显示在遮罩上（登录入口），而非仅控制台；控制台另有本周/下周值守位。
+     ★副文案用【本周实际口令】当例子（不用硬编码的 "shana"）——
+       可一眼看出「该输的是罗马字、且长度就这么多」，无需玩家自行摸索。
+     · 首字母大写 + 其余打点：既给长度、又不至于把答案直接印出来；
+       想抄的人仍需自己拼出完整罗马字（防「扫一眼就进」）。 */
+  function maskPw(s){
+    s = String(s || '');
+    if(s.length <= 2) return s;
+    return s.slice(0, 1).toUpperCase() + new Array(s.length).join('·');
+  }
+  function paintWeek(){
+    var el = document.getElementById('authWeek'); if(!el) return;
+    var pool = weekPool(); if(!pool.length){ el.style.display = 'none'; return; }
+    var wk = weeklyInfo(pool); if(!wk.name){ el.style.display = 'none'; return; }
+    el.style.display = '';
+    el.innerHTML = '本周口令提示：<b>' + wk.name + '</b>' +
+      '<span class="ag-week-sub">（角色罗马字，小写、无空格，' + maskPw(wk.pw) + '）</span>';
   }
   function paintFoot(){
     var el = document.getElementById('authRemain'); if(!el) return;
@@ -32562,6 +32837,7 @@ window.__build = buildDefaultCharDB;
   }
   paintFoot();
   paintBadge();
+  paintWeek();
   function showGate(msg0){
     if(msg0) note(msg0);
     if(btn) btn.addEventListener('click', submit);
@@ -32605,7 +32881,15 @@ window.__build = buildDefaultCharDB;
       localOk: localOk, login: login, revalidate: revalidate,
       submit: submit, pass: pass, showGate: showGate, mustRecheck: mustRecheck,
       remainingDays: remainingDays, expiryText: expiryText, graceNote: graceNote,
-      paintFoot: paintFoot, paintBadge: paintBadge
+      paintFoot: paintFoot, paintBadge: paintBadge,
+      /* v3.3.2：本周口令（池 / 派生 / 提示 / 直通）—— 供套件逐条断言 */
+      weekPool: weekPool, weekIndexOf: weekIndexOf, weekNormEn: weekNormEn,
+      weeklyInfo: weeklyInfo, weeklyLocalPass: weeklyLocalPass, paintWeek: paintWeek,
+      WEEK_EPOCH: WEEK_EPOCH, WEEK_CYCLE: WEEK_CYCLE, WEEK_SALT: WEEK_SALT, WEEK_AVOID: WEEK_AVOID,
+      weekPickSyncRaw: weekPickSyncRaw, weekPickSync: weekPickSync, weekResolve: weekResolve,
+      sha256Bytes: sha256Bytes, WEEK_EXTRA: WEEK_EXTRA,
+      WEEK_BLOCK: WEEK_BLOCK, WEEK_BASE_W: WEEK_BASE_W, weekBlocked: weekBlocked,
+      weekBaseN: weekBaseN, weekBaseNFixed: function(){ return WEEK_BASE_N; }
     };
   }catch(e){}
 })();
