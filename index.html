@@ -16,7 +16,7 @@
 
 <link rel="manifest" href="manifest.webmanifest" data-page-node-id="Ujjb7vN2J2zFun44wCBIv8">
 
-<title>陪伴服3.3.0版本 · 残梦伤害计算器 · 心象 / 藏品 / 源质库</title>
+<title>陪伴服3.3.1版本 · 残梦伤害计算器 · 心象 / 藏品 / 源质库</title>
 
 <style>
 
@@ -870,7 +870,7 @@
 
     <div data-page-node-id="U3DQMnMQczfqNwA08GXIhj">
 
-      <h1 id="title" data-page-node-id="efK7lKccgtoypss7lhPAmx">残梦伤害计算器 <span style="font-size:12px;font-weight:700;color:#fff;background:#c0392b;border-radius:4px;padding:2px 7px;vertical-align:middle" data-page-node-id="8L10itvWf3BpMcGnSmAd9b">陪伴服3.3.0版本</span> <span style="font-size:12px;font-weight:700;color:#fff;background:#7c3aed;border-radius:4px;padding:2px 7px;vertical-align:middle" data-page-node-id="blIaQao7a9SrQ0lYXyABBd">含武装</span> <span style="font-size:11px;color:#7c3aed;vertical-align:middle" title="v1.0.7：修复出招表武装列乱码；新增角色组后武装配置区；武装增益已完整接入伤害公式（主战主动窗口 + 护卫被动条件触发 + 暴击分段结算）" data-page-node-id="1trZvOMvaDdDGFqf7a0bwj">v1.0.7</span></h1>
+      <h1 id="title" data-page-node-id="efK7lKccgtoypss7lhPAmx">残梦伤害计算器 <span style="font-size:12px;font-weight:700;color:#fff;background:#c0392b;border-radius:4px;padding:2px 7px;vertical-align:middle" data-page-node-id="8L10itvWf3BpMcGnSmAd9b">陪伴服3.3.1版本</span> <span style="font-size:12px;font-weight:700;color:#fff;background:#7c3aed;border-radius:4px;padding:2px 7px;vertical-align:middle" data-page-node-id="blIaQao7a9SrQ0lYXyABBd">含武装</span> <span style="font-size:11px;color:#7c3aed;vertical-align:middle" title="v1.0.7：修复出招表武装列乱码；新增角色组后武装配置区；武装增益已完整接入伤害公式（主战主动窗口 + 护卫被动条件触发 + 暴击分段结算）" data-page-node-id="1trZvOMvaDdDGFqf7a0bwj">v1.0.7</span></h1>
 
     </div>
 
@@ -881,7 +881,7 @@
 
       <button class="btn danger" onclick="resetAll()" data-page-node-id="OkbsuyOPXHN6p8PhIKSPWc">重置</button>
       <button class="btn" onclick="showChangelog()" title="查看近期版本更新重点（按版本条目罗列）" data-page-node-id="v243ChangelogBtn">📋 更新日志</button>
-      <span style="font-size:11px;color:#b45309;vertical-align:middle" title="v2.3.7 起（沿用至 3.3.0）：每个版本使用独立的本地存档，打开新版本会自动使用全新默认数据（无需重置）；旧版本文件仍读自己的存档。若当前界面数据异常，点击「重置」可手动恢复为本版本默认值。" data-page-node-id="OkbsuyOPXHN6p8PhIKSPWc2">⚠️ 使用前先点击「重置」刷新为最新版本</span>
+      <span style="font-size:11px;color:#b45309;vertical-align:middle" title="v2.3.7 起（沿用至 3.3.1）：每个版本使用独立的本地存档，打开新版本会自动使用全新默认数据（无需重置）；旧版本文件仍读自己的存档。若当前界面数据异常，点击「重置」可手动恢复为本版本默认值。" data-page-node-id="OkbsuyOPXHN6p8PhIKSPWc2">⚠️ 使用前先点击「重置」刷新为最新版本</span>
 
     </div>
 
@@ -1708,11 +1708,11 @@ let state = {
 
   groups:[
 
-    { mainId:'', subId:'', weaponPct:0, critRate:30, critDmg:60, talentFx:true, awakenFx:true, mainAwakenFx:true, subAwakenFx:true, mainAwakenStage:5, subAwakenStage:5 },
+    { mainId:'', subId:'', weaponPct:0, critRate:35, critDmg:60, talentFx:true, awakenFx:true, mainAwakenFx:true, subAwakenFx:true, mainAwakenStage:5, subAwakenStage:5 },
 
-    { mainId:'', subId:'', weaponPct:0, critRate:30, critDmg:60, talentFx:true, awakenFx:true, mainAwakenFx:true, subAwakenFx:true, mainAwakenStage:5, subAwakenStage:5 },
+    { mainId:'', subId:'', weaponPct:0, critRate:35, critDmg:60, talentFx:true, awakenFx:true, mainAwakenFx:true, subAwakenFx:true, mainAwakenStage:5, subAwakenStage:5 },
 
-    { mainId:'', subId:'', weaponPct:0, critRate:30, critDmg:60, talentFx:true, awakenFx:true, mainAwakenFx:true, subAwakenFx:true, mainAwakenStage:5, subAwakenStage:5 }
+    { mainId:'', subId:'', weaponPct:0, critRate:35, critDmg:60, talentFx:true, awakenFx:true, mainAwakenFx:true, subAwakenFx:true, mainAwakenStage:5, subAwakenStage:5 }
 
   ],
 
@@ -1815,10 +1815,13 @@ const ROLE_GROUPS_DEFAULT = [
 
 
 /* 当前程序版本：页眉徽标、模式标题、导出页脚戳统一读取此常量 */
-const APP_VER = '3.3.0';
+const APP_VER = '3.3.1';
 
 /* v2.4.3：更新日志数据（按版本条目罗列近期更新重点）。点击「📋 更新日志」按钮弹出公告框。 */
 const CHANGELOG = [
+  {ver:'3.3.1', date:'2026-09-19', items:[
+    '【数值口径】角色默认暴击率由 30% 上调为 35%（新档与「重置」同步；暴击率只进暴击分/突破分，不入增伤区）。',
+  ]},
   {ver:'3.3.0', date:'2026-09-19', items:[
     '【授权】启动校验改为服务端验证：本机不再内嵌任何凭据，改为保存服务端签发的授权令牌；离线仍可进入（宽限 3 天），超期后自动联网复核。',
     '【维护】管理员可对单个授权单独停用、改期或吊销，不必更换主凭据；调整即时生效，其他使用者不受影响。',
@@ -32178,7 +32181,7 @@ function resetAll(){
 
     initSP:0, initBP:0, enemySpeeds:[1252],
 
-    groups: JSON.parse(JSON.stringify(ROLE_GROUPS_DEFAULT)).map(g=>(Object.assign(g,{panel:0,talent:0,equipType:'none',mainEquip:'none',subEquip:'none',mainKurooVal:0,subKurooVal:0,mainTraumaVal:0,subTraumaVal:0,critRate:30,critDmg:60,talentFx:true,awakenFx:true,mainAwakenFx:true,subAwakenFx:true,mainAwakenStage:5,subAwakenStage:5}))),
+    groups: JSON.parse(JSON.stringify(ROLE_GROUPS_DEFAULT)).map(g=>(Object.assign(g,{panel:0,talent:0,equipType:'none',mainEquip:'none',subEquip:'none',mainKurooVal:0,subKurooVal:0,mainTraumaVal:0,subTraumaVal:0,critRate:35,critDmg:60,talentFx:true,awakenFx:true,mainAwakenFx:true,subAwakenFx:true,mainAwakenStage:5,subAwakenStage:5}))),
 
     rounds:[], confirmBuffs:[],
 
@@ -32200,7 +32203,7 @@ function resetAll(){
 
   };
 
-  state.groups.forEach(g=>Object.assign(g,{panel:0,talent:0,equipType:'none',mainEquip:'none',subEquip:'none',mainKurooVal:0,subKurooVal:0,mainTraumaVal:0,subTraumaVal:0,critRate:30,critDmg:60,talentFx:true,awakenFx:true,mainAwakenFx:true,subAwakenFx:true,mainAwakenStage:5,subAwakenStage:5}));
+  state.groups.forEach(g=>Object.assign(g,{panel:0,talent:0,equipType:'none',mainEquip:'none',subEquip:'none',mainKurooVal:0,subKurooVal:0,mainTraumaVal:0,subTraumaVal:0,critRate:35,critDmg:60,talentFx:true,awakenFx:true,mainAwakenFx:true,subAwakenFx:true,mainAwakenStage:5,subAwakenStage:5}));
 
   ensureRounds();
 
