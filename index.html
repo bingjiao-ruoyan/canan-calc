@@ -16,7 +16,7 @@
 
 <link rel="manifest" href="manifest.webmanifest" data-page-node-id="Ujjb7vN2J2zFun44wCBIv8">
 
-<title>陪伴服3.3.1版本 · 残梦伤害计算器 · 心象 / 藏品 / 源质库</title>
+<title>陪伴服3.3.2版本 · 残梦伤害计算器 · 心象 / 藏品 / 源质库</title>
 
 <style>
 
@@ -874,7 +874,7 @@
 
     <div data-page-node-id="U3DQMnMQczfqNwA08GXIhj">
 
-      <h1 id="title" data-page-node-id="efK7lKccgtoypss7lhPAmx">残梦伤害计算器 <span style="font-size:12px;font-weight:700;color:#fff;background:#c0392b;border-radius:4px;padding:2px 7px;vertical-align:middle" data-page-node-id="8L10itvWf3BpMcGnSmAd9b">陪伴服3.3.1版本</span> <span style="font-size:12px;font-weight:700;color:#fff;background:#7c3aed;border-radius:4px;padding:2px 7px;vertical-align:middle" data-page-node-id="blIaQao7a9SrQ0lYXyABBd">含武装</span> <span style="font-size:11px;color:#7c3aed;vertical-align:middle" title="v1.0.7：修复出招表武装列乱码；新增角色组后武装配置区；武装增益已完整接入伤害公式（主战主动窗口 + 护卫被动条件触发 + 暴击分段结算）" data-page-node-id="1trZvOMvaDdDGFqf7a0bwj">v1.0.7</span></h1>
+      <h1 id="title" data-page-node-id="efK7lKccgtoypss7lhPAmx">残梦伤害计算器 <span style="font-size:12px;font-weight:700;color:#fff;background:#c0392b;border-radius:4px;padding:2px 7px;vertical-align:middle" data-page-node-id="8L10itvWf3BpMcGnSmAd9b">陪伴服3.3.2版本</span> <span style="font-size:12px;font-weight:700;color:#fff;background:#7c3aed;border-radius:4px;padding:2px 7px;vertical-align:middle" data-page-node-id="blIaQao7a9SrQ0lYXyABBd">含武装</span> <span style="font-size:11px;color:#7c3aed;vertical-align:middle" title="v1.0.7：修复出招表武装列乱码；新增角色组后武装配置区；武装增益已完整接入伤害公式（主战主动窗口 + 护卫被动条件触发 + 暴击分段结算）" data-page-node-id="1trZvOMvaDdDGFqf7a0bwj">v1.0.7</span></h1>
 
     </div>
 
@@ -885,7 +885,7 @@
 
       <button class="btn danger" onclick="resetAll()" data-page-node-id="OkbsuyOPXHN6p8PhIKSPWc">重置</button>
       <button class="btn" onclick="showChangelog()" title="查看近期版本更新重点（按版本条目罗列）" data-page-node-id="v243ChangelogBtn">📋 更新日志</button>
-      <span style="font-size:11px;color:#b45309;vertical-align:middle" title="v2.3.7 起（沿用至 3.3.1）：每个版本使用独立的本地存档，打开新版本会自动使用全新默认数据（无需重置）；旧版本文件仍读自己的存档。若当前界面数据异常，点击「重置」可手动恢复为本版本默认值。" data-page-node-id="OkbsuyOPXHN6p8PhIKSPWc2">⚠️ 使用前先点击「重置」刷新为最新版本</span>
+      <span style="font-size:11px;color:#b45309;vertical-align:middle" title="v2.3.7 起（沿用至 3.3.2）：每个版本使用独立的本地存档，打开新版本会自动使用全新默认数据（无需重置）；旧版本文件仍读自己的存档。若当前界面数据异常，点击「重置」可手动恢复为本版本默认值。" data-page-node-id="OkbsuyOPXHN6p8PhIKSPWc2">⚠️ 使用前先点击「重置」刷新为最新版本</span>
 
     </div>
 
@@ -1506,7 +1506,7 @@
 
     <div class="card">
 
-      <h2>角色数值统计 <span class="tag">数据源：陪伴服角色数值统计-20260910 · 每格可编辑 · 修改自动保存（跨版本保留）</span></h2>
+      <h2>角色数值统计 <span class="tag">数据源：陪伴服角色数值统计-20260910 · 每格可编辑 · 修改自动保存（跨版本保留） · ★面板默认取 LV60 三列，「6★·70级」形态档改取 LV70 三列</span></h2>
 
       <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:10px">
 
@@ -1819,10 +1819,15 @@ const ROLE_GROUPS_DEFAULT = [
 
 
 /* 当前程序版本：页眉徽标、模式标题、导出页脚戳统一读取此常量 */
-const APP_VER = '3.3.1';
+const APP_VER = '3.3.2';
 
 /* v2.4.3：更新日志数据（按版本条目罗列近期更新重点）。点击「📋 更新日志」按钮弹出公告框。 */
 const CHANGELOG = [
+  {ver:'3.3.2', date:'2026-09-20', items:[
+    '【攻击力口径】角色面板默认改用 60 级数据：面板 =（LV60攻击力 + 380）× 1.85 ×（1 + 基础攻击力%）。',
+    '【形态档位】新增「6★ · 70级 · 技能25」档，选中即改用 70 级数据（攻击 / 100天赋 / 觉醒面板三列）。',
+    '【数值统计】面板等级随形态档位走：默认 60 级三列，选 70 级档读 70 级三列。'
+  ]},
   {ver:'3.3.1', date:'2026-09-20', items:[
     '【攻击力口径】觉醒加攻改独立乘区：角色面板 =（LV70攻击力 + 380）× 1.85 ×（1 + 基础攻击力%），觉醒 5% 时整体 +2.24%。',
     '【数值统计】「觉醒面板(LV60 / LV70)」两列按新口径全量重算（110 角色 × 2 档）。',
@@ -2610,10 +2615,11 @@ function isPureBuffSkill(sk){
 }
 
 /* ============ v2.4.9 形态档位（星级/等级/技能等级三选一） ============
-   三档：'60'=6★·60级·技能25（默认，当前数据）/'50'=5★·50级·技能20/'40'=4★·40级·技能15。
+   四档：'60'=6★·60级·技能25（默认，当前数据）/'70'=6★·70级·技能25/'50'=5★·50级·技能20/'40'=4★·40级·技能15。
    主战（mainStage）与 sub（subStage）各自独立选择。
    换算口径（用户裁定）：
-   · 面板不换算（低星面板=当前面板）；
+   · 面板随等级档位换算（★v3.3.2 用户裁决）：'70' 档读 70 级数据（atk70 / t100_70 / awk70），
+     其余档读 60 级数据（atk60 / t100_60 / awk60）—— 低星档（'50' / '40'）不做面板换算，沿用 60 级面板；
    · 非连携技（技能/升华）：Lv1基础 + (L-1)/24 × 升24级成长（拆分字段 phys1/energy1 + phys24/energy24，
      与总倍率自洽 ±0.05 才换算，否则保持总倍率不动——防数据缺口失真）；
    · 连携技：无技能等级，星级成长经 extraVal = 每星加成×等效星级 通道自动缩放
@@ -2621,15 +2627,37 @@ function isPureBuffSkill(sk){
    · 「每多1星+X%」类技能 / 治疗星成长：按所选等效星级计算（effStarOf）；
    · 觉醒/天赋不受星级限制照常生效；
    · 旧存档无 mainStage/subStage 字段 → 默认 '60'，分数与 2.4.8 完全一致。 */
+/* ★v3.3.2 角色面板默认等级：'70' 形态档位 ⇒ 70 级数据，其余档 ⇒ 60 级（取值走 panelLvOf）。 */
+const ATK_PANEL_LV_DEF = 60;
 const STAGE_OPTS = {
-  '60': {star:6, skillLv:25, label:'6★ · 60级 · 技能25（当前）'},
+  '60': {star:6, skillLv:25, label:'6★ · 60级 · 技能25（默认）'},
+  '70': {star:6, skillLv:25, label:'6★ · 70级 · 技能25'},
   '50': {star:5, skillLv:20, label:'5★ · 50级 · 技能20'},
   '40': {star:4, skillLv:15, label:'4★ · 40级 · 技能15'}
 };
-/* 组+槽位当前档位键（'60'/'50'/'40'）；非法/缺失回退 '60' */
+/* ★v3.3.2 下拉显示顺序：JS 对「数字样字符串键」会强制升序（会排成 40/50/60），
+   ⇒ 显式定序，保证默认档 '60' 落在首位、新档 '70' 紧随其后；未登记的新键自动追加在后。 */
+const STAGE_ORDER = ['60', '70', '50', '40'];
+function stageOptionKeys(){
+  const all = Object.keys(STAGE_OPTS);
+  const ord = STAGE_ORDER.filter(k => STAGE_OPTS[k]);
+  return ord.concat(all.filter(k => ord.indexOf(k) < 0).sort());
+}
+/* 组+槽位当前档位键（'60'/'70'/'50'/'40'）；非法/缺失回退 '60' */
 function grpStageKey(grp, who){
   const v = (who==='sub') ? (grp&&grp.subStage) : (grp&&grp.mainStage);
   return STAGE_OPTS[String(v)] ? String(v) : '60';
+}
+/* ★v3.3.2「角色面板等级」：随形态档位走 —— '70' 档 = 70 级数据；其余档（'60' / '50' / '40'）= 60 级数据
+   （低星档不做面板换算，沿用 60 级面板；技能倍率 / 星级仍按各自档位换算，见 skillMultAtStage / effStarOf）。 */
+function panelLvOf(grp, who){
+  return grpStageKey(grp, who)==='70' ? 70 : ATK_PANEL_LV_DEF;
+}
+/* 「⑪ 数值统计」表的面板数据列名（三件套）随档位切换：{atk, t100, awk} */
+function panelColsOf(grp, who){
+  return (panelLvOf(grp, who)===70)
+    ? {atk:'atk70', t100:'t100_70', awk:'awk70'}
+    : {atk:'atk60', t100:'t100_60', awk:'awk60'};
 }
 /* 组+槽位等效星级（星系技能/治疗星成长用） */
 function effStarOf(grp, who){
@@ -2771,7 +2799,7 @@ function recomputeStageAutoBuffs(gIdx){
 function stageSelectHTML(gIdx, slot, cur){
   const v = String(cur||'60');
   return '<div style="margin-top:4px;font-size:11px;color:var(--sub)">形态：<select class="narrow" onchange="setGroupStage('+gIdx+',\''+slot+'\',this.value)">'
-    + Object.keys(STAGE_OPTS).map(k=>'<option value="'+k+'"'+(k===v?' selected':'')+'>'+STAGE_OPTS[k].label+'</option>').join('')
+    + stageOptionKeys().map(k=>'<option value="'+k+'"'+(k===v?' selected':'')+'>'+STAGE_OPTS[k].label+'</option>').join('')
     + '</select></div>';
 }
 /* 切换形态档位：写档位 → 重算自动 buff → 全量刷新（倍率/星系加成为实时计算，无需迁移存档） */
@@ -15607,7 +15635,7 @@ function bindGroupChar(gIdx,slot,id){
   const sc = getChar(state.groups[gIdx].subId);
   const mAtk = mc && mc.atk ? mc.atk : 0;
   const sAtk = sc && sc.atk ? sc.atk : 0;
-  /* v3.0：角色面板改由引擎按 (atk70+380)×1.85×(1+基础攻击力%) 自动推算，不再写入缓存值。
+  /* v3.0：角色面板改由引擎按 (LVxx攻击力+380)×1.85×(1+基础攻击力%) 自动推算（v3.3.2：列随形态档位），不再写入缓存值。
      （旧实现 = mAtk + sAtk，即主战/援护的 t100 列之和，不含觉醒 5%。） */
   state.groups[gIdx].panel = 0;
 
@@ -17088,7 +17116,7 @@ function renderConfirm(){
 
   const inputRows = [
 
-    {label:'角色最终面板（含装备·可自定义）', key:'panel', tip:'可填游戏内看到的最终攻击力（含装备），系统自动换算（减装备加成 +1470/槽、去觉醒加攻）写回内部面板；填值 = 自定义覆盖，清空或点「↺ 自动」= 回到 v3.0 自动推算（角色面板 =（LV70攻击力 + 380）×（1 + 25% + 60%）×（1 + 基础攻击力%），取自「⑪ 数值统计」atk70 列）。灰底 = 自动推算、白底 = 自定义。主战与 SUB 各自独立携带套装，散件/套装统一 +1470。与「血量增益面板 → 最终攻击力」同源双向联动。'},
+    {label:'角色最终面板（含装备·可自定义）', key:'panel', tip:'可填游戏内看到的最终攻击力（含装备），系统自动换算（减装备加成 +1470/槽、去觉醒加攻）写回内部面板；填值 = 自定义覆盖，清空或点「↺ 自动」= 回到 v3.0 自动推算（角色面板 =（LV60攻击力 + 380）×（1 + 25% + 60%）×（1 + 基础攻击力%），取自「⑪ 数值统计」atk60 列；★形态档位选「6★·70级」时改取 LV70 三列）。灰底 = 自动推算、白底 = 自定义。主战与 SUB 各自独立携带套装，散件/套装统一 +1470。与「血量增益面板 → 最终攻击力」同源双向联动。'},
 
     {label:'请输入角色天赋效果 %', key:'talent', tip:'天赋百分比（在下方增益区每行勾选生效）'},
 
@@ -17157,7 +17185,7 @@ function renderConfirm(){
         const _effPShow = (_aeP && _aeP.id === ('cfAtkPanel'+g)) ? String(_aeP.value == null ? '' : _aeP.value) : String(effP);
         const _isCus = (+grp.panel||0) > 0;
         const _panelTip = '★只接受整数（输入时自动剔除小数点）。直接填游戏内看到的最终攻击力（含装备）即可，无需自己扣装备；系统按「（填值 - 装备加成）/（1 + 觉醒加攻%）」写回内部面板，装备加成本组为 +' + eqBonus + '。'
-          + '清空或点「↺ 自动」= 回到自动推算（角色面板 = (LV70攻击力 + 380) × (1 + 25% + 60%) × (1 + 基础攻击力%)，取自「⑪ 数值统计」atk70 列，本组自动值 = ' + _autoFin + '）。'
+          + '清空或点「↺ 自动」= 回到自动推算（角色面板 = (LV60攻击力 + 380) × (1 + 25% + 60%) × (1 + 基础攻击力%)，取自「⑪ 数值统计」atk60 列；★形态档位选「6★·70级」时改取 LV70 三列。本组自动值 = ' + _autoFin + '）。'
           + '总攻击 = 角色面板 × (1 + 攻击力%) + 藏品攻击力(含装备 +' + eqBonus + ')。与「血量增益面板 → 最终攻击力」同源双向联动。';
         h += '<td><input type="number" step="1" inputmode="numeric" id="cfAtkPanel' + g + '" value="' + _effPShow + '"'
           + (_isCus ? '' : ' style="background:var(--bg2,#f3f4f6)"')
@@ -18113,18 +18141,23 @@ function mainEquipOf(grp){ return (grp && grp.mainEquip!=null) ? grp.mainEquip :
 function subEquipOf(grp){  return (grp && grp.subEquip!=null)  ? grp.subEquip  : (grp && grp.equipType ? grp.equipType : 'none'); }
 function groupEquipPanel(grp){ grp = grp||{}; return equipPanelBonusFor(mainEquipOf(grp)) + equipPanelBonusFor(subEquipOf(grp)); }
 
-/* ===== 攻击力口径（v3.0 订正 · v3.3.1 觉醒改为独立乘区）=====
-   ① 角色面板 = (LV70攻击力 + 380) × (1 + 25% + 60%) × (1 + Σ「基础攻击力 +X%」)
-        · LV70攻击力 取「⑪ 数值统计」表 atk70 列（ATK_PANEL_LV，默认 70 级；60 级同理换 atk60）
+/* ===== 攻击力口径（v3.0 订正 · v3.3.1 觉醒改独立乘区 · v3.3.2 面板等级随形态档位）=====
+   ① 角色面板 = (LVxx攻击力 + 380) × (1 + 25% + 60%) × (1 + Σ「基础攻击力 +X%」)
+        · LVxx攻击力 取「⑪ 数值统计」表 atk60 / atk70 列（★v3.3.2：随形态档位走 —
+          '70' 档 ⇒ atk70；其余档（'60' / '50' / '40'）⇒ atk60，即默认 60 级）
         · 25% + 60% = 100 天赋固定加成（ATK_TALENT_PCT = 85，固定常量；觉醒关 ⇒ 结果 = t100 列）
         · 「基础攻击力 +X%」= 觉醒加攻（全库 main 在觉醒 2 阶 / sub 在 1 阶），觉醒开 ⇒ 结果 = awk 列
         ★v3.3.1 用户裁决：觉醒加攻由【前置区相加】改为【独立乘区 ×(1+觉醒%)】——
           旧式 (1+85%+5%) = 1.90，新式 1.85×1.05 = 1.9425（整体 +2.24%）；
           「⑪ 数值统计」awk 列同步按 1.85×1.05 全量重算。
+        ★v3.3.2 用户裁决：面板数据列由「固定 70 级」改为「随形态档位」——
+          默认档 '60'（6★·60级·技能25）读 60 级三列；新增 '70' 档（6★·70级·技能25）读 70 级三列。
+          口径 = (LVxx攻击力 + 380) × 1.85 × (1 + 基础攻击力%)，LVxx 由 panelLvOf(grp, who) 决定。
    ② 总攻击 = 角色面板 × (1 + Σ「攻击力 +X%」) + 藏品攻击力（散件/套装统一 +1470/槽）
    ③ 区分点：文案写【基础】攻击力 → 前置区（进面板）；只写【攻击力】→ 后置区（乘面板，不放大藏品）。
    注：旧版把「攻击力%」乘在 (面板 + 藏品) 上 ⇒ 藏品被攻击力%放大，与本口径不符，v3.0 订正。 */
-const ATK_PANEL_LV    = 70;   /* 面板等级（默认 70；数据表另有 atk60 / t100_60 / awk60） */
+/* 面板等级（v3.3.2 起随形态档位动态取值，已无固定常量）：
+   常量 ATK_PANEL_LV_DEF = 60（见 STAGE_OPTS 上方）；取值函数 panelLvOf(grp, who)。 */
 const ATK_PANEL_FLAT  = 380;  /* (等级攻击力 + 380) 中的固定加值 */
 const ATK_TALENT_PCT  = 85;   /* 天赋固定 25% + 60% */
 
@@ -18141,14 +18174,18 @@ function statRowOf(id){
   return _statRowMapCache[id] || null;
 }
 
-/* 单人「角色面板」：(atk70 + 380) × 1.85 × (1 + 基础攻击力%)（v3.0 立 · v3.3.1 觉醒改独立乘区）。 */
+/* 单人「角色面板」：(LVxx攻击力 + 380) × 1.85 × (1 + 基础攻击力%)（v3.0 立 · v3.3.1 觉醒改独立乘区
+   · ★v3.3.2 数据列随形态档位：'70' 档 ⇒ atk70；其余档 ⇒ atk60）。 */
 function atkPanelBaseOf(charId, who, g){
   if(!charId) return 0;
   const aw = (typeof groupAwakeningAtkPct==='function') ? (+groupAwakeningAtkPct(g, who)||0) : 0;
+  const _grp = (g!=null && typeof state!=='undefined' && state && state.groups) ? state.groups[g] : null;
+  const col = (typeof panelColsOf==='function') ? panelColsOf(_grp, who) : {atk:'atk60'};
   let atk = 0;
-  try{ atk = +statVal(charId, 'atk70') || 0; }catch(e){ atk = 0; }
+  try{ atk = +statVal(charId, col.atk) || 0; }catch(e){ atk = 0; }
   if(atk > 0) return (atk + ATK_PANEL_FLAT) * (1 + ATK_TALENT_PCT/100) * (1 + aw/100);
-  /* 回退：角色库 atk = t100 列（100 天赋面板，不含觉醒）⇒ 觉醒按独立乘区叠加即得面板 */
+  /* 回退：角色库 atk ≈ LV70 的 t100 列（100 天赋面板，不含觉醒）⇒ 觉醒按独立乘区叠加即得面板。
+     现网 110 形态全部已入「⑪ 数值统计」表 ⇒ 此分支不可达，仅作数据缺口的兜底。 */
   const c = (typeof getChar==='function') ? getChar(charId) : null;
   const t100 = (c && +c.atk) ? +c.atk : 0;
   return t100 > 0 ? t100 * (1 + aw/100) : 0;
@@ -18161,7 +18198,8 @@ function autoGroupPanel(g){
 }
 
 /* 组「觉醒加攻 %」加权值（按 t100 值加权，兼容 main / sub 开关不一致）。
-   v3.3.1：觉醒为【独立乘区】⇒ 自动推算 = (atk70+380)×1.85×(1+aw%)；显式面板语义 = 不含觉醒的
+   v3.3.1：觉醒为【独立乘区】⇒ 自动推算 = (LVxx攻击力+380)×1.85×(1+aw%)（v3.3.2：数据列随各槽位档位）；
+   显式面板语义 = 不含觉醒的
    基础面板，×(1+aw%) 即完整面板 ⇒ groupPanelAtk 显式分支与 UI「最终面板」反算（setGroupFinalPanel）
    无需改动即严格互逆 ⇒「显示值 ⇄ 存储值」可无损往返（灰底自动 / 白底自定义 两种状态互不串值）。 */
 function groupPanelAwPct(g){
@@ -18171,9 +18209,9 @@ function groupPanelAwPct(g){
   if(!awM && !awS) return 0;
   let tm = 0, ts = 0;
   try{
-    const _t = function(id){ const v = +statVal(id, 'atk70')||0; return v>0 ? (v + ATK_PANEL_FLAT)*(1 + ATK_TALENT_PCT/100) : 0; };
-    tm = grp.mainId ? _t(grp.mainId) : 0;
-    ts = grp.subId  ? _t(grp.subId)  : 0;
+    const _t = function(id, who){ const col = (typeof panelColsOf==='function') ? panelColsOf(grp, who) : {atk:'atk60'}; const v = +statVal(id, col.atk)||0; return v>0 ? (v + ATK_PANEL_FLAT)*(1 + ATK_TALENT_PCT/100) : 0; };
+    tm = grp.mainId ? _t(grp.mainId, 'main') : 0;
+    ts = grp.subId  ? _t(grp.subId, 'sub')   : 0;
   }catch(e){ tm = 0; ts = 0; }
   const sum = tm + ts;
   return sum > 0 ? ((awM*tm + awS*ts)/sum) : Math.max(awM, awS);
@@ -24041,7 +24079,7 @@ function loadScheduleTemplate(){
     autoBindTemplateGroups(tpl);
 
     /* v3.0.1：载入模板不再回写面板——②数据确认 / 血量增益面板的「最终攻击力」已由 groupPanelAtk 自动推算
-       （自动推算值取自「⑪ 数值统计」atk70 列；用户自定义值不应被模板覆盖）。 */
+       （自动推算值取自「⑪ 数值统计」atk60 / atk70 列，随形态档位；用户自定义值不应被模板覆盖）。 */
     (state.groups||[]).forEach(grp=>{
       if(!grp) return;
       const mc = getChar(grp.mainId), sc = getChar(grp.subId);
@@ -32387,7 +32425,7 @@ window.__build = buildDefaultCharDB;
 
 <script data-auth-gate="1">
 /* ============================================================================
-   残梦计算器 · 访问口令闸门（v3.3.1 · 服务端校验 + 周临时口令 + 池可勾选）
+   残梦计算器 · 访问口令闸门（v3.3.2 · 服务端校验 + 周临时口令 + 池可勾选）
    ---------------------------------------------------------------------------
    机制
      · 口令由服务端校验（Cloudflare Pages Functions：/api/auth 与 /api/verify）；
