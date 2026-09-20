@@ -16,7 +16,7 @@
 
 <link rel="manifest" href="manifest.webmanifest" data-page-node-id="Ujjb7vN2J2zFun44wCBIv8">
 
-<title>陪伴服3.3.3版本 · 残梦伤害计算器 · 心象 / 藏品 / 源质库</title>
+<title>陪伴服3.3.0版本 · 残梦伤害计算器 · 心象 / 藏品 / 源质库</title>
 
 <style>
 
@@ -874,7 +874,7 @@
 
     <div data-page-node-id="U3DQMnMQczfqNwA08GXIhj">
 
-      <h1 id="title" data-page-node-id="efK7lKccgtoypss7lhPAmx">残梦伤害计算器 <span style="font-size:12px;font-weight:700;color:#fff;background:#c0392b;border-radius:4px;padding:2px 7px;vertical-align:middle" data-page-node-id="8L10itvWf3BpMcGnSmAd9b">陪伴服3.3.3版本</span> <span style="font-size:12px;font-weight:700;color:#fff;background:#7c3aed;border-radius:4px;padding:2px 7px;vertical-align:middle" data-page-node-id="blIaQao7a9SrQ0lYXyABBd">含武装</span> <span style="font-size:11px;color:#7c3aed;vertical-align:middle" title="v1.0.7：修复出招表武装列乱码；新增角色组后武装配置区；武装增益已完整接入伤害公式（主战主动窗口 + 护卫被动条件触发 + 暴击分段结算）" data-page-node-id="1trZvOMvaDdDGFqf7a0bwj">v1.0.7</span></h1>
+      <h1 id="title" data-page-node-id="efK7lKccgtoypss7lhPAmx">残梦伤害计算器 <span style="font-size:12px;font-weight:700;color:#fff;background:#c0392b;border-radius:4px;padding:2px 7px;vertical-align:middle" data-page-node-id="8L10itvWf3BpMcGnSmAd9b">陪伴服3.3.0版本</span> <span style="font-size:12px;font-weight:700;color:#fff;background:#7c3aed;border-radius:4px;padding:2px 7px;vertical-align:middle" data-page-node-id="blIaQao7a9SrQ0lYXyABBd">含武装</span> <span style="font-size:11px;color:#7c3aed;vertical-align:middle" title="v1.0.7：修复出招表武装列乱码；新增角色组后武装配置区；武装增益已完整接入伤害公式（主战主动窗口 + 护卫被动条件触发 + 暴击分段结算）" data-page-node-id="1trZvOMvaDdDGFqf7a0bwj">v1.0.7</span></h1>
 
     </div>
 
@@ -885,7 +885,7 @@
 
       <button class="btn danger" onclick="resetAll()" data-page-node-id="OkbsuyOPXHN6p8PhIKSPWc">重置</button>
       <button class="btn" onclick="showChangelog()" title="查看近期版本更新重点（按版本条目罗列）" data-page-node-id="v243ChangelogBtn">📋 更新日志</button>
-      <span style="font-size:11px;color:#b45309;vertical-align:middle" title="v2.3.7 起（沿用至 3.3.3）：每个版本使用独立的本地存档，打开新版本会自动使用全新默认数据（无需重置）；旧版本文件仍读自己的存档。若当前界面数据异常，点击「重置」可手动恢复为本版本默认值。" data-page-node-id="OkbsuyOPXHN6p8PhIKSPWc2">⚠️ 使用前先点击「重置」刷新为最新版本</span>
+      <span style="font-size:11px;color:#b45309;vertical-align:middle" title="v2.3.7 起（沿用至 3.3.0）：每个版本使用独立的本地存档，打开新版本会自动使用全新默认数据（无需重置）；旧版本文件仍读自己的存档。若当前界面数据异常，点击「重置」可手动恢复为本版本默认值。" data-page-node-id="OkbsuyOPXHN6p8PhIKSPWc2">⚠️ 使用前先点击「重置」刷新为最新版本</span>
 
     </div>
 
@@ -1819,31 +1819,12 @@ const ROLE_GROUPS_DEFAULT = [
 
 
 /* 当前程序版本：页眉徽标、模式标题、导出页脚戳统一读取此常量 */
-const APP_VER = '3.3.3';
+const APP_VER = '3.3.0';
 
 /* v2.4.3：更新日志数据（按版本条目罗列近期更新重点）。点击「📋 更新日志」按钮弹出公告框。 */
 const CHANGELOG = [
-  {ver:'3.3.3', date:'2026-09-20', items:[
-    '【提示语】入口每周提示改为角色"本体名"：不再出现「女仆 / 泳装 / 双刀 / 界」这类形态前缀与「·751」这类显示后缀，白井黑子直接提示「黑子」。',
-    '【素材池】改为「角色库本体 + 其全名」两层：本体条如 黑子 / 桐人 / 美琴，全名条如 白井黒子 / 桐ヶ谷和人 / 御坂美琴，看到哪条就输哪条的罗马字。',
-    '【可勾选】同作品其他角色改为按需勾选：默认全部待命不进池，在本地控制台里按作品整组或逐条勾选，勾完即重算，池子大小随勾选变化。',
-    '【安全】候选与固定凭据逐条撞库复核；本轮又拦下一条（御坂美琴的全名拼写与某条固定凭据同串）并剔出池，两者依旧绝不撞车。',
-    '【零口径漂移】本次只动访问层，不碰任何伤害公式 / 乘区 / 技能库 / 连携数据。'
-  ]},
-  {ver:'3.3.2', date:'2026-09-20', items:[
-    '【访问体验】新增「每周临时码」：入口直接提示本周值守角色，以她的英文罗马字（全小写）即可进入，下线一周自动换人、无需人工维护。',
-    '【素材池】取自角色库罗马字、并入同作品其他角色；角色库角色优先轮值，同一角色至少隔 9 周才重现，提示语即该条目自己的中文名。',
-    '【易用性】输入不区分大小写、自动去首尾空格；提示语末尾给出长度与首字母（如 K···········），照着手打即可。',
-    '【兜底】原有固定凭据全部保留，二者任一可用；临时码持有者本机自动续期 7 天；素材池已排除与固定凭据同串的条目，两者绝不撞车。',
-    '【零口径漂移】本次只动访问层，不碰任何伤害公式 / 乘区 / 技能库 / 连携数据。'
-  ]},
-  {ver:'3.3.1', date:'2026-09-19', items:[
-    '【数值口径】角色默认暴击率由 30% 上调为 35%（新档与「重置」同步；暴击率只进暴击分/突破分，不入增伤区）。',
-  ]},
   {ver:'3.3.0', date:'2026-09-19', items:[
-    '【授权】启动校验改为服务端验证：本机不再内嵌任何凭据，改为保存服务端签发的授权令牌；离线仍可进入（宽限 3 天），超期后自动联网复核。',
-    '【维护】管理员可对单个授权单独停用、改期或吊销，不必更换主凭据；调整即时生效，其他使用者不受影响。',
-    '【体验】校验卡片与页眉徽标改按服务端返回的到期日显示剩余天数（≤7 天转黄、≤3 天转红），并提示本机离线可用天数。',
+    '【数值口径】角色默认暴击率由 30% 上调为 35%（新档与「重置」同步；暴击率只进暴击分/突破分，不入增伤区）。'
   ]},
   {ver:'3.2.0 ~ 3.2.5', date:'2026-09-19', archived:true, items:[
     '【口径】3.2.2 确立木桩环境四假设（满血 / 不被击杀 / 不攻击 / 无增益）并改天赋逐条求值，补齐四类觉醒条件闸门；3.2.0b 食蜂操祈「精神抑制」改按首次出手之后逐拍计入。',
@@ -32395,7 +32376,7 @@ window.__build = buildDefaultCharDB;
 
 <script data-auth-gate="1">
 /* ============================================================================
-   残梦计算器 · 访问口令闸门（v3.3.3 · 服务端校验 + 周临时口令 + 池可勾选）
+   残梦计算器 · 访问口令闸门（v3.3.0 · 服务端校验 + 周临时口令 + 池可勾选）
    ---------------------------------------------------------------------------
    机制
      · 口令由服务端校验（Cloudflare Pages Functions：/api/auth 与 /api/verify）；
@@ -32786,7 +32767,7 @@ window.__build = buildDefaultCharDB;
     var left = Math.max(0, Math.ceil((GRACE_DAYS * 86400000 - (Date.now() - (+o.ok || 0))) / 86400000));
     return '本机离线可用 ' + left + ' 天';
   }
-  /* ---------- 本周口令提示行（v3.3.3）----------
+  /* ---------- 本周口令提示行（v3.3.0）----------
      入口处明示「本周口令提示：<角色名>」—— 玩家拿中文名反推罗马字即可进入。
      ★必须显示在遮罩上（登录入口），而非仅控制台；控制台另有本周/下周值守位。
      ★副文案用【本周实际口令】当例子（不用硬编码的 "shana"）——
@@ -32885,7 +32866,7 @@ window.__build = buildDefaultCharDB;
       submit: submit, pass: pass, showGate: showGate, mustRecheck: mustRecheck,
       remainingDays: remainingDays, expiryText: expiryText, graceNote: graceNote,
       paintFoot: paintFoot, paintBadge: paintBadge,
-      /* v3.3.3：本周口令（池 / 派生 / 提示 / 直通 / 勾选）—— 供套件逐条断言 */
+      /* v3.3.0：本周口令（池 / 派生 / 提示 / 直通 / 勾选）—— 供套件逐条断言 */
       weekPool: weekPool, weekIndexOf: weekIndexOf, weekNormEn: weekNormEn,
       weeklyInfo: weeklyInfo, weeklyLocalPass: weeklyLocalPass, paintWeek: paintWeek,
       WEEK_EPOCH: WEEK_EPOCH, WEEK_CYCLE: WEEK_CYCLE, WEEK_SALT: WEEK_SALT, WEEK_AVOID: WEEK_AVOID,
