@@ -16,7 +16,7 @@
 
 <link rel="manifest" href="manifest.webmanifest" data-page-node-id="Ujjb7vN2J2zFun44wCBIv8">
 
-<title>陪伴服3.3.2版本 · 残梦伤害计算器 · 心象 / 藏品 / 源质库</title>
+<title>陪伴服3.3.3版本 · 残梦伤害计算器 · 心象 / 藏品 / 源质库</title>
 
 <style>
 
@@ -874,7 +874,7 @@
 
     <div data-page-node-id="U3DQMnMQczfqNwA08GXIhj">
 
-      <h1 id="title" data-page-node-id="efK7lKccgtoypss7lhPAmx">残梦伤害计算器 <span style="font-size:12px;font-weight:700;color:#fff;background:#c0392b;border-radius:4px;padding:2px 7px;vertical-align:middle" data-page-node-id="8L10itvWf3BpMcGnSmAd9b">陪伴服3.3.2版本</span> <span style="font-size:12px;font-weight:700;color:#fff;background:#7c3aed;border-radius:4px;padding:2px 7px;vertical-align:middle" data-page-node-id="blIaQao7a9SrQ0lYXyABBd">含武装</span> <span style="font-size:11px;color:#7c3aed;vertical-align:middle" title="v1.0.7：修复出招表武装列乱码；新增角色组后武装配置区；武装增益已完整接入伤害公式（主战主动窗口 + 护卫被动条件触发 + 暴击分段结算）" data-page-node-id="1trZvOMvaDdDGFqf7a0bwj">v1.0.7</span></h1>
+      <h1 id="title" data-page-node-id="efK7lKccgtoypss7lhPAmx">残梦伤害计算器 <span style="font-size:12px;font-weight:700;color:#fff;background:#c0392b;border-radius:4px;padding:2px 7px;vertical-align:middle" data-page-node-id="8L10itvWf3BpMcGnSmAd9b">陪伴服3.3.3版本</span> <span style="font-size:12px;font-weight:700;color:#fff;background:#7c3aed;border-radius:4px;padding:2px 7px;vertical-align:middle" data-page-node-id="blIaQao7a9SrQ0lYXyABBd">含武装</span> <span style="font-size:11px;color:#7c3aed;vertical-align:middle" title="v1.0.7：修复出招表武装列乱码；新增角色组后武装配置区；武装增益已完整接入伤害公式（主战主动窗口 + 护卫被动条件触发 + 暴击分段结算）" data-page-node-id="1trZvOMvaDdDGFqf7a0bwj">v1.0.7</span></h1>
 
     </div>
 
@@ -885,7 +885,7 @@
 
       <button class="btn danger" onclick="resetAll()" data-page-node-id="OkbsuyOPXHN6p8PhIKSPWc">重置</button>
       <button class="btn" onclick="showChangelog()" title="查看近期版本更新重点（按版本条目罗列）" data-page-node-id="v243ChangelogBtn">📋 更新日志</button>
-      <span style="font-size:11px;color:#b45309;vertical-align:middle" title="v2.3.7 起（沿用至 3.3.2）：每个版本使用独立的本地存档，打开新版本会自动使用全新默认数据（无需重置）；旧版本文件仍读自己的存档。若当前界面数据异常，点击「重置」可手动恢复为本版本默认值。" data-page-node-id="OkbsuyOPXHN6p8PhIKSPWc2">⚠️ 使用前先点击「重置」刷新为最新版本</span>
+      <span style="font-size:11px;color:#b45309;vertical-align:middle" title="v2.3.7 起（沿用至 3.3.3）：每个版本使用独立的本地存档，打开新版本会自动使用全新默认数据（无需重置）；旧版本文件仍读自己的存档。若当前界面数据异常，点击「重置」可手动恢复为本版本默认值。" data-page-node-id="OkbsuyOPXHN6p8PhIKSPWc2">⚠️ 使用前先点击「重置」刷新为最新版本</span>
 
     </div>
 
@@ -1819,13 +1819,20 @@ const ROLE_GROUPS_DEFAULT = [
 
 
 /* 当前程序版本：页眉徽标、模式标题、导出页脚戳统一读取此常量 */
-const APP_VER = '3.3.2';
+const APP_VER = '3.3.3';
 
 /* v2.4.3：更新日志数据（按版本条目罗列近期更新重点）。点击「📋 更新日志」按钮弹出公告框。 */
 const CHANGELOG = [
+  {ver:'3.3.3', date:'2026-09-20', items:[
+    '【提示语】入口每周提示改为角色"本体名"：不再出现「女仆 / 泳装 / 双刀 / 界」这类形态前缀与「·751」这类显示后缀，白井黑子直接提示「黑子」。',
+    '【素材池】改为「角色库本体 + 其全名」两层：本体条如 黑子 / 桐人 / 美琴，全名条如 白井黒子 / 桐ヶ谷和人 / 御坂美琴，看到哪条就输哪条的罗马字。',
+    '【可勾选】同作品其他角色改为按需勾选：默认全部待命不进池，在本地控制台里按作品整组或逐条勾选，勾完即重算，池子大小随勾选变化。',
+    '【安全】候选与固定凭据逐条撞库复核；本轮又拦下一条（御坂美琴的全名拼写与某条固定凭据同串）并剔出池，两者依旧绝不撞车。',
+    '【零口径漂移】本次只动访问层，不碰任何伤害公式 / 乘区 / 技能库 / 连携数据。'
+  ]},
   {ver:'3.3.2', date:'2026-09-20', items:[
     '【访问体验】新增「每周临时码」：入口直接提示本周值守角色，以她的英文罗马字（全小写）即可进入，下线一周自动换人、无需人工维护。',
-    '【素材池】取自角色库罗马字、并入同作品其他角色（共 253 位）；角色库角色优先轮值，同一角色至少隔 9 周才重现，提示语即该条目自己的中文名。',
+    '【素材池】取自角色库罗马字、并入同作品其他角色；角色库角色优先轮值，同一角色至少隔 9 周才重现，提示语即该条目自己的中文名。',
     '【易用性】输入不区分大小写、自动去首尾空格；提示语末尾给出长度与首字母（如 K···········），照着手打即可。',
     '【兜底】原有固定凭据全部保留，二者任一可用；临时码持有者本机自动续期 7 天；素材池已排除与固定凭据同串的条目，两者绝不撞车。',
     '【零口径漂移】本次只动访问层，不碰任何伤害公式 / 乘区 / 技能库 / 连携数据。'
@@ -32388,7 +32395,7 @@ window.__build = buildDefaultCharDB;
 
 <script data-auth-gate="1">
 /* ============================================================================
-   残梦计算器 · 访问口令闸门（v3.3.2 · 服务端校验 + 周临时口令）
+   残梦计算器 · 访问口令闸门（v3.3.3 · 服务端校验 + 周临时口令 + 池可勾选）
    ---------------------------------------------------------------------------
    机制
      · 口令由服务端校验（Cloudflare Pages Functions：/api/auth 与 /api/verify）；
@@ -32427,9 +32434,32 @@ window.__build = buildDefaultCharDB;
   /* ★WEEK_BLOCK：从池中彻底剔除的拼音（同时作用于角色库段与扩展段）。
      唯一的加入理由 = 该串与某条【固定口令】完全相同 —— 某周抽中它会让入口公开提示
      其中文名，玩家反推即得该固定口令 ⇒ 长期凭据被示众。
-     实测：shana（角色库段 · Shana）与固定口令「夏娜」同串 ⇒ 剔除。
+     实测一：shana（角色库段 · Shana）与固定口令「夏娜」同串 ⇒ 剔除。
+     实测二：misakamikoto（本体全名条 · 御坂美琴）与固定口令「炮姐」同串 ⇒ 剔除。
      ★与 _tools/auth/_extra_chars.js 的 BLOCK 必须逐位一致（build.js 会比对，不一致直接 die）。 */
-  var WEEK_BLOCK  = ['shana'];
+  var WEEK_BLOCK  = ['shana','misakamikoto'];
+  /* ★WEEK_SHORT：角色库段的「提示语」定稿表（拼音 → 本体简称）。
+     来源 _tools/auth/_short_names.js，由 build.js 注入；一律不带形态修饰
+     （女仆 / 泳装 / 双刀 / 和服 / 神猫 / 界）与「·751」这类显示后缀，
+     有姓者取「名」（白井黑子 → 黑子）；特例见该表。缺登记时回落为
+     「去 ·数字后缀的 label」⇒ 套件有「覆盖率 100%」断言，漏登记会翻红。 */
+  /*__WEEKSHORT_BEGIN__*/ var WEEK_SHORT = {
+      'accelerator':'一方通行', 'ako':'亚子', 'alice':'爱丽丝', 'alicia':'艾利西亚',
+      'asuna':'亚丝娜', 'boogiepop':'布吉波普', 'celty':'塞尔提', 'cmr91':'CMR-91',
+      'dokurochan':'朵库萝', 'emi':'惠美', 'enju':'延珠', 'erio':'艾莉欧',
+      'eugeo':'尤吉欧', 'frolaytia':'芙萝蕾缇雅', 'haruyuki':'春雪', 'hatsunemiku':'初音',
+      'havia':'贺维亚', 'hinata':'日向', 'holo':'赫萝', 'index':'茵蒂克丝',
+      'izaya':'临也', 'kagaminerinlen':'镜音', 'kamineko':'神猫黑猫', 'kino':'奇诺',
+      'kirino':'桐乃', 'kirito':'桐人', 'kojyo':'古城', 'kouko':'香子',
+      'kuroko':'黑子', 'kuroneko':'黑猫', 'kuroyukihime':'黑雪姬', 'leafa':'莉法',
+      'llenn':'莲', 'mashiro':'真白', 'megurineluka':'巡音', 'mhcrdrei':'MHCR-Drei',
+      'mhcreins':'MHCR-Eins', 'mhcrzwei':'MHCR-Zwei', 'mikoto':'美琴', 'miyuki':'深雪',
+      'qwenthur':'库温瑟', 'rentaro':'莲太郎', 'rusian':'卢西安', 'ryuji':'龙儿',
+      'sadao':'贞夫', 'selvaria':'塞露贝利亚', 'shana':'夏娜', 'shizuo':'静雄',
+      'shokuhou':'食蜂', 'sinon':'诗乃', 'taiga':'大河', 'tatsuya':'达也',
+      'tomo':'浅间', 'tomoka':'智花', 'touma':'当麻', 'uiharu':'初春',
+      'wilhelmina':'威尔艾米娜', 'yukina':'雪菜', 'yuuki':'有纪', 'zero':'零'
+    }; /*__WEEKSHORT_END__*/
   var WEEK_BASE_N = 0;                             /* weekPool() 写入：角色库段长度（加权分段点） */
   /* ★分段点自愈：WEEK_BASE_N 仅由 weekPool() 写入；若调用方直接喂入池而未经 weekPool()，
      则退化为下面的「自池首扫描第一个属于扩展段的条目」—— 池构序恒为角色库段在前、
@@ -32505,58 +32535,31 @@ window.__build = buildDefaultCharDB;
 
   /* ---------- 池：角色库段 + 扩展段 ----------
      ① 角色库段：EMBED_CHARS 按 label 排序 → 罗马字清洗 → 同名只留首见；
-     ② 扩展段：同作品「其他角色」（未入册但玩家熟悉），全名 + 简称并存、直接拼接无连接符。
-        ★扩展段由 _tools/auth/_extra_chars.js 维护，经 syncpool.js 落到
-          _tools/auth/_weekpool.json 后「原样复制」进本表（离线也算得出来）。
+     ② 扩展段 =「本体全名条（常驻）」+「勾选的同作品其他角色」，一律全名 + 直接拼接。
+        ★由 _tools/auth/_extra_chars.js（CORE_FULL / DROP / BLOCK）与 _extra_sel.json
+          （勾选表）决定，经 syncpool.js 落到 _tools/auth/_weekpool.json 后
+          「原样复制」进本表（离线也算得出来）。
      ③ 两段合并后仍按口令去重；扩展里与角色库撞车者已在生成期剔除。
      与服务端 _worker.js 的 WEEK_POOL 必须逐位同源 —— 改一处必改两处（跑 _check_pipe.js 验）。 */
-  var WEEK_EXTRA = [
-    ['sakaijyuyuji','坂井悠二'],['yoshidakazumi','吉田一美'],['alastor','阿拉斯托尔'],['margeritalg','玛格丽·朵'],['fecchan','菲蕾丝'],
-    ['tanakaeri','田中荣太'],['ogatamadoka','绪方真竹'],['satenruiko','佐天泪子'],['lastorder','最后之作'],['stiylmagnus','史提尔'],
-    ['kanzakikaori','神裂火织'],['tsuchimikadokaori','土御门元春'],['aqualette','水之守护者'],['hyoukakazakiri','风斩冰华'],['awaki','结标淡希'],
-    ['kinuhata','绢旗最爱'],['frendaseivelun','芙兰达'],['takitsubo','泷壶理后'],['mugino','麦野沉利'],['hamazura','滨面仕上'],
-    ['kakine','垣根帝督'],['gunha','削板军霸'],['willow','意志'],['eternal','艾扎力'],['maika','舞夏'],
-    ['misakaworst','御坂妹妹'],['kirigayasuguha','桐ヶ谷直叶'],['yui','结衣'],['silica','西莉卡'],['lizbeth','莉兹贝特'],
-    ['klein','克莱因'],['agil','艾基尔'],['heathcliff','希兹克利夫'],['kayaba','茅场晶彦'],['deathgun','死枪'],
-    ['eiji','瑛二'],['yuuna','尤娜'],['sion','希翁'],['strea','斯翠雅'],['philia','菲利亚'],
-    ['alicezuberg','爱丽丝·滋贝鲁库'],['sortiliena','索尔缇莉娜'],['ronie','罗妮耶'],['tieze','缇洁'],['medina','梅蒂娜'],
-    ['kurasakichiyuri','仓崎千百合'],['mayuzumitakumu','黛拓武'],['kurasakifuuko','仓崎枫子'],['silvercrow','银鸦'],['niiko','上月由仁子'],
-    ['seiji','能美征二'],['kuroba','黑羽早雪'],['kousakakyousuke','高坂京介'],['aragakiayase','新垣绫濑'],['makishimasaori','槙岛沙织'],
-    ['gokoururi','五更琉璃'],['tamuramanami','田村麻奈实'],['kandahisatake','神田空太'],['aoyamananami','青山七海'],['kamikurusaki','上井草美咲'],
-    ['mitakajin','三鹰仁'],['akasakaryuunosuke','赤坂龙之介'],['sengokuchihiro','千石千寻'],['kushiedaminori','栉枝实乃梨'],['kawashimaami','川岛亚美'],
-    ['takasuyasuko','高须泰子'],['kitamura','北村祐作'],['ryuugamikemikado','龙之峰帝人'],['kidaaomasaomi','纪田正臣'],['sonoharaanri','园原杏里'],
-    ['kishidanoshinra','岸谷新罗'],['stalker','赛尔提'],['walker','游马崎沃尔克'],['erika','狩泽绘理华'],['saki','张间美香'],
-    ['kishidanoshizuo','岸谷森严'],['kraftlawrence','克拉福·罗伦斯'],['nora','诺儿拉'],['chloe','克罗艾'],['fermil','费米·阿玛提'],
-    ['dianrubens','狄安娜'],['shibamizuki','柴田美月'],['chibaerika','千叶艾莉卡'],['kitayamashizuku','北山雫'],['mitsuihonoka','光井穗香'],
-    ['nanakusamayumi','七草真由美'],['juumonjikatsuto','十文字克人'],['watanabemari','渡边摩利'],['kanbarakihito','神原秋人'],['nasehiroomi','名濑博臣'],
-    ['nasemitsuki','名濑美月'],['naseizumi','名濑泉'],['shindouai','新堂爱'],['kuriyamamirai','栗山未来'],['sasakichiho','佐佐木千穗'],
-    ['urushihara','漆原半藏'],['alsiel','艾尔西尔'],['suzuno','铃乃'],['asuhasuzuno','铃木梨香'],['aibasumi','蓝羽浅葱'],
-    ['kizakikisayaka','煌坂纱矢华'],['laforia','拉·芙利亚'],['akatsukinagisa','晓凪沙'],['yasekimotoki','矢濑基树'],['astarte','亚丝塔露蒂'],
-    ['haseyuuma','叶濑夏音'],['nagi','薙'],['aobatsugumi','青叶鸫'],['mikuriyahiro','御厨仁'],['nyaruko','奈亚子'],
-    ['kuuko','克子'],['tsuruko','鹤子'],['yasakamahiro','八坂真寻'],['yasakayuka','八坂赖子'],['sanzeninnagi','三千院凪'],
-    ['katsurahinagiku','桂雏菊'],['ayasaki','绫崎飒'],['maria','玛莉亚'],['saginomiyaisumi','鹭之宫伊澄'],['sakuya','春鸟'],
-    ['hikitaniyahachiman','比企谷八幡'],['yukinoshitayukino','雪之下雪乃'],['yubihamayui','由比滨结衣'],['isshiki','一色伊吕波'],['hikitani','比企谷小町'],
-    ['hiratsukashizuka','平冢静'],['totsuka','户冢彩加'],['aniya','安艺伦也'],['katoumegumi','加藤惠'],['sawamuraeriri','泽村英梨梨'],
-    ['kasumigaokautaha','霞之丘诗羽'],['hyoudoumichiru','冰堂美智留'],['orekihoutarou','折木奉太郎'],['chitandaeru','千反田爱瑠'],['fukubesatoshi','福部里志'],
-    ['ibaramayaka','伊原摩耶花'],['togashiyuuta','富樫勇太'],['takanashirikka','小鸟游六花'],['nibutanashinka','丹生谷森夏'],['itsukisanae','五月七日茴香'],
-    ['tsuyurikumin','凸守早苗'],['takanashitouka','小鸟游十花'],['natsukisubaru','菜月昴'],['emilia','爱蜜莉雅'],['rem','雷姆'],
-    ['ram','拉姆'],['beatrice','贝蒂'],['puck','帕克'],['roswaal','罗兹瓦尔'],['julius','尤里乌斯'],
-    ['shaula','夏乌拉'],['ferris','菲利斯'],['ottosu','奥托'],['garfiel','加菲尔'],['satoukazuma','佐藤和真'],
-    ['aqua','阿克娅'],['megumin','惠惠'],['darkness','达克妮斯'],['wiz','维兹'],['yunyun','云云'],
-    ['itsukashido','五河士道'],['yatonokamitohka','夜刀神十香'],['yoshino','四糸乃'],['tokisakikurumi','时崎狂三'],['itsukakotori','五河琴里'],
-    ['yamai','八舞耶倶矢'],['natsumi','七罪'],['tobiichi','鸢一折纸'],['hotocoa','保登心爱'],['kafuuchino','香风智乃'],
-    ['utsumatsuchiya','宇治松千夜'],['kirimasyaro','桐间纱路'],['tederamize','天天座理世'],['gotoubocchi','后藤一里'],['ijichinijika','伊地知虹夏'],
-    ['yamadaryo','山田凉'],['kitakita','喜多郁代'],['kagamiharanadeshiko','各务原抚子'],['shimarin','志摩凛'],['oogakichiaki','大垣千明'],
-    ['inuyamaaoi','犬山葵'],['saitouena','齐藤惠那'],['meiko','MEIKO'],['kaito','KAITO'],['gumi','GUMI'],
-    ['iabrown','IA'],['yukari','结月缘'],['tetokasane','重音テト'],['kobeni','小红'],['shirahaku','白夜'],
-    ['shion','紫苑'],['nogizakaharuka','乃木坂春香'],['amamiyamizuki','天宫椎菜'],['sakurabashina','樱坂叶月']
-  ];
+  /*__WEEKEXTRA_BEGIN__*/ var WEEK_EXTRA = [
+    ['kamijoutouma','上条当麻'],['shiraikuroko','白井黒子'],['uiharusaten','初春饰利'],['shokuhoumisaki','食蜂操祈'],['kirigayakazuto','桐ヶ谷和人'],
+    ['yuukiasuna','结城明日奈'],['aomitaharuyuki','有田春雪'],['kousakakirino','高坂桐乃'],['shiinamashiro','椎名真白'],['aisakataiga','逢坂大河'],
+    ['takasuyuuji','高须龙儿'],['oriharayaizaya','折原临也'],['heiwajimashizuo','平和岛静雄'],['shibatatsuya','司波达也'],['shibamiyuki','司波深雪'],
+    ['maousadao','真奥贞夫'],['yusashiemi','游佐惠美'],['akatsukikojou','晓古城'],['himeragiyukina','姬柊雪菜'],['kagaminerin','镜音铃'],
+    ['kagaminelen','镜音连'],['sakaijyuyuji','坂井悠二'],['satenruiko','佐天泪子'],['lastorder','最后之作'],['kirigayasuguha','桐ヶ谷直叶'],
+    ['yui','结衣'],['gokoururi','五更琉璃'],['nyaruko','奈亚子'],['yukinoshitayukino','雪之下雪乃'],['katoumegumi','加藤惠'],
+    ['sawamuraeriri','泽村英梨梨'],['kasumigaokautaha','霞之丘诗羽'],['takanashirikka','小鸟游六花'],['natsukisubaru','菜月昴'],['emilia','爱蜜莉雅'],
+    ['rem','雷姆'],['yoshino','四糸乃'],['tokisakikurumi','时崎狂三'],['itsukakotori','五河琴里'],['kafuuchino','香风智乃']
+  ]; /*__WEEKEXTRA_END__*/
   /* ★BLOCK 判定：命中即从池中彻底剔除（角色库段与扩展段同时生效）。
      原 DROP 表只作用于扩展段，挡不住角色库段里的 shana —— 这正是本轮实测的安全缺口。 */
   function weekBlocked(p){
     for(var i = 0; i < WEEK_BLOCK.length; i++){ if(WEEK_BLOCK[i] === p) return true; }
     return false;
   }
+  /* ★提示语兜底：只剥「·751」这类显示后缀；形态前缀由 WEEK_SHORT 定稿表负责，
+     不在此处猜（启发式剥前缀会把「上条当麻」误剥成「当麻」）。 */
+  function weekStripLabel(s){ return String(s == null ? '' : s).replace(/[·・]\s*\d+$/, ''); }
   function weekPool(){
     var rows = [], seen = {}, out = [];
     try{
@@ -32571,7 +32574,7 @@ window.__build = buildDefaultCharDB;
       if(seen[key]) continue;
       seen[key] = 1;
       if(weekBlocked(key)) continue;          /* ★BLOCK：角色库段同受约束 */
-      out.push({ p: key, n: rows[k].label });
+      out.push({ p: key, n: WEEK_SHORT[key] || weekStripLabel(rows[k].label) });
     }
     /* ★分段点：角色库段长度（加权派生的分界；扩展段全部排在它之后） */
     WEEK_BASE_N = out.length;
@@ -32783,7 +32786,7 @@ window.__build = buildDefaultCharDB;
     var left = Math.max(0, Math.ceil((GRACE_DAYS * 86400000 - (Date.now() - (+o.ok || 0))) / 86400000));
     return '本机离线可用 ' + left + ' 天';
   }
-  /* ---------- 本周口令提示行（v3.3.2）----------
+  /* ---------- 本周口令提示行（v3.3.3）----------
      入口处明示「本周口令提示：<角色名>」—— 玩家拿中文名反推罗马字即可进入。
      ★必须显示在遮罩上（登录入口），而非仅控制台；控制台另有本周/下周值守位。
      ★副文案用【本周实际口令】当例子（不用硬编码的 "shana"）——
@@ -32882,13 +32885,14 @@ window.__build = buildDefaultCharDB;
       submit: submit, pass: pass, showGate: showGate, mustRecheck: mustRecheck,
       remainingDays: remainingDays, expiryText: expiryText, graceNote: graceNote,
       paintFoot: paintFoot, paintBadge: paintBadge,
-      /* v3.3.2：本周口令（池 / 派生 / 提示 / 直通）—— 供套件逐条断言 */
+      /* v3.3.3：本周口令（池 / 派生 / 提示 / 直通 / 勾选）—— 供套件逐条断言 */
       weekPool: weekPool, weekIndexOf: weekIndexOf, weekNormEn: weekNormEn,
       weeklyInfo: weeklyInfo, weeklyLocalPass: weeklyLocalPass, paintWeek: paintWeek,
       WEEK_EPOCH: WEEK_EPOCH, WEEK_CYCLE: WEEK_CYCLE, WEEK_SALT: WEEK_SALT, WEEK_AVOID: WEEK_AVOID,
       weekPickSyncRaw: weekPickSyncRaw, weekPickSync: weekPickSync, weekResolve: weekResolve,
       sha256Bytes: sha256Bytes, WEEK_EXTRA: WEEK_EXTRA,
       WEEK_BLOCK: WEEK_BLOCK, WEEK_BASE_W: WEEK_BASE_W, weekBlocked: weekBlocked,
+      WEEK_SHORT: WEEK_SHORT, weekStripLabel: weekStripLabel,
       weekBaseN: weekBaseN, weekBaseNFixed: function(){ return WEEK_BASE_N; }
     };
   }catch(e){}
