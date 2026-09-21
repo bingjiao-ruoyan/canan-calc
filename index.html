@@ -844,16 +844,15 @@
 </style>
 <div id="authGate" data-page-node-id="authGate" data-i18n-skip>
   <div class="ag-card">
-    <div class="ag-logo">残</div>
-    <div class="ag-t">残梦伤害计算器</div>
-    <div class="ag-s">请输入访问口令以继续</div>
+    <div class="ag-logo" id="agLogo">残</div>
+    <div class="ag-t" id="agT">残梦伤害计算器</div>
+    <div class="ag-s" id="agS">请输入访问口令以继续</div>
     <div class="ag-week" id="authWeek" data-page-node-id="authWeek"></div>
     <div class="ag-lang"><span class="i18n-seg" id="authLang" data-page-node-id="authLang" title="界面语言 / Interface language">
-      <button type="button" data-m="both" class="on">EN+中</button>
-      <button type="button" data-m="en">EN</button>
+      <button type="button" data-m="en" class="on">EN</button>
       <button type="button" data-m="zh">中</button>
     </span></div>
-    <label class="ag-lab" for="authPw">访问口令（英文 / 数字 / 连字符，请直接用英文键盘输入）</label>
+    <label class="ag-lab" for="authPw" id="agLab">访问口令（英文 / 数字 / 连字符，请直接用英文键盘输入）</label>
     <div class="ag-row">
       <input id="authPw" type="password" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" inputmode="latin" placeholder="请输入口令" data-page-node-id="authPw">
       <button id="authEye" class="ag-eye" type="button" title="显示 / 隐藏口令" data-page-node-id="authEye">显示</button>
@@ -861,7 +860,7 @@
     <button id="authBtn" type="button" data-page-node-id="authBtn">进入</button>
     <div class="ag-msg" id="authMsg"></div>
     <div class="ag-foot">
-      授权由服务器校验 <span class="ag-dev" id="authDev">····</span><br>
+      <span id="agFootTxt">授权由服务器校验</span> <span class="ag-dev" id="authDev">····</span><br>
       <span id="authRemain">首次使用需联网校验一次</span>
     </div>
   </div>
@@ -882,9 +881,8 @@
 
     <div class="toolbar" data-page-node-id="7NeBAsVGM3w4W6YBF4deCC">
 
-      <span class="i18n-seg" id="i18nSeg" data-i18n-skip title="显示语言 / Display language">
-        <button type="button" data-m="both" class="on">EN + 中</button>
-        <button type="button" data-m="en">EN</button>
+      <span class="i18n-seg" id="i18nSeg" data-i18n-skip title="Display language">
+        <button type="button" data-m="en" class="on">EN</button>
         <button type="button" data-m="zh">中</button>
       </span>
 
@@ -1849,8 +1847,8 @@ const APP_VER = '3.4.0';
 /* v2.4.3：更新日志数据（按版本条目罗列近期更新重点）。点击「📋 更新日志」按钮弹出公告框。 */
 const CHANGELOG = [
   {ver:'3.4.0', date:'2026-09-21', items:[
-    '【双语】新增英文对照：角色名与主要标签/数据名称采用官方英文，英文在上、中文在下；页眉可切换「英中 / 仅英 / 仅中」。',
-    '【双语】效果描述与说明段落保留中文原文，不做英译，避免中英夹杂。',
+    '【双语】新增英文界面：角色名与主要标签/数据名称采用官方英文，默认显示英文；页眉与登录页均可切换 EN / 中。',
+    '【双语】效果描述与说明段落不做英译：选 EN 时未翻译的内容整块隐藏、不显示文字，避免中英夹杂。',
     '【双语】角色英文名统一只取基础名，不再附加主战/援护括注（修正心象库「携带角色」把主战标成 Support）。',
     '【双语】「仅中」档位与未加双语层时逐像素一致（修正中文版字号偏小、颜色偏灰、行距偏紧）。',
     '【界面】移除导出图片与导出文本里署名的水印。',
@@ -32784,7 +32782,7 @@ window.__build = buildDefaultCharDB;
   function setPlain(on){
     _plain = !!on;
     try{ if(pwEl) pwEl.setAttribute('type', _plain ? 'text' : 'password'); }catch(e){}
-    if(eye) eye.textContent = _plain ? '隐藏' : '显示';
+    if(eye) eye.textContent = _plain ? gt().eyeHide : gt().eye;
     if(_plain && pwEl){ try{ var _n = String(pwEl.value || '').length; pwEl.focus(); pwEl.setSelectionRange(_n, _n); }catch(e){} }
   }
   if(eye) eye.addEventListener('click', function(){ setPlain(!_plain); });
@@ -32795,29 +32793,27 @@ window.__build = buildDefaultCharDB;
     /* ★口令一律小写归一：日更口令池本身全小写，玩家大小写混打也认；
        固定口令的用户名风格口令（如 bingjiao-ruoyan）本也全小写，归一无副作用。 */
     var v = pwEl ? String(pwEl.value || '').trim().toLowerCase() : '';
-    if(!v){ fail('请输入访问口令'); return; }
+    if(!v){ fail(gt().mEmpty); return; }
     if(busy) return;
     busy = true;
     if(btn) btn.disabled = true;
     var wl = weeklyLocalPass(v);
     if(wl){ busy = false; if(btn) btn.disabled = false; pass(); paintFoot(); paintBadge(); return; }
-    note('正在校验…');
+    note(gt().mChecking);
     login(v).then(function(r){
       busy = false;
       if(btn) btn.disabled = false;
       if(r.ok){ pass(); paintFoot(); paintBadge(); return; }
-      if(r.err === 'net') fail('无法连接服务器，请检查网络后重试');
-      else if(r.err === 'bad_pw') fail('口令不正确（不区分大小写），请重试');
-      else if(r.err === 'expired') fail('这个口令已过期');
-      else if(r.err === 'disabled') fail('这个口令已被暂停使用');
-      else if(r.err === 'origin_not_allowed') fail('当前访问地址未被授权，请联系管理员');
-      else fail('校验失败（' + r.err + '），请稍后再试');
+      var T = gt();
+      if(r.err === 'net') fail(T.mNet);
+      else if(r.err === 'bad_pw') fail(T.mBad);
+      else if(r.err === 'expired') fail(T.mExpired);
+      else if(r.err === 'disabled') fail(T.mDisabled);
+      else if(r.err === 'origin_not_allowed') fail(T.mOrigin);
+      else fail(T.mPre + r.err + T.mEnd);
     });
   }
-  if(devEl){
-    var _r0 = rec();
-    devEl.textContent = _r0 ? ('身份 ' + (_r0.label || '—') + ' · 已校验') : '未验证';
-  }
+  /* 身份 / 校验状态文案已移入 paintGate() —— 否则切档后这段不会重绘，会留住旧档语言。 */
 
   /* ---------- 有效期可视化（v3.2.5 立 · v3.3.0 改按服务端给的到期日）----------
      两处落点：① 校验卡片页脚 —— 本机授权剩余天数与到期日；
@@ -32834,13 +32830,14 @@ window.__build = buildDefaultCharDB;
     return d.getFullYear() + '-' + ('0' + (d.getMonth() + 1)).slice(-2) + '-' + ('0' + d.getDate()).slice(-2);
   }
   function graceNote(){
+    var T = gt();
     var o = rec(); if(!o) return '';
-    if(GRACE_DAYS <= 0) return '每次打开都联网校验';
+    if(GRACE_DAYS <= 0) return T.graceNever;
     var left = Math.max(0, Math.ceil((GRACE_DAYS * 86400000 - (Date.now() - (+o.ok || 0))) / 86400000));
-    return '本机离线可用 ' + left + ' 天';
+    return T.gracePre + left + T.graceSuf;
   }
   /* ---------- 今日口令提示行（v3.3.0 立 · v3.4.0 改日更）----------
-     仅在「仅中」界面明示「今日口令提示：<角色名>」—— 玩家拿中文名反推罗马字即可进入。
+     仅在中档（'zh'）明示「今日口令提示：<角色名>」—— 玩家拿中文名反推罗马字即可进入。
      ★必须显示在遮罩上（登录入口），而非仅控制台；控制台另有今日/次日值守位。
      ★副文案用【今日实际口令】当例子（不用硬编码的 "shana"）——
        可一眼看出「该输的是罗马字、且长度就这么多」，无需玩家自行摸索。
@@ -32851,22 +32848,101 @@ window.__build = buildDefaultCharDB;
     if(s.length <= 2) return s;
     return s.slice(0, 1).toUpperCase() + new Array(s.length).join('·');
   }
-  /* 显示档位：'zh' 给完整提示（中文名 + 掩码）；'en' / 'both' 只给一句无角色信息的引导。
-     ★自检规约：_selfcheck 的 DOM 桩只实现 querySelector / querySelectorAll，**没有**
+  /* ★自检规约：_selfcheck 的 DOM 桩只实现 querySelector / querySelectorAll，**没有**
        getElementsByTagName ⇒ 闸门脚本只能用前两者，否则 11 个套件会在闸门脚本初始化那一刻
        抛 TypeError: box.getElementsByTagName is not a function，整片翻红（实测踩中一次）。 */
   var gateLangOb = null;
+  /* ---------- 显示档位（v3.4.0 修订：两档制，取消「英中并显」）----------
+     默认 'en' —— 登录页与主界面一律英文；只有用户主动点「中」才切中文。
+     提示行（#authWeek）的安全口径：只有 'zh' 档才给「中文角色名 + 掩码」；
+     'en' 档只给一句不含任何角色线索的英文引导。 */
   var HINT_OFF = {
-    en:   'Password hint is shown only in the Chinese interface — switch to 「中」.',
-    both: '口令提示仅在「中」界面显示 · Hint only in 中 mode'
+    en: 'Daily password hint is shown in the Chinese interface only — use the switch below.'
   };
   function gateLang(){
     var m = '';
     try{ m = document.documentElement.getAttribute('data-i18n-mode') || ''; }catch(e){}
-    if(m !== 'both' && m !== 'en' && m !== 'zh'){
-      try{ var v = localStorage.getItem('czy_lang'); if(v === 'both' || v === 'en' || v === 'zh') m = v; }catch(e){}
+    if(m !== 'en' && m !== 'zh'){
+      try{ var v = localStorage.getItem('czy_lang'); if(v === 'en' || v === 'zh') m = v; }catch(e){}
     }
-    return (m === 'en' || m === 'zh') ? m : 'both';
+    return (m === 'zh') ? 'zh' : 'en';
+  }
+  /* ---------- 闸门文案表（按档渲染）----------
+     ★登录页属访问控制层，其文案与口令强相关 ⇒ 不交给双语引擎（遮罩常驻 data-i18n-skip），
+       由本脚本按档直接改写 textContent / placeholder / title，避免「引擎再译一遍」的通道。
+     ★英文档不允许出现任何中文字符（含提示行引导语）。 */
+  var GT = {
+    zh: {
+      title:'残梦伤害计算器', sub:'请输入访问口令以继续',
+      lab:'访问口令（英文 / 数字 / 连字符，请直接用英文键盘输入）',
+      ph:'请输入口令', eye:'显示', eyeHide:'隐藏', eyeT:'显示 / 隐藏口令',
+      btn:'进入', foot:'授权由服务器校验', langT:'界面语言', logo:'残',
+      idPre:'身份 ', verified:' · 已校验', okSolo:'已校验', unverified:'未验证',
+      remainOff:'本机授权需联网复核或已到期', remainLong:'本机长期授权 · 无到期日',
+      remainPre:'本机授权剩余 ', remainMid:' 天', remainTo:'（至 ', remainToEnd:'）',
+      gracePre:'本机离线可用 ', graceSuf:' 天', graceNever:'每次打开都联网校验',
+      badgeLong:'授权 · 长期', badgePre:'授权 · 剩余 ', badgeSuf:' 天',
+      bTitleLong:'本机长期授权 · 无到期日', bTitleExp:'到期日 ', bTitleLeft:'剩余 ', bTitleEnd:' 天',
+      mEmpty:'请输入访问口令', mChecking:'正在校验…',
+      mNet:'无法连接服务器，请检查网络后重试',
+      mBad:'口令不正确（不区分大小写），请重试',
+      mExpired:'这个口令已过期', mDisabled:'这个口令已被暂停使用',
+      mOrigin:'当前访问地址未被授权，请联系管理员',
+      mPre:'校验失败（', mEnd:'），请稍后再试',
+      mRecheck:'正在联网复核授权…',
+      mNoNet:'网络不可用，无法复核授权。请联网后重试，或直接输入口令。',
+      mDead:'授权已失效，请重新输入口令。'
+    },
+    en: {
+      title:'Canan Damage Calculator', sub:'Enter your access password to continue',
+      lab:'Access password (letters / digits / hyphens — type with an English keyboard)',
+      ph:'Enter password', eye:'Show', eyeHide:'Hide', eyeT:'Show / hide password',
+      btn:'Enter', foot:'Authorization is verified by the server', langT:'Interface language', logo:'C',
+      idPre:'ID ', verified:' · verified', okSolo:'Verified', unverified:'Not verified',
+      remainOff:'Local authorization needs an online re-check, or has expired',
+      remainLong:'Local authorization · permanent',
+      remainPre:'Local authorization: ', remainMid:' day(s) left', remainTo:' (until ', remainToEnd:')',
+      gracePre:'offline for ', graceSuf:' day(s)', graceNever:'online check on every launch',
+      badgeLong:'Auth · Permanent', badgePre:'Auth · ', badgeSuf:' days left',
+      bTitleLong:'Local authorization · permanent', bTitleExp:'Expires ', bTitleLeft:'Days left: ', bTitleEnd:'',
+      mEmpty:'Please enter your access password', mChecking:'Verifying…',
+      mNet:'Cannot reach the server. Check your network and retry.',
+      mBad:'Incorrect password (case-insensitive). Please try again.',
+      mExpired:'This password has expired.', mDisabled:'This password has been suspended.',
+      mOrigin:'This address is not authorized. Please contact the administrator.',
+      mPre:'Verification failed (', mEnd:'). Please try again later.',
+      mRecheck:'Re-checking authorization…',
+      mNoNet:'Network unavailable — cannot re-check. Reconnect and retry, or enter a password.',
+      mDead:'Authorization is no longer valid. Please enter your password again.'
+    }
+  };
+  function gt(){ return GT[gateLang()] || GT.en; }
+  function setTxt(id, v){
+    var el = document.getElementById(id);
+    if(el) el.textContent = v;
+  }
+  /* 静态文案整体按档改写：标题 / 副标题 / 标签 / 口令框 / 显隐按钮 / 进入 / 页脚 / 身份状态 */
+  function paintGate(){
+    var T = gt();
+    setTxt('agLogo', T.logo);
+    setTxt('agT', T.title);
+    setTxt('agS', T.sub);
+    setTxt('agLab', T.lab);
+    setTxt('authBtn', T.btn);
+    setTxt('agFootTxt', T.foot);
+    setTxt('authEye', _plain ? T.eyeHide : T.eye);
+    var pw = document.getElementById('authPw');
+    if(pw){ try{ pw.setAttribute('placeholder', T.ph); }catch(e){} }
+    var ey = document.getElementById('authEye');
+    if(ey){ try{ ey.setAttribute('title', T.eyeT); }catch(e){} }
+    var dv = document.getElementById('authDev');
+    if(dv){
+      var r0 = rec();
+      /* ★身份标签是 token 自带的中文角色名（也是当期口令的中文写法）⇒ 英文档一律不并入，
+         免得英文界面里冒出中文；中文档照旧「身份 X · 已校验」。 */
+      dv.textContent = !r0 ? T.unverified
+        : ((gateLang() === 'zh') ? (T.idPre + (r0.label || '—') + T.verified) : T.okSolo);
+    }
   }
   function paintGateLang(){
     var box = document.getElementById('authLang'); if(!box) return;
@@ -32876,18 +32952,23 @@ window.__build = buildDefaultCharDB;
          真机不需要这层，但少了它，闸门脚本会在初始化那一刻抛错 ⇒ 十几个套件整片翻红。 */
     try{ bs = (box.querySelectorAll ? box.querySelectorAll('button') : null) || []; }catch(e){ bs = []; }
     for(var i = 0; i < bs.length; i++) bs[i].className = (bs[i].getAttribute('data-m') === m) ? 'on' : '';
+    /* 开关自身的提示语按档给（开关必须常驻豁免，否则英文档会把它自己清空） */
+    try{ box.setAttribute('title', gt().langT); }catch(e){}
+    paintGate();
+    /* 页脚与徽标同样按档 ⇒ 切档必须一并重绘（函数声明会提升，此处可前向调用）。 */
+    paintFoot();
+    paintBadge();
   }
   function paintWeek(){
     var el = document.getElementById('authWeek'); if(!el) return;
     var pool = weekPool(); if(!pool.length){ el.style.display = 'none'; return; }
     var wk = weeklyInfo(pool); if(!wk.name){ el.style.display = 'none'; return; }
     el.style.display = '';
-    var md = gateLang();
-    if(md === 'zh'){
+    if(gateLang() === 'zh'){
       el.innerHTML = '今日口令提示：<b>' + wk.name + '</b>' +
         '<span class="ag-week-sub">（角色罗马字，小写、无空格，' + maskPw(wk.pw) + '）</span>';
     } else {
-      el.innerHTML = '<span class="ag-week-sub">' + HINT_OFF[md] + '</span>';
+      el.innerHTML = '<span class="ag-week-sub">' + HINT_OFF.en + '</span>';
     }
     paintGateLang();
   }
@@ -32899,7 +32980,7 @@ window.__build = buildDefaultCharDB;
       while(t && t !== box && !(t.getAttribute && t.getAttribute('data-m'))) t = t.parentNode;
       if(!t || t === box || !t.getAttribute) return;
       var m = t.getAttribute('data-m');
-      if(m !== 'both' && m !== 'en' && m !== 'zh') return;
+      if(m !== 'en' && m !== 'zh') return;
       try{ if(window.__I18N && window.__I18N.setMode) window.__I18N.setMode(m); }catch(e){}
       try{ document.documentElement.setAttribute('data-i18n-mode', m); }catch(e){}
       paintGateLang(); paintWeek();
@@ -32920,11 +33001,13 @@ window.__build = buildDefaultCharDB;
   }
   function paintFoot(){
     var el = document.getElementById('authRemain'); if(!el) return;
-    if(!localOk()){ el.textContent = '本机授权需联网复核或已到期'; el.style.color = ''; return; }
+    var T = gt();
+    if(!localOk()){ el.textContent = T.remainOff; el.style.color = ''; return; }
     var n = remainingDays();
-    if(n === Infinity || n === null){ el.textContent = '本机长期授权 · 无到期日'; el.style.color = ''; return; }
+    if(n === Infinity || n === null){ el.textContent = T.remainLong; el.style.color = ''; return; }
     var t = expiryText();
-    el.textContent = '本机授权剩余 ' + n + ' 天' + (t ? '（至 ' + t + '）' : '') + ' · ' + graceNote();
+    el.textContent = T.remainPre + n + T.remainMid + (t ? (T.remainTo + t + T.remainToEnd) : '') +
+                     ' · ' + graceNote();
     el.style.color = (n <= 3) ? '#dc2626' : ((n <= 7) ? '#b45309' : '');
   }
   function paintBadge(){
@@ -32940,17 +33023,21 @@ window.__build = buildDefaultCharDB;
     }
     var o = rec() || {};
     var n = remainingDays();
+    var T = gt();
+    /* ★身份标签只在中文档并入 title —— 英文档既不出现中文，也不给出口令的中文线索。 */
+    var lab = (gateLang() === 'zh' && o.label) ? (T.idPre + o.label) : '';
     if(n === Infinity || n === null){
-      el.textContent = '授权 · 长期';
+      el.textContent = T.badgeLong;
       el.className = '';
-      el.title = '本机长期授权 · 无到期日' + (o.label ? '　身份 ' + o.label : '') + '\n' + graceNote();
+      el.title = T.bTitleLong + (lab ? '　' + lab : '') + '\n' + graceNote();
       return;
     }
-    el.textContent = '授权 · 剩余 ' + n + ' 天';
+    el.textContent = T.badgePre + n + T.badgeSuf;
     el.className = (n <= 3) ? 'exp' : ((n <= 7) ? 'warn' : '');
-    el.title = (o.label ? '身份 ' + o.label + '\n' : '') + '到期日 ' + (expiryText() || '—') +
-               '\n剩余 ' + n + ' 天\n' + graceNote();
+    el.title = (lab ? lab + '\n' : '') + T.bTitleExp + (expiryText() || '—') +
+               '\n' + T.bTitleLeft + n + T.bTitleEnd + '\n' + graceNote();
   }
+  paintGate();          /* ★静态文案按档渲染：默认 'en' ⇒ 登录页整页英文，不出现中文 */
   paintFoot();
   paintBadge();
   paintWeek();
@@ -32969,11 +33056,11 @@ window.__build = buildDefaultCharDB;
   }
   /* 本机有记录、但已超宽限（或未到期但需复核）⇒ 必须联网复核一次 */
   function mustRecheck(){
-    showGate('正在联网复核授权…');
+    showGate(gt().mRecheck);
     revalidate().then(function(r){
       if(r === true){ pass(); paintFoot(); paintBadge(); }
-      else if(r === null){ fail('网络不可用，无法复核授权。请联网后重试，或直接输入口令。'); }
-      else { clearRec(); fail('授权已失效，请重新输入口令。'); }
+      else if(r === null){ fail(gt().mNoNet); }
+      else { clearRec(); fail(gt().mDead); }
     });
   }
 
@@ -33004,6 +33091,7 @@ window.__build = buildDefaultCharDB;
       weekPool: weekPool, weekIndexOf: weekIndexOf, weekNormEn: weekNormEn,
       weeklyInfo: weeklyInfo, weeklyLocalPass: weeklyLocalPass, paintWeek: paintWeek,
       gateLang: gateLang, paintGateLang: paintGateLang, HINT_OFF: HINT_OFF,
+      gt: gt, GT: GT, paintGate: paintGate,
       WEEK_EPOCH: WEEK_EPOCH, WEEK_CYCLE: WEEK_CYCLE, WEEK_SALT: WEEK_SALT, WEEK_AVOID: WEEK_AVOID,
       weekPickSyncRaw: weekPickSyncRaw, weekPickSync: weekPickSync, weekResolve: weekResolve,
       sha256Bytes: sha256Bytes, WEEK_EXTRA: WEEK_EXTRA,
@@ -33021,19 +33109,24 @@ window.__build = buildDefaultCharDB;
 
 <!-- ==================== 双语显示（i18n）· 3.4.0 新增 ==================== -->
 <style>
-  /* 双语块：英文在上、中文在下（inline-flex 竖排，兼容行内/表格/flex 容器） */
-  .i18n-b{display:inline-flex;flex-direction:column;line-height:1.28;vertical-align:baseline;max-width:100%}
-  .i18n-b>.i18n-en{font-weight:600;white-space:normal}
-  .i18n-b>.i18n-zh{font-size:.88em;opacity:.62;white-space:normal}
-  html[data-i18n-mode="en"] .i18n-zh{display:none}
-  /* ★★「仅中」档位必须与「从未加过双语层」的页面**逐像素一致**。
-     若不中和：中文被压成 .88em 字号 + .62 不透明度，且 inline-flex 竖列把 line-height
-     从 body 的 1.5 压到 1.28 ⇒ 整页中文又小又灰又挤（实测反馈「中文版字体很丑」）。
-     中和三件套：① 结构还原为普通行内 ② 字号/透明度/行高/字重全部 inherit ③ 屏蔽 en。
-     ★ 这些选择器比 .i18n-b>.i18n-zh（0,2,0）高一级（0,3,1），故能压过下方媒体查询。 */
+  /* ---------- 双语层样式（v3.4.0 修订：两档制 en / zh，取消「英中并显」）----------
+     EN 档（默认）：只渲染英文；中文子节点一律不出。
+       · 未译条目（.i18n-raw —— 只含中文子节点的双语块）**整块收起**，
+         即用户的「英文没有翻译的部分就隐藏掉，不显示文字」。
+       · 不做任何字号 / 不透明度压缩：en 档显示的就是译文本身，没有「次要中文」需要降级。
+     中 档：必须与「从未加过双语层」的页面**逐像素一致** —— 中和三件套
+       （① 结构还原为普通行内 ② 字号/透明度/行高/字重全部 inherit ③ 屏蔽 en 层）。
+       若不对中，中文会被压成小灰字并因 inline-flex 竖列把 line-height 从 body 的 1.5 压到 1.28
+       （实测反馈「中文版字体很丑」）。
+     ★ 档位选择器（0,3,1）高于基础规则（0,2,0），故能稳定压过。 */
+  .i18n-b{display:inline;line-height:inherit;vertical-align:baseline;max-width:none}
+  .i18n-b>.i18n-en{white-space:normal}
+  .i18n-b>.i18n-zh{display:none}
+  .i18n-b.i18n-raw{display:none}
   html[data-i18n-mode="zh"] .i18n-b{display:inline;line-height:inherit;vertical-align:baseline;max-width:none}
   html[data-i18n-mode="zh"] .i18n-b>.i18n-en{display:none}
-  html[data-i18n-mode="zh"] .i18n-b>.i18n-zh{font-size:inherit;opacity:1;font-weight:inherit;line-height:inherit;white-space:inherit}
+  html[data-i18n-mode="zh"] .i18n-b>.i18n-zh{display:inline;font-size:inherit;opacity:1;font-weight:inherit;line-height:inherit;white-space:inherit}
+  html[data-i18n-mode="zh"] .i18n-b.i18n-raw{display:inline}
   /* 语言开关 */
   .i18n-seg{display:inline-flex;align-items:center;gap:0;border:1px solid #cbd5e1;border-radius:6px;overflow:hidden;background:#fff;vertical-align:middle}
   .i18n-seg>button{border:0;background:transparent;color:#475569;font-size:11px;padding:4px 8px;cursor:pointer;font-family:inherit;line-height:1.4}
@@ -33044,8 +33137,6 @@ window.__build = buildDefaultCharDB;
   .disclaimer .dc-icon{flex:none;font-size:13px;line-height:1.3}
   .i18n-footer{margin-top:18px;padding:10px 12px 4px;border-top:1px dashed #e2e8f0;color:#94a3b8;font-size:11px;text-align:center}
   @media (max-width:640px){
-    /* 只缩「英中并显 / 仅英」档的次要中文；「仅中」档由上方中和规则接管，不受影响 */
-    html:not([data-i18n-mode="zh"]) .i18n-b>.i18n-zh{font-size:.82em}
     .disclaimer{font-size:11px;padding:8px 10px}
   }
 </style>
@@ -33057,14 +33148,16 @@ window.__build = buildDefaultCharDB;
      ① 角色名 —— 来自数据自带的 nameEn / supEn
      ② 主要标签 —— 界面上的短标签（页签、分区标题、按钮、表头、状态词）
      ③ 数据名称 —— 技能名 / 心象名 / 藏品名 / 武装名 / 源质名
-     ✗ 技能与觉醒的**效果描述**、大段说明文字一律保留中文原文（不译、不并显）
+     ✗ 技能与觉醒的**效果描述**、大段说明文字不译 —— EN 档整块收起，中档原样显示
    ---------------------------------------------------------------------------
    设计
      · 字典两路：① 构建期注入的 DICT（标签 + 名称，中文键以 \\uXXXX 转义存放）
                  ② 运行时从数据自带官方英文补齐（nameEn / supEn / nEn）
      · 渲染：把命中的文本节点包成 <span class="i18n-b"><span class="i18n-en">…</span>
-       <span class="i18n-zh">…</span></span> ⇒ 英文在上、中文在下。
-     · 显示档位：html[data-i18n-mode] = both（默认，英中并显）/ en（仅英）/ zh（仅中）。
+       <span class="i18n-zh">…</span></span>；中文子节点只在「中」档渲染。
+     · ★未命中（无译文）的文本同样包一层并加 i18n-raw —— 只为在 EN 档整块收起，
+       即用户口径「英文没有翻译的部分就隐藏掉，不显示文字」。
+     · 显示档位：html[data-i18n-mode] = en（默认，仅英）/ zh（仅中）。★已取消「英中并显」档。
      · 幂等：已处理过的节点带 .i18n-b 祖先，再次遍历直接跳过；结果按原文缓存。
    注意
      · 只处理「文本节点」，不碰属性以外的结构；脚本 / 样式 / 文本域 / 标题节点一律跳过。
@@ -33081,8 +33174,9 @@ window.__build = buildDefaultCharDB;
 
   var LS_KEY  = 'czy_lang';        /* 不带版本后缀：语言偏好跨版本保留 */
   var CJK     = /[\u4e00-\u9fff]/;
-  /* ★只译「标签 / 名称」级别：超过这个长度的一律不碰（效果描述、说明段落）。
-     现有字典最长键 = 17 字（数据名称），最长标签 = 12 字，故 40 有充足余量。 */
+  /* ★只译「标签 / 名称」级别：超过这个长度的一律不译（效果描述、说明段落）。
+     现有字典最长键 = 17 字（数据名称），最长标签 = 12 字，故 40 有充足余量。
+     ★「不译」在 EN 档下等于「整块收起」—— 说明段落不会以中文形态残留在英文界面里。 */
   var MAXTEXT = 40;
   var SKIP_TAG = { script:1, style:1, noscript:1, textarea:1, title:1, iframe:1, svg:1, canvas:1 };
 
@@ -33155,6 +33249,7 @@ window.__build = buildDefaultCharDB;
     if(text == null) return null;
     var t = String(text);
     if(!t || !CJK.test(t)) return null;
+    if(t.length > MAXTEXT) return null;      /* ★超长一律按「未译」处理（EN 档整块收起） */
     if(cache[t] !== undefined) return cache[t];
     var out = null;
     if(DICT[t] != null){
@@ -33185,15 +33280,19 @@ window.__build = buildDefaultCharDB;
   }
 
   /* ---------- ③ 模式 ---------- */
-  var mode = 'both';
-  try{ var m0 = localStorage.getItem(LS_KEY); if(m0 === 'both' || m0 === 'en' || m0 === 'zh') mode = m0; }catch(e){}
+  /* ★默认档 = 'en'：登录页与主界面一律英文；只有用户主动选「中」才切中文。
+     存量 'both' 记录落不到两个合法值 ⇒ 自然回落到默认 en（并显档已取消，无需迁移代码）。 */
+  var mode = 'en';
+  try{ var m0 = localStorage.getItem(LS_KEY); if(m0 === 'en' || m0 === 'zh') mode = m0; }catch(e){}
   function paintSeg(){
     var box = document.getElementById('i18nSeg'); if(!box) return;
     var bs = box.getElementsByTagName('button');
     for(var i = 0; i < bs.length; i++) bs[i].className = (bs[i].getAttribute('data-m') === mode) ? 'on' : '';
+    /* 开关自身的提示语按档给 —— 它是双语开关，必须常驻豁免翻译（否则 EN 档会被自己清空） */
+    try{ box.setAttribute('title', (mode === 'zh') ? '显示语言' : 'Display language'); }catch(e){}
   }
   function setMode(m){
-    if(m !== 'both' && m !== 'en' && m !== 'zh') return;
+    if(m !== 'en' && m !== 'zh') return;
     mode = m;
     document.documentElement.setAttribute('data-i18n-mode', m);
     try{ localStorage.setItem(LS_KEY, m); }catch(e){}
@@ -33218,44 +33317,73 @@ window.__build = buildDefaultCharDB;
     if(p.closest && p.closest('.i18n-b,[data-i18n-skip],#authGate')) return false;
     return true;
   }
+  /* ---------- <option> 专用分档 ----------
+     <option> 内不能放元素，CSS 也管不了它的文本 ⇒ 只能按档重写 textContent。
+     ★幂等：算出的值与当前一致就不写 —— 否则每次改写都会触发 mutation ⇒ 观察器自激空转。 */
+  function syncOpt(el){
+    var orig = (el.getAttribute ? el.getAttribute('data-i18n-opt') : null);
+    if(orig == null) return;
+    var en = tr(orig);
+    var next = (mode === 'zh') ? orig : ((en != null && en !== orig) ? en : '');
+    try{ if(el.textContent !== next) el.textContent = next; }catch(e){}
+  }
   function doText(node){
     var raw = node.nodeValue;
     if(!raw) return;
     var t = raw.trim();
-    if(!t || t.length > MAXTEXT || !CJK.test(t)) return;
+    if(!t || !CJK.test(t)) return;
     var p = node.parentNode;
     if(!markable(p)) return;
     var tag = (p.nodeName || '').toLowerCase();
-    if(tag === 'option' && p.getAttribute('data-i18n-opt')) return;   /* 已退化过，防二次拼接 */
     var en = tr(t);
-    if(en == null || en === t) return;
+    var has = (en != null && en !== t);
     if(tag === 'option'){
-      /* <option> 只能放纯文本 ⇒ 退化成「英文 · 中文」；打标记防二次处理 */
-      try{ p.textContent = en + '  ·  ' + t; p.setAttribute('data-i18n-opt', '1'); }catch(e){}
+      /* <option> 只能放纯文本、也没法用 span + CSS 分档 ⇒ 改为「按档整写 textContent」：
+           EN 档：有译文写译文，无译文写空串（不显示文字，即用户口径）
+           中  档：写回中文原文
+         原文存进 data-i18n-opt；重写由 syncOpt() 承接（值相同不写，避免观察器自激）。 */
+      if(p.getAttribute('data-i18n-opt') == null) p.setAttribute('data-i18n-opt', t);
+      syncOpt(p);
       return;
     }
     var span = document.createElement('span');
-    span.className = 'i18n-b';
-    var e1 = document.createElement('span'); e1.className = 'i18n-en'; e1.textContent = en;
+    /* ★未译（!has）⇒ 只包中文子节点 + i18n-raw：EN 档由 CSS 整块收起，中档原样显示。
+       两档共用同一套节点 —— 切档只改 html[data-i18n-mode]，不重建 DOM。 */
+    span.className = has ? 'i18n-b' : 'i18n-b i18n-raw';
+    if(has){
+      var e1 = document.createElement('span'); e1.className = 'i18n-en'; e1.textContent = en;
+      span.appendChild(e1);
+    }
     var e2 = document.createElement('span'); e2.className = 'i18n-zh'; e2.textContent = t;
-    span.appendChild(e1); span.appendChild(e2);
+    span.appendChild(e2);
     p.insertBefore(span, node);
     /* ★ 原文节点只保留空白（丢掉正文）—— 否则中文会与 .i18n-zh 重复显示，
        且 en 档位下 .i18n-zh 被隐藏后残留原文仍可见 */
     node.nodeValue = raw.replace(/[^\s]/g, '');
   }
+  /* 属性通道（title / placeholder）：两档写法互斥 ——
+       EN 档：有译文写译文；无译文**清空**（不留中文残迹，即「不显示文字」）。
+       中  档：恢复中文原文。
+     ★原文备份在 data-i18n-o-<attr>，处理标记在 data-i18n-t-<attr>（各属性独立一格；
+       旧实现 title 与 placeholder 共用一个 data-i18n-t 槽位，存在互相误判的隐患）。
+     ★并显档已取消 ⇒ 不再拼「译文换行 + 中文」。 */
   function doAttr(el, attr){
-    /* ★属性通道也要认豁免：原实现只有文本节点走 markable()，
-       于是手写双语的 title（如 #i18nSeg 的「显示语言 / Display language」）
-       与闸门内的 placeholder 仍会被再译一遍。 */
-    if(el.closest && el.closest('[data-i18n-skip],#authGate')) return;
-    var v = el.getAttribute(attr);
-    if(!v || v.length > MAXTEXT || !CJK.test(v)) return;
-    if(el.getAttribute('data-i18n-t') === attr) return;
-    var en = tr(v.trim());
-    if(en == null) return;
-    el.setAttribute(attr, en + '\n' + v.trim());
-    el.setAttribute('data-i18n-t', attr);
+    if(!el.getAttribute || !el.setAttribute) return;
+    if(el.closest && el.closest('[data-i18n-skip],#authGate,.i18n-b')) return;
+    var KEY = 'data-i18n-o-' + attr;
+    var origin = el.getAttribute(KEY);
+    if(origin == null){
+      var v0 = el.getAttribute(attr);
+      if(v0 == null) return;
+      if(!CJK.test(v0)) return;                        /* 纯 ASCII 属性不参与 */
+      origin = v0;
+      el.setAttribute(KEY, v0);
+    }
+    var v = String(origin).trim();
+    if(!v) return;
+    var en = tr(v);
+    el.setAttribute(attr, (mode === 'zh') ? v : ((en != null && en !== v) ? en : ''));
+    el.setAttribute('data-i18n-t-' + attr, '1');
   }
 
   var busy = false, queued = null;
@@ -33263,13 +33391,20 @@ window.__build = buildDefaultCharDB;
     if(!root) return;
     var w = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, {
       acceptNode: function(n){
-        if(!n.nodeValue || n.nodeValue.length > MAXTEXT) return NodeFilter.FILTER_REJECT;
-        return CJK.test(n.nodeValue) ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_REJECT;
+        /* ★不再按长度拒绝：超长中文同样要在 EN 档收起（tr() 内部已把超长一律判为未译）。 */
+        if(!n.nodeValue || !CJK.test(n.nodeValue)) return NodeFilter.FILTER_REJECT;
+        var pn = n.parentNode;
+        if(pn && SKIP_TAG[(pn.nodeName || '').toLowerCase()]) return NodeFilter.FILTER_REJECT;
+        return NodeFilter.FILTER_ACCEPT;
       }
     });
     var batch = [], n;
     while((n = w.nextNode())) batch.push(n);
     for(var i = 0; i < batch.length; i++){ try{ doText(batch[i]); }catch(e){} }
+    /* ★<option> 显式回扫：EN 档下它已被写成纯英文（或空串）⇒ 不再含汉字，
+       文本通道永远看不见它，切回中档就恢复不了。故每次 apply() 都按存的原文重写一遍。 */
+    var opts = root.querySelectorAll ? root.querySelectorAll('option[data-i18n-opt]') : [];
+    for(var oi = 0; oi < opts.length; oi++){ try{ syncOpt(opts[oi]); }catch(e){} }
     var els = root.querySelectorAll ? root.querySelectorAll('[title],[placeholder]') : [];
     for(var j = 0; j < els.length; j++){
       doAttr(els[j], 'title');
@@ -33331,6 +33466,7 @@ window.__build = buildDefaultCharDB;
   else boot();
 
   window.__I18N = {
+    DEFAULT_MODE: 'en',
     mode: function(){ return mode; },
     setMode: setMode,
     apply: apply,
