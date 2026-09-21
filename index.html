@@ -841,7 +841,7 @@
 .ag-week b{color:#1d4ed8;font-weight:700;font-size:15px;letter-spacing:.5px}
 .ag-week .ag-week-sub{color:#64748b;font-size:12.5px}
 </style>
-<div id="authGate" data-page-node-id="authGate">
+<div id="authGate" data-page-node-id="authGate" data-i18n-skip>
   <div class="ag-card">
     <div class="ag-logo">残</div>
     <div class="ag-t">残梦伤害计算器</div>
@@ -32870,6 +32870,7 @@ window.__build = buildDefaultCharDB;
       el = document.createElement('span');
       el.id = 'authBadge';
       el.setAttribute('data-page-node-id', 'authBadge');
+      el.setAttribute('data-i18n-skip', '');
       host.appendChild(el);
     }
     var o = rec() || {};
@@ -33138,7 +33139,15 @@ window.__build = buildDefaultCharDB;
     var tag = (p.nodeName || '').toLowerCase();
     if(SKIP_TAG[tag]) return false;
     if(p.classList && p.classList.contains('i18n-b')) return false;
-    if(p.closest && p.closest('.i18n-b,[data-i18n-skip]')) return false;
+    /* ★★访问层硬豁免：闸门遮罩内**一律不译**。
+       原因（实测踩中）：入口提示行 #authWeek 显示的是 wk.name（中文角色名），
+       运行时字典把它补译成官方英文（EMBED_CHARS[].nameEn）—— 而那个英文正是
+       当期口令的罗马字（口径：口令 = 角色名罗马字，全小写）。
+       实测：kamineko 当期，提示行把中文名与英文名并列渲染 ⇒ 完整口令现身登录页，
+       maskPw() 的掩码设计被彻底废掉。
+       （★写注释时不要复述被回读断言统计的界面文案字面量，否则计数断言会虚增。）
+       闸门属访问控制层，其文案与口令强相关 ⇒ 与界面其余部分解耦，永不参与翻译。 */
+    if(p.closest && p.closest('.i18n-b,[data-i18n-skip],#authGate')) return false;
     return true;
   }
   function doText(node){
@@ -33168,6 +33177,10 @@ window.__build = buildDefaultCharDB;
     node.nodeValue = raw.replace(/[^\s]/g, '');
   }
   function doAttr(el, attr){
+    /* ★属性通道也要认豁免：原实现只有文本节点走 markable()，
+       于是手写双语的 title（如 #i18nSeg 的「显示语言 / Display language」）
+       与闸门内的 placeholder 仍会被再译一遍。 */
+    if(el.closest && el.closest('[data-i18n-skip],#authGate')) return;
     var v = el.getAttribute(attr);
     if(!v || v.length > MAXTEXT || !CJK.test(v)) return;
     if(el.getAttribute('data-i18n-t') === attr) return;
