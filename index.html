@@ -840,6 +840,7 @@
 .ag-week{background:#eef6ff;border:1px solid #cfe4fb;border-radius:9px;padding:9px 12px;margin:0 0 13px;font-size:13.5px;color:#1e3a5f;line-height:1.6;text-align:center}
 .ag-week b{color:#1d4ed8;font-weight:700;font-size:15px;letter-spacing:.5px}
 .ag-week .ag-week-sub{color:#64748b;font-size:12.5px}
+.ag-lang{margin:0 0 13px}
 </style>
 <div id="authGate" data-page-node-id="authGate" data-i18n-skip>
   <div class="ag-card">
@@ -847,6 +848,11 @@
     <div class="ag-t">残梦伤害计算器</div>
     <div class="ag-s">请输入访问口令以继续</div>
     <div class="ag-week" id="authWeek" data-page-node-id="authWeek"></div>
+    <div class="ag-lang"><span class="i18n-seg" id="authLang" data-page-node-id="authLang" title="界面语言 / Interface language">
+      <button type="button" data-m="both" class="on">EN+中</button>
+      <button type="button" data-m="en">EN</button>
+      <button type="button" data-m="zh">中</button>
+    </span></div>
     <label class="ag-lab" for="authPw">访问口令（英文 / 数字 / 连字符，请直接用英文键盘输入）</label>
     <div class="ag-row">
       <input id="authPw" type="password" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" inputmode="latin" placeholder="请输入口令" data-page-node-id="authPw">
@@ -32834,7 +32840,7 @@ window.__build = buildDefaultCharDB;
     return '本机离线可用 ' + left + ' 天';
   }
   /* ---------- 今日口令提示行（v3.3.0 立 · v3.4.0 改日更）----------
-     入口处明示「今日口令提示：<角色名>」—— 玩家拿中文名反推罗马字即可进入。
+     仅在「仅中」界面明示「今日口令提示：<角色名>」—— 玩家拿中文名反推罗马字即可进入。
      ★必须显示在遮罩上（登录入口），而非仅控制台；控制台另有今日/次日值守位。
      ★副文案用【今日实际口令】当例子（不用硬编码的 "shana"）——
        可一眼看出「该输的是罗马字、且长度就这么多」，无需玩家自行摸索。
@@ -32845,13 +32851,72 @@ window.__build = buildDefaultCharDB;
     if(s.length <= 2) return s;
     return s.slice(0, 1).toUpperCase() + new Array(s.length).join('·');
   }
+  /* 显示档位：'zh' 给完整提示（中文名 + 掩码）；'en' / 'both' 只给一句无角色信息的引导。
+     ★自检规约：_selfcheck 的 DOM 桩只实现 querySelector / querySelectorAll，**没有**
+       getElementsByTagName ⇒ 闸门脚本只能用前两者，否则 11 个套件会在闸门脚本初始化那一刻
+       抛 TypeError: box.getElementsByTagName is not a function，整片翻红（实测踩中一次）。 */
+  var gateLangOb = null;
+  var HINT_OFF = {
+    en:   'Password hint is shown only in the Chinese interface — switch to 「中」.',
+    both: '口令提示仅在「中」界面显示 · Hint only in 中 mode'
+  };
+  function gateLang(){
+    var m = '';
+    try{ m = document.documentElement.getAttribute('data-i18n-mode') || ''; }catch(e){}
+    if(m !== 'both' && m !== 'en' && m !== 'zh'){
+      try{ var v = localStorage.getItem('czy_lang'); if(v === 'both' || v === 'en' || v === 'zh') m = v; }catch(e){}
+    }
+    return (m === 'en' || m === 'zh') ? m : 'both';
+  }
+  function paintGateLang(){
+    var box = document.getElementById('authLang'); if(!box) return;
+    var m = gateLang(), bs = [];
+    /* ★自检桩差异兜底：各套件的 DOM 桩对 querySelectorAll 的实现不一致
+       —— 有的返回 []、有的返回 undefined、有的干脆没有 getElementsByTagName。
+         真机不需要这层，但少了它，闸门脚本会在初始化那一刻抛错 ⇒ 十几个套件整片翻红。 */
+    try{ bs = (box.querySelectorAll ? box.querySelectorAll('button') : null) || []; }catch(e){ bs = []; }
+    for(var i = 0; i < bs.length; i++) bs[i].className = (bs[i].getAttribute('data-m') === m) ? 'on' : '';
+  }
   function paintWeek(){
     var el = document.getElementById('authWeek'); if(!el) return;
     var pool = weekPool(); if(!pool.length){ el.style.display = 'none'; return; }
     var wk = weeklyInfo(pool); if(!wk.name){ el.style.display = 'none'; return; }
     el.style.display = '';
-    el.innerHTML = '今日口令提示：<b>' + wk.name + '</b>' +
-      '<span class="ag-week-sub">（角色罗马字，小写、无空格，' + maskPw(wk.pw) + '）</span>';
+    var md = gateLang();
+    if(md === 'zh'){
+      el.innerHTML = '今日口令提示：<b>' + wk.name + '</b>' +
+        '<span class="ag-week-sub">（角色罗马字，小写、无空格，' + maskPw(wk.pw) + '）</span>';
+    } else {
+      el.innerHTML = '<span class="ag-week-sub">' + HINT_OFF[md] + '</span>';
+    }
+    paintGateLang();
+  }
+  function bindGateLang(){
+    var box = document.getElementById('authLang'); if(!box || box.__bound) return;
+    box.__bound = 1;
+    box.addEventListener('click', function(ev){
+      var t = ev.target;
+      while(t && t !== box && !(t.getAttribute && t.getAttribute('data-m'))) t = t.parentNode;
+      if(!t || t === box || !t.getAttribute) return;
+      var m = t.getAttribute('data-m');
+      if(m !== 'both' && m !== 'en' && m !== 'zh') return;
+      try{ if(window.__I18N && window.__I18N.setMode) window.__I18N.setMode(m); }catch(e){}
+      try{ document.documentElement.setAttribute('data-i18n-mode', m); }catch(e){}
+      paintGateLang(); paintWeek();
+    });
+    paintGateLang();
+  }
+  /* 档位也可能被页眉开关或 localStorage 初始化改写（本脚本先于双语引擎执行）
+     ⇒ 盯住 html 属性变化，档位一变就同步开关高亮与提示区；闸门移除后自动解绑。 */
+  function watchGateLang(){
+    if(!window.MutationObserver || gateLangOb) return;
+    try{
+      gateLangOb = new MutationObserver(function(){
+        if(!document.getElementById('authLang')){ try{ gateLangOb.disconnect(); }catch(e){} gateLangOb = null; return; }
+        paintGateLang(); paintWeek();
+      });
+      gateLangOb.observe(document.documentElement, { attributes: true, attributeFilter: ['data-i18n-mode'] });
+    }catch(e){}
   }
   function paintFoot(){
     var el = document.getElementById('authRemain'); if(!el) return;
@@ -32889,6 +32954,8 @@ window.__build = buildDefaultCharDB;
   paintFoot();
   paintBadge();
   paintWeek();
+  bindGateLang();
+  watchGateLang();
   function showGate(msg0){
     if(msg0) note(msg0);
     if(btn) btn.addEventListener('click', submit);
@@ -32936,6 +33003,7 @@ window.__build = buildDefaultCharDB;
       /* v3.3.0 立 · v3.4.0 改日更：今日口令（池 / 派生 / 提示 / 直通 / 勾选）—— 供套件逐条断言 */
       weekPool: weekPool, weekIndexOf: weekIndexOf, weekNormEn: weekNormEn,
       weeklyInfo: weeklyInfo, weeklyLocalPass: weeklyLocalPass, paintWeek: paintWeek,
+      gateLang: gateLang, paintGateLang: paintGateLang, HINT_OFF: HINT_OFF,
       WEEK_EPOCH: WEEK_EPOCH, WEEK_CYCLE: WEEK_CYCLE, WEEK_SALT: WEEK_SALT, WEEK_AVOID: WEEK_AVOID,
       weekPickSyncRaw: weekPickSyncRaw, weekPickSync: weekPickSync, weekResolve: weekResolve,
       sha256Bytes: sha256Bytes, WEEK_EXTRA: WEEK_EXTRA,
