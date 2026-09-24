@@ -16,7 +16,7 @@
 
 <link rel="manifest" href="manifest.webmanifest" data-page-node-id="Ujjb7vN2J2zFun44wCBIv8">
 
-<title>Canan Wiki · 3.5.1 · Characters / Imagery / Relics / Elementium</title>
+<title>Canan Wiki · 3.5.4 · Characters / Imagery / Relics / Elementium</title>
 
 <style>
 
@@ -880,7 +880,7 @@
 
     <div data-page-node-id="U3DQMnMQczfqNwA08GXIhj">
 
-      <h1 id="title" data-page-node-id="efK7lKccgtoypss7lhPAmx">Canan Wiki <span style="font-size:12px;font-weight:700;color:#4338ca;background:#eef2ff;border-radius:6px;padding:2px 8px;vertical-align:middle" data-page-node-id="8L10itvWf3BpMcGnSmAd9b">3.5.1</span></h1>
+      <h1 id="title" data-page-node-id="efK7lKccgtoypss7lhPAmx">Canan Wiki <span style="font-size:12px;font-weight:700;color:#4338ca;background:#eef2ff;border-radius:6px;padding:2px 8px;vertical-align:middle" data-page-node-id="8L10itvWf3BpMcGnSmAd9b">3.5.4</span></h1>
 
     </div>
 
@@ -1827,7 +1827,7 @@ const ROLE_GROUPS_DEFAULT = [
 
 
 /* 当前程序版本：页眉徽标、模式标题、导出页脚戳统一读取此常量 */
-const APP_VER = '3.5.1';
+const APP_VER = '3.5.4';
 
 
 /* v2.3.8：localStorage 键按 APP_VER 分版本隔离（同 2.3.7 规则）。
@@ -11882,6 +11882,13 @@ function costDisp(costType, n){
   return String(n);
 }
 
+/* 消耗显示（文案版）：效果描述里的「N升华点」也同步转带圈（如「10升华点·群体攻击」→「⑩升华点·群体攻击」）。
+   ★只匹配「升华点」紧前的整数：技能点文案形如「6点·群体攻击」（不含「升华点」字样）⇒ SP 侧天然不受影响。
+   ★v3.5.3 P47：与 costDisp 同源（同走 circled）；供导出报告 / 出招排表的「效果首句」使用。 */
+function costTextBp(t){
+  return String(t == null ? '' : t).replace(/(\d+)(\s*升华点)/g, function(_m, _d, _tail){ return circled(_d) + _tail; });
+}
+
 /* 消耗显示统一：none 且 0 消耗 = SP 0（一号位技能 0 消耗按 SP0 显示，不显示「无消耗」） */
 function costLabel(costType, n){
   n = +n || 0;
@@ -12691,6 +12698,19 @@ function groupAwakeningTalentVulnPct(g){
   const c = getChar(id); if(!c) return 0;
   const aw = parseAwakening(c.awakening, null, grpMainAwakenStage(g)); if(!aw) return 0;
   return (+aw.talentVulnPct) || 0;
+}
+
+/* 觉醒「主战专属天赋·概率型易伤」覆写查询：返回该角色觉醒带来的**概率型**易伤覆写值%（已判定主战觉醒开关；无则 0）。
+   ★v3.5.2 P46：与上面 groupAwakeningTalentVulnPct 是**两条不同通道** —— 那条读 aw.talentVulnPct（常驻易伤），
+     本条读 aw.talentSpecialVulnPct（概率型：期望 = 概率 × 该值，如 电击使 50%×12% = 6%），
+     消费端 = mainTalentSpecialVuln()。二者不可混用。 */
+function groupAwakeningTalentSpecialVulnPct(g){
+  const grp = state.groups[g]; if(!grp) return 0;
+  if(!grpAwakenFxOn(g)) return 0;
+  const id = grp.mainId; if(!id) return 0;
+  const c = getChar(id); if(!c) return 0;
+  const aw = parseAwakening(c.awakening, null, grpMainAwakenStage(g)); if(!aw) return 0;
+  return (+aw.talentSpecialVulnPct) || 0;
 }
 
 /* 觉醒「主战专属天赋·暴击率%」覆写查询：返回该角色觉醒带来的天赋暴击率覆写值%（已判定主战觉醒开关；无则返回 0）。
@@ -16317,7 +16337,13 @@ function renderGroupFxToggles(){
 
         <span>${esc(lbl)}</span>
 
-        <span style="font-size:11px;font-weight:400;color:#3730a3;cursor:pointer;text-decoration:underline dotted" onclick="toggleAwakenDetail(${g})">查看觉醒效果</span>
+        <span style="font-size:11px;font-weight:400;display:inline-flex;gap:12px;align-items:center">
+
+          <span style="color:#3730a3;cursor:pointer;text-decoration:underline dotted" onclick="toggleTalentDetail(${g})">查看天赋效果</span>
+
+          <span style="color:#3730a3;cursor:pointer;text-decoration:underline dotted" onclick="toggleAwakenDetail(${g})">查看觉醒效果</span>
+
+        </span>
 
       </span>
 
@@ -16347,6 +16373,8 @@ function renderGroupFxToggles(){
 
     </div>
 
+    <div id="talentDetail${g}" style="display:none;font-size:11px;line-height:1.7;padding:6px 10px 8px 10px;border:1px solid var(--line);border-top:none;border-radius:0 0 8px 8px;background:#f8fafc;margin:-8px 0 8px 0;color:#374151">${talentDetailHTML(g)}</div>
+
     <div id="awakenDetail${g}" style="display:none;font-size:11px;line-height:1.7;padding:6px 10px 8px 10px;border:1px solid var(--line);border-top:none;border-radius:0 0 8px 8px;background:#faf9ff;margin:-8px 0 8px 0;color:#374151">${awakenDetailHTML(g)}</div>`;
 
   }).join('');
@@ -16359,6 +16387,131 @@ function renderGroupFxToggles(){
                 + `</div>`
                 + rows;
 
+}
+
+/* ============ v3.5.2 P46：天赋效果可视化（用户诉求②）============
+   背景：用户要求把「天赋效果」显示出来，并让我判断放「角色配置」还是「战斗配置 → 查看觉醒效果」处。
+   裁决：放**战斗配置 → 全局增益**，与本组「天赋特殊效果」勾选框、既有「查看觉醒效果」并列。理由：
+     ① 天赋效果与觉醒效果是同一类信息（角色自带效果说明 + 生效状态），同处才自洽、学习成本最低；
+     ② 天赋是否生效由该行的「天赋特殊效果」勾选框控制 —— 效果说明紧挨它的开关，用户一关就能立刻看清关掉的是什么；
+     ③ 「角色配置」的「角色天赋效果 %」是**数值覆写输入**，不是说明；塞说明会与该页「只做输入」的定位冲突，
+        且角色数据表刚在 P45 压缩过，不宜再加行。
+   ★本函数组**只做展示，不参与任何计算**；分数口径一字未动。 */
+
+/* 天赋行状态：为「角色配置 → 角色数据 → 角色天赋效果 %」提供「状态 + 自动值」内联提示。
+   auto = 自动解析（含觉醒覆写）后的生效值；ov = 用户在①整组填的覆盖值（0 = 不覆盖）。 */
+function talentRowState(g){
+  const grp = (state.groups && state.groups[g]) || {};
+  const r = { present:false, name:'', type:'', auto:0, autoTxt:'', ov:0, on:true };
+  r.on = (typeof grpTalentFx === 'function') ? grpTalentFx(g) : true;
+  const c = getChar(grp.mainId);
+  if(!c) return r;
+  const tl = (c.talents||[]).find(x=>!['元气','热血','生机'].includes(x.n));
+  if(!tl) return r;
+  r.present = true; r.name = tl.n;
+  const tg = parseTalentGain(c);
+  const sg = parseSpecialGain(c);
+  const _awV = (typeof groupAwakeningTalentVulnPct === 'function') ? (groupAwakeningTalentVulnPct(g)||0) : 0;
+  const _awD = (typeof groupAwakeningTalentDmgUpPct === 'function') ? (groupAwakeningTalentDmgUpPct(g)||0) : 0;
+  /* 主类型判定顺序与引擎覆盖口径一致：易伤 > 概率型易伤 > 增伤 > 升华后技能位 */
+  if((+tg.vuln||0) > 0){
+    r.type = '易伤';
+    r.auto = _awV > 0 ? _awV : (+tg.vuln||0);
+    r.autoTxt = r.auto + '%' + (_awV > 0 ? '（觉醒强化）' : '');
+  } else if(sg && (+sg.vuln||0) > 0){
+    r.type = '概率型易伤';
+    /* ★v3.5.2 P46b 修订（verify_3520 E4/E13 抓出）：parseSpecialGain 里 prob 是**小数**（m/100）、
+       pct/vuln 是**百分数** ⇒ 期望 = prob × pct（首轮误除 100，显示成 0.05%）；
+       且概率型易伤的觉醒覆写走**专用通道** talentSpecialVulnPct（同 mainTalentSpecialVuln），
+       不是常驻易伤通道 _awV（那会取错觉醒字段）。 */
+    const _spV = (typeof groupAwakeningTalentSpecialVulnPct === 'function') ? (groupAwakeningTalentSpecialVulnPct(g)||0) : 0;
+    const _pct = _spV > 0 ? _spV : (+sg.pct||0);
+    r.auto = Math.round((+sg.prob||0) * _pct * 100) / 100;
+    r.autoTxt = '期望 ' + r.auto + '%（' + Math.round((+sg.prob||0)*100) + '% × ' + _pct + '%）';
+  } else if((+tg.dmgUp||0) > 0){
+    r.type = '增伤';
+    r.auto = _awD > 0 ? _awD : (+tg.dmgUp||0);
+    r.autoTxt = r.auto + '%' + (_awD > 0 ? '（觉醒强化）' : '');
+  } else if((+tg.skill1||0) || (+tg.skill2||0) || (+tg.ult||0)){
+    r.type = '升华后技能位';
+    r.auto = (+tg.skill1||0) || (+tg.skill2||0) || (+tg.ult||0);
+    r.autoTxt = '1号' + (+tg.skill1||0) + '% / 2号' + (+tg.skill2||0) + '% / 升华' + (+tg.ult||0) + '%';
+  } else {
+    r.type = '未建模';
+    r.autoTxt = '无（纯文案 / 条件型，不计分）';
+  }
+  r.ov = (grp.talent != null && (+grp.talent) !== 0) ? (+grp.talent) : 0;
+  return r;
+}
+
+/* 单组「主战专属天赋」详情（与 awakenDetailHTML 同款版式与展开交互）。
+   展示：天赋名 + 全文 + 引擎识别通道 + 自动 vs 覆盖的生效值 + 通用天赋 + 援护说明。 */
+function talentDetailHTML(g){
+  const grp = (state.groups && state.groups[g]) || {};
+  const c = getChar(grp.mainId);
+  if(!c) return '<span style="color:#9ca3af">（该组未选择主战）</span>';
+  const _on = (typeof grpTalentFx === 'function') ? grpTalentFx(g) : true;
+  const tl = (c.talents||[]).find(x=>!['元气','热血','生机'].includes(x.n));
+  const _badge = _on
+    ? '<span style="color:#16a34a;font-weight:600">● 已生效</span>'
+    : '<span style="color:#b45309;font-weight:600">○ 关（本组主战 + 援护 暴击率 +10% 补强）</span>';
+  let h = '';
+  if(!tl){
+    h += '<div><b>' + esc(c.name) + '</b>（主战）：<span style="color:#9ca3af">无专属天赋（仅通用天赋）</span></div>';
+  } else {
+    const tg = parseTalentGain(c);
+    const sg = parseSpecialGain(c);
+    const tb = parseTalentSpBp(tl);
+    h += '<div><b>' + esc(c.name) + '</b>（主战 · 专属天赋） ' + _badge + '</div>';
+    h += '<div style="margin-top:3px"><b>' + esc(tl.n || '') + '</b></div>';
+    h += '<div style="margin-top:2px">' + esc(tl.fx || '') + '</div>';
+    /* 引擎实际识别出的通道（与 parseTalentGain / parseTalentSpBp 同源，非人工罗列） */
+    const ch = [];
+    if((+tg.vuln||0) > 0) ch.push('易伤 +' + tg.vuln + '%' + (tg.vulnPostAct ? '（行动结束后施加）' : ''));
+    if((+tg.dmgUp||0) > 0) ch.push('增伤 +' + tg.dmgUp + '%');
+    if(tg.dmgUpAfterUlt) ch.push('升华技后增伤 +' + tg.dmgUpAfterUlt.pct + '%（' + tg.dmgUpAfterUlt.dur + '回合）');
+    if(tg.dmgUpAfterSkill) ch.push('释放「' + (tg.dmgUpAfterSkill.names||[]).join('/') + '」后增伤 +' + tg.dmgUpAfterSkill.pct + '%');
+    if((+tg.skill1||0) || (+tg.skill2||0) || (+tg.ult||0)) ch.push('升华后技能位 1号' + (+tg.skill1||0) + '% / 2号' + (+tg.skill2||0) + '% / 升华' + (+tg.ult||0) + '%');
+    if(sg && (+sg.vuln||0) > 0){
+      /* ★v3.5.2 P46b：概率因子 prob 是小数 ⇒ 显示须 ×100；期望值含觉醒覆写时与「当前生效值」行同源。 */
+      const _spV = (typeof groupAwakeningTalentSpecialVulnPct === 'function') ? (groupAwakeningTalentSpecialVulnPct(g)||0) : 0;
+      const _spPct = _spV > 0 ? _spV : (+sg.pct||0);
+      const _spEff = _spV > 0 ? Math.round((+sg.prob||0) * _spV * 100) / 100 : sg.vuln;
+      ch.push('概率型易伤 期望 ' + _spEff + '%（' + Math.round((+sg.prob||0)*100) + '% × ' + _spPct + '%'
+        + (_spV > 0 ? ' 觉醒强化' : '') + '）');
+    }
+    if(tb){
+      if(tb.spPerRound) ch.push('每回合 +' + tb.spPerRound + 'SP');
+      if(tb.bpPerRound) ch.push('每回合 +' + tb.bpPerRound + 'BP');
+      if(tb.spNextAction) ch.push('下次行动 ' + tb.spNextAction + 'SP');
+      if(tb.bpOnKill) ch.push('击杀 +' + tb.bpOnKill + 'BP');
+      if(tb.judge) ch.push('「' + tb.judge.name + '」上限' + tb.judge.max + '层 · 每层 +' + tb.judge.pctPerStack + '%');
+    }
+    const _evo = (typeof evolutionStacksInfo === 'function' && (state.rounds||[]).length)
+      ? evolutionStacksInfo(g, (state.rounds||[]).length - 1) : null;
+    if(_evo && _evo.pct > 0) ch.push('【战术进化】×' + _evo.stacks + '/' + _evo.cap + ' · 暴击伤害 +' + _evo.pct + '%');
+    h += '<div style="margin-top:4px">引擎识别通道：'
+      + (ch.length ? '<span style="color:#4338ca">' + esc(ch.join(' · ')) + '</span>'
+                   : '<span style="color:#9ca3af">无可建模通道（纯文案 / 条件型，不计分）</span>') + '</div>';
+    const ts = talentRowState(g);
+    const _eff = ts.ov
+      ? ('<b style="color:#7c3aed">' + ts.ov + '%</b>（来源：角色配置「角色天赋效果 %」覆盖值）')
+      : ('<b>' + esc(ts.autoTxt || '—') + '</b>（来源：' + ts.type + '自动解析）');
+    h += '<div style="margin-top:2px">当前生效值：' + _eff
+      + (_on ? '' : ' <span style="color:#b45309">（开关已关 ⇒ 实际不计入）</span>') + '</div>';
+    h += '<div style="margin-top:2px;color:#6b7280">覆盖入口：角色配置 → 角色数据 →「角色天赋效果 %」—— 填 0 = 用自动值；填非 0 = 按上表「主类型」覆盖该通道。</div>';
+    const gens = (c.talents||[]).filter(x=>['元气','热血','生机'].includes(x.n));
+    if(gens.length) h += '<div style="margin-top:4px;color:#6b7280">通用天赋（自动生效、不可关）：' + gens.map(x=>esc(x.n)).join(' / ') + '</div>';
+  }
+  const _s = grp.subId ? getChar(grp.subId) : null;
+  if(_s) h += '<div style="margin-top:4px;color:#6b7280">援护 <b>' + esc(_s.name) + '</b>：无专属天赋（约定：专属天赋仅主战位生效）</div>';
+  return h;
+}
+
+/* 展开 / 收起天赋详情（与 toggleAwakenDetail 同款） */
+function toggleTalentDetail(g){
+  const el = document.getElementById('talentDetail' + g);
+  if(el) el.style.display = (el.style.display === 'none') ? '' : 'none';
 }
 
 /* 单组「主战 + 援护」的觉醒 1~5 阶效果详情（主战与援护均可觉醒到 5 阶） */
@@ -17239,7 +17392,7 @@ function renderConfirm(){
 
     {label:'角色最终面板', key:'panel', tip:'可填游戏内看到的最终攻击力（含装备），系统自动换算（减装备加成 +1470/槽、去觉醒加攻）写回内部面板；填值 = 自定义覆盖，清空或点「↺ 自动」= 回到 v3.0 自动推算（角色面板 =（LV60攻击力 + 380）×（1 + 25% + 60%）×（1 + 基础攻击力%），取自「数值统计」atk60 列；★形态档位选「6★·70级」时改取 LV70 三列）。灰底 = 自动推算、白底 = 自定义。主战与 SUB 各自独立携带套装，散件/套装统一 +1470。与「血量增益面板 → 最终攻击力」同源双向联动。'},
 
-    {label:'角色天赋效果 %', key:'talent', tip:'天赋百分比（在下方增益区每行勾选生效）'},
+    {label:'角色天赋效果 %', key:'talent', tip:'角色专属天赋的生效百分比（天赋名与全文见「战斗配置 → 全局增益 → 查看天赋效果」）。填 0 = 不覆盖，引擎按角色库自动解析值计算；填非 0 = 覆盖，按该天赋原本的主类型覆盖对应通道：易伤型→易伤%、增伤型→增伤%、升华后技能位型→一号位/二号位/升华技。易伤型【跨组共享】（全场三组加总，任一组施加即全场生效），增伤与技能位型仅作用于本组。天赋是否计入由「战斗配置 → 全局增益」里该组的「天赋特殊效果」勾选控制：取消勾选则该组天赋整体不生效、改为本组主战+援护 暴击率 +10% 补强。该格右侧小字实时显示当前状态与自动值。'},
 
     {label:'主战藏品', key:'mainEquip', type:'eqsel', tip:'主战独立选择是否携带套装：不良（≥4 SP 招，装备效果增益·参与暴击）；桐桐（≤3 SP 招，装备效果增益·参与暴击）；创伤（创伤伤害·不参与暴击）。单套生效=满额一半（不良14%/桐桐11%/创伤13.5%），连携双套(主战+SUB同台)才达满额。主战自身技能吃主战套装；选后下面② 藏品列该主战技能自动填默认值，可二次修改。攻击力 +1470（散件/套装统一）。藏品携带者：主战散件→本组+6%伤害、套装→本组+3%伤害（与援护各自计入、同组叠加）'},
 
@@ -17288,6 +17441,21 @@ function renderConfirm(){
           + ' <span style="font-size:10px;color:var(--sub)">' + (_isCus ? '自定义' : '自动推算') + ' · 含藏品 +' + eqBonus + '</span>'
           + (_isCus ? ' <button type="button" style="font-size:10px;padding:1px 6px;margin-left:2px;cursor:pointer" onclick="resetGroupFinalPanel(' + g + ')" title="清掉自定义值，回到 v3.0 自动推算（' + _autoFin + '）">↺ 自动</button>' : '')
           + '</td>';
+
+      }else if(row.key==='talent'){
+
+        /* v3.5.2 P46：天赋行加「状态 + 自动值」内联提示 —— 原来只有一个 0，用户既不知道 0 是何义、
+           也不知道当前自动解析值是多少。★纯展示：输入框 oninput / onchange 口径与旧版一字不差。 */
+        const _ts = talentRowState(g);
+        let _tBadge, _tColor;
+        if(!_ts.present){ _tBadge = '无专属天赋'; _tColor = 'var(--sub)'; }
+        else if(!_ts.on){ _tBadge = '已关 · 暴击+10%补强'; _tColor = '#b45309'; }
+        else if(_ts.ov){ _tBadge = '覆盖中 · ' + _ts.type + ' ' + _ts.ov + '%'; _tColor = '#7c3aed'; }
+        else { _tBadge = '自动 · ' + _ts.type + ' ' + _ts.autoTxt; _tColor = 'var(--sub)'; }
+        h += '<td><input type="number" step="0.01" value="' + (grp[row.key]||0) + '"'
+          + ' oninput="state.groups[' + g + '].talent=+this.value;recalc();" onchange="renderConfirm()"'
+          + ' title="' + esc(row.tip) + '">'
+          + ' <span style="font-size:10px;color:' + _tColor + '">' + esc(_tBadge) + '</span></td>';
 
       }else{
 
@@ -23148,7 +23316,7 @@ function exportActionHTML(opts){
 
       } else if(actorInfo.costType==='bp'){
 
-        costLine = `<div style="font-size:11px;color:var(--sub);margin-top:2px"><span${costStyle}>BP ${effCost}</span>${_selfTag}${effShort?' · '+esc(effShort):''}</div>`;
+        costLine = `<div style="font-size:11px;color:var(--sub);margin-top:2px"><span${costStyle}>BP ${costDisp('bp', effCost)}</span>${_selfTag}${effShort?' · '+esc(costTextBp(effShort)):''}</div>`;
 
       } else {
 
@@ -23279,7 +23447,7 @@ function exportActionText(){
 
       }
 
-      return `${wpnTag} ${sk.name} (${tt}${effectiveSkillCost(actorInfo.costType, actorInfo.cost)})`;
+      return `${wpnTag} ${sk.name} (${tt}${costDisp(actorInfo.costType, effectiveSkillCost(actorInfo.costType, actorInfo.cost))})`;
 
     });
 
@@ -23712,7 +23880,7 @@ function exportReportLogHTML(){
     const _rCost = (function(){
       let o = '';
       if(_rSP) o += '<span style="color:#1e40af">SP ' + _rSP + '</span>';
-      if(_rBP) o += (_rSP ? '<br>' : '') + '<span style="color:#92400e">BP ' + _rBP + '</span>';
+      if(_rBP) o += (_rSP ? '<br>' : '') + '<span style="color:#92400e">BP ' + circled(_rBP) + '</span>';
       return o || '<span style="color:#cbd5e1">—</span>';
     })();
     h += '<div style="display:flex;border-bottom:1px solid var(--line)">';
@@ -23757,7 +23925,7 @@ function exportReportLogHTML(){
       if(actorInfo.costType === 'sp'){
         costLine = `<div style="font-size:11px;color:var(--sub);margin-top:2px"><span${costStyle}>SP ${effCost}</span>${_redTag}${_selfTag}${effShort ? ' · ' + esc(effShort) : ''}</div>`;
       } else if(actorInfo.costType === 'bp'){
-        costLine = `<div style="font-size:11px;color:var(--sub);margin-top:2px"><span${costStyle}>BP ${effCost}</span>${_selfTag}${effShort ? ' · ' + esc(effShort) : ''}</div>`;
+        costLine = `<div style="font-size:11px;color:var(--sub);margin-top:2px"><span${costStyle}>BP ${costDisp('bp', effCost)}</span>${_selfTag}${effShort ? ' · ' + esc(costTextBp(effShort)) : ''}</div>`;
       } else {
         costLine = `<div style="font-size:11px;color:var(--sub);margin-top:2px">无消耗${effShort ? ' · ' + esc(effShort) : ''}</div>`;
       }
@@ -33185,7 +33353,7 @@ window.__build = buildDefaultCharDB;
 
 <script data-auth-gate="1">
 /* ============================================================================
-   Canan Wiki · 访问口令闸门（v3.5.1 · 服务端校验 + 每日临时口令 + 池可勾选）
+   Canan Wiki · 访问口令闸门（v3.5.4 · 服务端校验 + 每日临时口令 + 池可勾选）
    ---------------------------------------------------------------------------
    机制
      · 口令由服务端校验（Cloudflare Pages Functions：/api/auth 与 /api/verify）；
@@ -34361,10 +34529,6 @@ body{
 h1,h2,h3,h4{letter-spacing:0}
 h1#title{color:var(--ink);background:none!important;-webkit-background-clip:border-box!important;background-clip:border-box!important;-webkit-text-fill-color:currentColor!important}
 h2{font-size:15px;font-weight:600;color:var(--ink);gap:8px}
-h2::before{
-  content:"";width:5px;height:5px;border-radius:50%;background:var(--brand);
-  opacity:.9;display:inline-block;flex:0 0 auto;
-}
 h3,h4{font-weight:600;color:var(--ink)}
 .btn{color:var(--ink);background:transparent;border:1px solid var(--line);border-radius:4px;box-shadow:none;font-weight:500}
 .btn:hover{background:rgba(99,102,241,.06);border-color:rgba(99,102,241,.32);box-shadow:none}
@@ -34442,7 +34606,6 @@ h1#title>span{
     border-bottom:1px solid var(--line);background:var(--panel2);border-radius:0;
   }
   .modal-head .mt{display:flex;align-items:center;gap:8px;font-size:14.5px;font-weight:600;color:var(--ink);letter-spacing:.1px}
-  .modal-head .mt::before{content:"";width:5px;height:5px;border-radius:50%;background:var(--brand);flex:0 0 auto}
   .modal-head .toolbar{gap:6px}
   .exp-chk{display:inline-flex;align-items:center;gap:6px;height:32px;padding:0 11px;font-size:12px;color:var(--sub);border:1px solid var(--line);border-radius:4px;cursor:pointer;margin:0}
   .exp-chk:hover{border-color:rgba(99,102,241,.32);color:var(--ink)}
@@ -34499,7 +34662,6 @@ h1,h2,h3,.mt{font-family:Georgia,"Times New Roman","SimSun",serif}
 .tabbar{background:rgba(255,253,248,.94) !important;border-radius:4px !important;
         box-shadow:0 3px 12px rgba(42,35,28,.08) !important}
 thead th,th{background:#e5e7eb}
-h2::before,.mt::before{background:var(--brand) !important}
 .btn{border-radius:4px}
 .btn.primary{background:#6366f1 !important;border-color:#6366f1 !important;color:#fff !important}
 .btn.danger{color:#b91c1c}
