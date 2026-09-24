@@ -16,7 +16,7 @@
 
 <link rel="manifest" href="manifest.webmanifest" data-page-node-id="Ujjb7vN2J2zFun44wCBIv8">
 
-<title>Canan Wiki · 3.5.5 · Characters / Imagery / Relics / Elementium</title>
+<title>Canan Wiki · 3.5.6 · Characters / Imagery / Relics / Elementium</title>
 
 <style>
 
@@ -880,7 +880,7 @@
 
     <div data-page-node-id="U3DQMnMQczfqNwA08GXIhj">
 
-      <h1 id="title" data-page-node-id="efK7lKccgtoypss7lhPAmx">Canan Wiki <span style="font-size:12px;font-weight:700;color:#4338ca;background:#eef2ff;border-radius:6px;padding:2px 8px;vertical-align:middle" data-page-node-id="8L10itvWf3BpMcGnSmAd9b">3.5.5</span></h1>
+      <h1 id="title" data-page-node-id="efK7lKccgtoypss7lhPAmx">Canan Wiki <span style="font-size:12px;font-weight:700;color:#4338ca;background:#eef2ff;border-radius:6px;padding:2px 8px;vertical-align:middle" data-page-node-id="8L10itvWf3BpMcGnSmAd9b">3.5.6</span></h1>
 
     </div>
 
@@ -1827,7 +1827,7 @@ const ROLE_GROUPS_DEFAULT = [
 
 
 /* 当前程序版本：页眉徽标、模式标题、导出页脚戳统一读取此常量 */
-const APP_VER = '3.5.5';
+const APP_VER = '3.5.6';
 
 
 /* v2.3.8：localStorage 键按 APP_VER 分版本隔离（同 2.3.7 规则）。
@@ -23312,15 +23312,15 @@ function exportActionHTML(opts){
 
       if(actorInfo.costType==='sp'){
 
-        costLine = `<span style="font-size:9.5px;color:var(--sub);margin-left:4px;line-height:1.25"><span${costStyle}>SP ${effCost}</span>${_redTag}${_selfTag}${effShort?' · '+esc(effShort):''}</span>`;
+        costLine = `<span style="font-size:10px;font-weight:600;color:#475569;margin-left:4px;line-height:1.25"><span${costStyle}>SP ${effCost}</span>${_redTag}${_selfTag}${effShort?' · '+esc(effShort):''}</span>`;
 
       } else if(actorInfo.costType==='bp'){
 
-        costLine = `<span style="font-size:9.5px;color:var(--sub);margin-left:4px;line-height:1.25"><span${costStyle}>BP ${costDisp('bp', effCost)}</span>${_selfTag}${effShort?' · '+esc(costTextBp(effShort)):''}</span>`;
+        costLine = `<span style="font-size:10px;font-weight:600;color:#475569;margin-left:4px;line-height:1.25"><span${costStyle}>BP ${costDisp('bp', effCost)}</span>${_selfTag}${effShort?' · '+esc(costTextBp(effShort)):''}</span>`;
 
       } else {
 
-        costLine = `<span style="font-size:9.5px;color:var(--sub);margin-left:4px;line-height:1.25">无消耗${effShort?' · '+esc(effShort):''}</span>`;
+        costLine = `<span style="font-size:10px;font-weight:600;color:#475569;margin-left:4px;line-height:1.25">无消耗${effShort?' · '+esc(effShort):''}</span>`;
 
       }
 
@@ -23697,7 +23697,7 @@ function exportGroupBasePanelHTML(){
   const _bound = _gi.filter(function(g){ const p = state.groups[g] || {}; return !!(p.mainId || p.subId); });
   if(_bound.length) _gi = _bound;
   const _LBL  = 'flex:0 0 64px;padding:1px 4px;text-align:center;background:#f8fafc;border-top:1px solid var(--line);font-size:9.5px;color:var(--sub);line-height:1.25';
-  const _CELL = 'flex:1;min-width:0;padding:6px 8px;border-left:1px solid var(--line);border-top:1px solid var(--line);text-align:center';
+  const _CELL = 'flex:1;min-width:0;padding:3px 6px;border-left:1px solid var(--line);border-top:1px solid var(--line);text-align:center;line-height:1.2';
   const _row = function(label, fn){
     let r = '<div style="display:flex"><div style="' + _LBL + '">' + esc(label) + '</div>';
     for(const g of _gi) r += '<div style="' + _CELL + '">' + fn(d.rows[g] || {}, g) + '</div>';
@@ -23706,11 +23706,13 @@ function exportGroupBasePanelHTML(){
   let h = '';
   /* 段标：一条**通栏细带**（不是独立区域）与上方同容器同宽，视觉上是同一张表的下半段。 */
   h += '<div style="padding:1px 9px;background:var(--panel2);border-top:1px solid var(--line);'
-    + 'font-size:11.5px;font-weight:600;color:var(--sub)">'
+    + 'font-size:11.5px;font-weight:600;color:var(--sub);line-height:1.2">'
     + esc('\u5404\u7ec4\u57fa\u7840\u9762\u677f\uff08' + exportStageFxCols(d) + '\uff09') + '</div>';
-  /* 行1：角色配置（头像 + 名 + 星） */
-  h += _row('\u89d2\u8272\u914d\u7f6e', function(r, g){ return exportBasePanelLineupHTML(g); });
-  /* 行2：攻击力（= 组面板 + 装备加成，即游戏内最终面板） */
+  /* v3.5.6 P50：原「行1 角色配置（头像 + 名 + 星）」整行撤下 ——
+     用户「各组基础配置的角色是否不需要重复显示了，因为上面已有」：
+     出招排表的组表头已给「头像 + 名 + 星 + 武装图标」，该行为纯重复。
+     ★helper exportBasePanelLineupHTML() 仍保留定义（verify_305 B17 / verify_3510 F1/F3 守门 + 其它入口在用）。 */
+  /* 行1：攻击力（= 组面板 + 装备加成，即游戏内最终面板） */
   h += _row('\u653b\u51fb\u529b', function(r){ return '<b style="color:var(--brand);font-size:11px">' + fmt(r.atk) + '</b>'; });
   /* 行3/4：暴击 / 暴伤（净加成） */
   h += _row('\u66b4\u51fb', function(r){ return '<span style="font-size:11px">' + (+r.crit || 0) + '%</span>'; });
@@ -23739,11 +23741,7 @@ function exportGroupBasePanelText(){
     return r + '\n';
   };
   s += '指标' + _gi.map(function(g){ return '\t' + GROUP_NAMES[g]; }).join('') + '\n';
-  s += _line('角色配置', function(r, g){
-    const p = state.groups[g] || {};
-    const m = getChar(p.mainId), sb = getChar(p.subId);
-    return [m && m.name, sb && sb.name].filter(Boolean).join('+') || '\u2014';
-  });
+  /* v3.5.6 P50：与 HTML 版同口径 —— 「角色配置」行撤下（组表头已给，避免重复）。 */
   s += _line('攻击力', function(r){ return fmt(r.atk); });
   s += _line('暴击', function(r){ return (+r.crit || 0) + '%'; });
   s += _line('暴伤', function(r){ return (+r.cd || 0) + '%'; });
@@ -23772,7 +23770,7 @@ function exportReportChipHTML(label, tone){
     info :['#dbeafe','#bfdbfe','#1e40af'],
     warn :['#fef3c7','#fcd34d','#92400e']
   }[tone || 'plain'] || ['#f8fafc','#e3e9f5','#475569'];
-  return '<span style="display:inline-block;font-size:10.5px;line-height:1.5;padding:1px 8px;border-radius:999px;'
+  return '<span style="display:inline-block;font-size:10.5px;line-height:1.35;padding:1px 8px;border-radius:999px;'
     + 'border:1px solid ' + _c[1] + ';background:' + _c[0] + ';color:' + _c[2] + ';font-weight:600;white-space:nowrap">'
     + esc(label) + '</span>';
 }
@@ -23804,17 +23802,19 @@ function exportReportBannerHTML(){
 }
 function exportReportScoreStripHTML(s){
   const mult = ((s && s.per) || []).reduce((a, p) => a + (+p.totalMult || 0), 0);
-  const cell = function(label, val, note, bg, fg, fs){
+  /* v3.5.6 P50：三格下的注解行整块撤下 ——
+     用户「总倍率、暴击分、完美暴击分，下面的文字 三组倍率之和、暴击期望档 等等 都可以删除了，不需要写」。
+     注解里的 critGain / burstGain 仍参与计算，只是不再显示（分数口径未动）。 */
+  const cell = function(label, val, bg, fg, fs){
     return '<div style="flex:1;min-width:96px;padding:3px 7px;border-radius:6px;border:1px solid var(--line);background:' + bg + '">'
       +   '<div style="font-size:9.5px;color:var(--sub)">' + esc(label) + '</div>'
       +   '<div style="font-size:' + fs + ';font-weight:700;line-height:1.25;color:' + fg + '">' + esc(val) + '</div>'
-      +   '<div style="font-size:10px;color:var(--sub);margin-top:0">' + esc(note) + '</div>'
       + '</div>';
   };
   return '<div style="margin-top:4px;display:flex;gap:5px;align-items:stretch;flex-wrap:wrap">'
-    + cell('总倍率', mult.toFixed(2), '三组倍率之和', 'var(--panel2)', 'var(--ink)', '15px')
-    + cell('暴击分', fmt(s.score2), '暴击期望档　+' + (+s.critGain || 0).toFixed(2), 'var(--sp-soft)', '#1e40af', '15px')
-    + cell('完美暴击分', fmt(s.score3), '满暴击档　+' + (+s.burstGain || 0).toFixed(2), 'var(--bp-soft)', '#92400e', '15px')
+    + cell('总倍率', mult.toFixed(2), 'var(--panel2)', 'var(--ink)', '15px')
+    + cell('暴击分', fmt(s.score2), 'var(--sp-soft)', '#1e40af', '15px')
+    + cell('完美暴击分', fmt(s.score3), 'var(--bp-soft)', '#92400e', '15px')
     + '</div>';
 }
 function exportReportLogHTML(){
@@ -23828,10 +23828,11 @@ function exportReportLogHTML(){
 
   let h = '<div style="margin-top:6px;border:1px solid var(--line);border-radius:8px;overflow:hidden;background:var(--panel);--line:#c9d4e8">';
   /* 段头 */
-  h += '<div style="display:flex;align-items:center;gap:6px;padding:2px 9px;background:var(--panel2);border-bottom:1px solid var(--line);flex-wrap:wrap">';
+  h += '<div style="display:flex;align-items:center;gap:6px;padding:2px 9px;background:var(--panel2);border-bottom:1px solid var(--line);flex-wrap:wrap;line-height:1.2">';
   h += '<span style="font-size:13px;font-weight:700">出招排表</span>';
-  h += '<span style="font-size:11.5px;color:var(--sub)">' + esc(modeLabel()) + ' · ' + _gi.length + ' 组 · ' + st.rounds.length + ' 回合</span>';
-  h += '<span style="margin-left:auto;font-size:11.5px;color:var(--sub)">' + esc(exportVerDate()) + '</span>';
+  /* v3.5.6 P50：段头右侧两段备注撤下 ——
+     用户「出招排表 后面的备注，比如单体残梦1组 7回合 以及版本信息 和大标题重复了 可以删除」。
+     模式与版本日期已由报头横幅给出；组数/回合数由下方回合条自明。 */
   h += '</div>';
   /* 组表头（一次性给出，不再每回合重复） */
   h += '<div style="display:flex;border-bottom:1px solid var(--line);background:#f8fafc">';
@@ -23923,11 +23924,11 @@ function exportReportLogHTML(){
       const _redTag = (_red > 0) ? ' <span title="变迁「技能减耗」-' + _red + '：原 SP ' + (actorInfo.cost) + '，实际 SP ' + effCost + '" style="color:#4338ca;font-weight:bold">🔻-' + _red + '</span>' : '';
       let costLine = '';
       if(actorInfo.costType === 'sp'){
-        costLine = `<span style="font-size:9.5px;color:var(--sub);margin-left:4px;line-height:1.25"><span${costStyle}>SP ${effCost}</span>${_redTag}${_selfTag}${effShort ? ' · ' + esc(effShort) : ''}</span>`;
+        costLine = `<span style="font-size:10px;font-weight:600;color:#475569;margin-left:4px;line-height:1.25"><span${costStyle}>SP ${effCost}</span>${_redTag}${_selfTag}${effShort ? ' · ' + esc(effShort) : ''}</span>`;
       } else if(actorInfo.costType === 'bp'){
-        costLine = `<span style="font-size:9.5px;color:var(--sub);margin-left:4px;line-height:1.25"><span${costStyle}>BP ${costDisp('bp', effCost)}</span>${_selfTag}${effShort ? ' · ' + esc(costTextBp(effShort)) : ''}</span>`;
+        costLine = `<span style="font-size:10px;font-weight:600;color:#475569;margin-left:4px;line-height:1.25"><span${costStyle}>BP ${costDisp('bp', effCost)}</span>${_selfTag}${effShort ? ' · ' + esc(costTextBp(effShort)) : ''}</span>`;
       } else {
-        costLine = `<span style="font-size:9.5px;color:var(--sub);margin-left:4px;line-height:1.25">无消耗${effShort ? ' · ' + esc(effShort) : ''}</span>`;
+        costLine = `<span style="font-size:10px;font-weight:600;color:#475569;margin-left:4px;line-height:1.25">无消耗${effShort ? ' · ' + esc(effShort) : ''}</span>`;
       }
       /* 界技能相对本体有改动 → 技能名金色加粗 + 旗标（tooltip 含本体原效果） */
       const _ownC = getChar(actorInfo.actorId);
@@ -23968,11 +23969,11 @@ function exportReportTotalHTML(){
      现改回与上方同源的 flex 行（行首 64px + 每组 flex:1 + 左分隔线），
      「三组合计」由独占一列**上提到段标右侧**（用户裁决「倍率按你的来」）。 */
   const _LBL  = 'flex:0 0 64px;padding:1px 4px;text-align:center;background:#f8fafc;border-top:1px solid var(--line);font-size:9.5px;color:var(--sub);line-height:1.25';
-  const _CELL = 'flex:1;min-width:0;padding:6px 8px;border-left:1px solid var(--line);border-top:1px solid var(--line);text-align:center';
+  const _CELL = 'flex:1;min-width:0;padding:3px 6px;border-left:1px solid var(--line);border-top:1px solid var(--line);text-align:center;line-height:1.2';
   let h = '';
   /* 段标：通栏细带（与「各组基础面板」段标同式），右上角挂三组合计 */
   h += '<div style="padding:1px 9px;background:var(--panel2);border-top:1px solid var(--line);'
-    + 'font-size:11.5px;font-weight:600;color:var(--sub);display:flex;align-items:center;gap:8px;flex-wrap:wrap">'
+    + 'font-size:11.5px;font-weight:600;color:var(--sub);display:flex;align-items:center;gap:8px;flex-wrap:wrap;line-height:1.2">'
     + '<span>' + esc('\u500d\u7387\u5408\u8ba1') + '</span>'
     + '<span style="margin-left:auto;font-weight:700;color:var(--brand);font-size:12.5px">'
     + esc('\u4e09\u7ec4\u5408\u8ba1') + ' ' + _sumAll.toFixed(2) + '</span></div>';
@@ -33353,7 +33354,7 @@ window.__build = buildDefaultCharDB;
 
 <script data-auth-gate="1">
 /* ============================================================================
-   Canan Wiki · 访问口令闸门（v3.5.5 · 服务端校验 + 每日临时口令 + 池可勾选）
+   Canan Wiki · 访问口令闸门（v3.5.6 · 服务端校验 + 每日临时口令 + 池可勾选）
    ---------------------------------------------------------------------------
    机制
      · 口令由服务端校验（Cloudflare Pages Functions：/api/auth 与 /api/verify）；
@@ -34610,6 +34611,10 @@ h1#title>span{
   .exp-chk{display:inline-flex;align-items:center;gap:6px;height:32px;padding:0 11px;font-size:12px;color:var(--sub);border:1px solid var(--line);border-radius:4px;cursor:pointer;margin:0}
   .exp-chk:hover{border-color:rgba(99,102,241,.32);color:var(--ink)}
   .modal-body{flex:1 1 auto;overflow:auto;padding:16px 18px}
+  /* v3.5.6 P50：125% 缩放适配 —— 1920×1080@125% ⇒ CSS 视口 ≈1536×864，
+     1600×900@125% ⇒ ≈1280×720；导出弹窗在此宽/高下比 100% 少约 1/4。
+     报告本身已压到 ≈5xx px，这里再把弹窗内边距让出 12px（宽 + 高各 +12px）。 */
+  #exportModal .modal-body{padding:10px 12px}
 }
 /* —— ④ 闸门（#authGate）内语言开关：压过 #authGate button 的全宽主按钮规则 —— */
 #authGate .ag-lang{display:flex;justify-content:center;margin:0 0 13px}
