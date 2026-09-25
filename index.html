@@ -16,7 +16,7 @@
 
 <link rel="manifest" href="manifest.webmanifest" data-page-node-id="Ujjb7vN2J2zFun44wCBIv8">
 
-<title>Canan Wiki · 3.5.7 · Characters / Imagery / Relics / Elementium</title>
+<title>Canan Wiki · 3.5.8 · Characters / Imagery / Relics / Elementium</title>
 
 <style>
 
@@ -880,7 +880,7 @@
 
     <div data-page-node-id="U3DQMnMQczfqNwA08GXIhj">
 
-      <h1 id="title" data-page-node-id="efK7lKccgtoypss7lhPAmx">Canan Wiki <span style="font-size:12px;font-weight:700;color:#4338ca;background:#eef2ff;border-radius:6px;padding:2px 8px;vertical-align:middle" data-page-node-id="8L10itvWf3BpMcGnSmAd9b">3.5.7</span></h1>
+      <h1 id="title" data-page-node-id="efK7lKccgtoypss7lhPAmx">Canan Wiki <span style="font-size:12px;font-weight:700;color:#4338ca;background:#eef2ff;border-radius:6px;padding:2px 8px;vertical-align:middle" data-page-node-id="8L10itvWf3BpMcGnSmAd9b">3.5.8</span></h1>
 
     </div>
 
@@ -1827,7 +1827,7 @@ const ROLE_GROUPS_DEFAULT = [
 
 
 /* 当前程序版本：页眉徽标、模式标题、导出页脚戳统一读取此常量 */
-const APP_VER = '3.5.7';
+const APP_VER = '3.5.8';
 
 
 /* v2.3.8：localStorage 键按 APP_VER 分版本隔离（同 2.3.7 规则）。
@@ -11111,10 +11111,12 @@ function wpnSelectHTML(r, g){
     for(const {wid, w, ownerG} of allAct){
       const owner = (typeof ownerG==='number' && GROUP_NAMES[ownerG]) ? '〔'+GROUP_NAMES[ownerG]+'〕' : '';
       const chk = curSet.has(wid) ? 'checked' : '';
+      const _dim = chk ? '' : ';opacity:.42;filter:grayscale(.7)';
       const _ic = w.icon
-        ? '<img src="'+esc(w.icon)+'" style="width:16px;height:16px;border-radius:3px;vertical-align:middle;object-fit:cover">'
-        : '<span style="display:inline-block;width:16px;height:16px;line-height:16px;text-align:center;font-size:10px;background:#f3f4f6;border-radius:3px">'+esc((w.name||'?').charAt(0))+'</span>';
-      h += '<label title="'+owner+esc(w.name||wid)+'" style="position:relative;display:inline-flex;align-items:center;justify-content:center;cursor:pointer;padding:1px;border:1px solid '+(chk?'#6366f1':'transparent')+';border-radius:4px;background:'+(chk?'#fff7ed':'transparent')+'">';
+        ? '<img src="'+esc(w.icon)+'" style="width:16px;height:16px;border-radius:3px;vertical-align:middle;object-fit:cover'+_dim+'">'
+        : '<span style="display:inline-block;width:16px;height:16px;line-height:16px;text-align:center;font-size:10px;background:#f3f4f6;border-radius:3px'+_dim+'">'+esc((w.name||'?').charAt(0))+'</span>';
+      h += '<label title="'+owner+esc(w.name||wid)+'" style="position:relative;display:inline-flex;align-items:center;justify-content:center;cursor:pointer;padding:1px;border:1px solid transparent;border-radius:4px;box-sizing:border-box;background:'+(chk?'#eef2ff':'transparent')+';box-shadow:'+(chk?'inset 0 0 0 2px #4f46e5':'inset 0 0 0 1px #e8eaf0')+'">';
+      if(chk) h += '<span style="position:absolute;top:-2px;right:-2px;width:11px;height:11px;line-height:11px;text-align:center;font-size:8px;font-weight:700;color:#fff;background:#4f46e5;border-radius:50%;box-shadow:0 0 0 1.5px #fff;pointer-events:none">✓</span>';
       h += '<input type="checkbox" '+chk+' '+_skipAttr+' onchange=\'toggleCellWpn('+r+','+g+','+JSON.stringify(wid)+',this.checked)\' style="position:absolute;opacity:0;width:0;height:0;margin:0">';
       h += _ic;
       h += '</label>';
@@ -15872,7 +15874,7 @@ function renderTable(){
 
   let h = '<thead>';
 
-  /* 第1行：角色组（每个组 colspan=4：武装+扮演+技能+消耗）
+  /* 第1行：角色组（每个组 colspan=4：扮演+技能+消耗+武装）
      v2.4.21：星级直接显示在每个角色名下方，不再单独成行 */
 
   h += '<tr>';
@@ -15930,7 +15932,7 @@ function renderTable(){
 
   h += '<th></th>';
 
-  const labs=['扮演','消耗','技能','武装'];   /* v3.5.0：武装列后移到行尾 */
+  const labs=['扮演','技能','消耗','武装'];   /* v3.5.8：消耗↔技能互换，技能列前移 */
 
   for(const g of _gi){ labs.forEach(l=> h += `<th style="white-space:nowrap">${l}</th>`); }
 
@@ -15950,7 +15952,7 @@ function renderTable(){
 
       /* 谁 */
 
-      /* v3.5.0：列序 = 扮演 · 消耗 · 技能 · 武装（武装 td 延后到行尾输出） */
+      /* v3.5.8：列序 = 扮演 · 技能 · 消耗 · 武装（消耗↔技能互换；武装 td 延后到行尾输出） */
       const _wpnTd = `<td style="vertical-align:top">${wpnSelectHTML(r, g)}</td>`;   /* v3.5.0：格内不再重复「武装」小标签（表头第 3 行已给出列名） */
       h += `<td style="vertical-align:top"><div style="font-size:10px;color:#6b7280;margin-bottom:2px">扮演</div><select onchange="setCell(${r},${g},'who',this.value)">
 
@@ -16115,9 +16117,9 @@ function renderTable(){
         if(_red>0 && !_cOverride) _cTxt += ' <span title="变迁「技能减耗」-'+_red+'：原 '+costDisp(actorInfo.costType,_cCur)+'，实际 '+costDisp(actorInfo.costType,_cEff)+'" style="color:#0ea5e9;font-size:10px;cursor:help">🔻-'+_red+'</span>';
         if(_cOverride) _cTxt += ' <span title="已手动调整（原：'+costDisp(actorInfo.costType, _cRaw)+'）" style="color:#92400e;font-size:10px;cursor:help">✎</span>';
       }
-      h += `<td class="${cellCls}" style="font-size:11px">${_cTxt}</td>`;
-
       h += _skTd;
+
+      h += `<td class="${cellCls}" style="font-size:11px">${_cTxt}</td>`;
 
       h += _wpnTd;
 
@@ -23896,7 +23898,7 @@ function exportReportLogHTML(){
       const cls = actorInfo.costType === 'sp' ? 'sp-cell' : (actorInfo.costType === 'bp' ? 'bp-cell' : '');
       if(!sk || cell.who === 'none'){
         const _skipCell = cell.who !== 'none' && (getConfirm(r, g).skillId === '__skip__');
-        h += '<div class="' + cls + '" style="flex:1;min-width:0;padding:2px 5px;border-left:1px solid var(--line);text-align:center;color:var(--sub);font-size:10.5px">'
+        h += '<div class="' + cls + '" style="flex:1;min-width:0;padding:6px 8px;border-left:1px solid var(--line);text-align:center;color:var(--sub);font-size:12px">'
           + (_skipCell ? '⏭ 跳过' : '—') + '</div>';
         continue;
       }
@@ -23924,19 +23926,19 @@ function exportReportLogHTML(){
       const _redTag = (_red > 0) ? ' <span title="变迁「技能减耗」-' + _red + '：原 SP ' + (actorInfo.cost) + '，实际 SP ' + effCost + '" style="color:#4338ca;font-weight:bold">🔻-' + _red + '</span>' : '';
       let costLine = '';
       if(actorInfo.costType === 'sp'){
-        costLine = `<span style="font-size:10px;font-weight:600;color:#475569;margin-left:4px;line-height:1.25"><span${costStyle}>SP ${effCost}</span>${_redTag}${_selfTag}${effShort ? ' · ' + esc(effShort) : ''}</span>`;
+        costLine = `<div style="font-size:11px;color:var(--sub);margin-top:2px"><span${costStyle}>SP ${effCost}</span>${_redTag}${_selfTag}${effShort ? ' · ' + esc(effShort) : ''}</div>`;
       } else if(actorInfo.costType === 'bp'){
-        costLine = `<span style="font-size:10px;font-weight:600;color:#475569;margin-left:4px;line-height:1.25"><span${costStyle}>BP ${costDisp('bp', effCost)}</span>${_selfTag}${effShort ? ' · ' + esc(costTextBp(effShort)) : ''}</span>`;
+        costLine = `<div style="font-size:11px;color:var(--sub);margin-top:2px"><span${costStyle}>BP ${costDisp('bp', effCost)}</span>${_selfTag}${effShort ? ' · ' + esc(costTextBp(effShort)) : ''}</div>`;
       } else {
-        costLine = `<span style="font-size:10px;font-weight:600;color:#475569;margin-left:4px;line-height:1.25">无消耗${effShort ? ' · ' + esc(effShort) : ''}</span>`;
+        costLine = `<div style="font-size:11px;color:var(--sub);margin-top:2px">无消耗${effShort ? ' · ' + esc(effShort) : ''}</div>`;
       }
       /* 界技能相对本体有改动 → 技能名金色加粗 + 旗标（tooltip 含本体原效果） */
       const _ownC = getChar(actorInfo.actorId);
       const _jxCell = jieTitleExtra(sk, _ownC);
       const _jFlagCell = _jxCell.startsWith('\n【界·相对本体改动】') ? `<span class="jie-flag" title="${esc(_jxCell.slice(1))}">界·改</span>` : (_jxCell.startsWith('\n【界·新技能】') ? `<span class="jie-flag" style="background:#16a34a" title="${esc(_jxCell.slice(1))}">界·新</span>` : '');
       const _skNameHtml = _jFlagCell ? `<span style="color:#b45309" title="${esc(_jxCell.slice(1))}">${esc(sk.name)}</span>` : esc(sk.name);
-      h += '<div class="' + cls + '" style="flex:1;min-width:0;padding:2px 5px;border-left:1px solid var(--line);text-align:center">'
-        + wpnChip + '<b style="font-size:10.5px">' + _jFlagCell + _skNameHtml + '</b>' + costLine + '</div>';
+      h += '<div class="' + cls + '" style="flex:1;min-width:0;padding:6px 8px;border-left:1px solid var(--line);text-align:center">'
+        + wpnChip + '<b style="font-size:12px">' + _jFlagCell + _skNameHtml + '</b>' + costLine + '</div>';
     }
     h += '</div>';
   }
@@ -33354,7 +33356,7 @@ window.__build = buildDefaultCharDB;
 
 <script data-auth-gate="1">
 /* ============================================================================
-   Canan Wiki · 访问口令闸门（v3.5.7 · 服务端校验 + 每日临时口令 + 池可勾选）
+   Canan Wiki · 访问口令闸门（v3.5.8 · 服务端校验 + 每日临时口令 + 池可勾选）
    ---------------------------------------------------------------------------
    机制
      · 口令由服务端校验（Cloudflare Pages Functions：/api/auth 与 /api/verify）；
@@ -34615,6 +34617,10 @@ h1#title>span{
      1600×900@125% ⇒ ≈1280×720；导出弹窗在此宽/高下比 100% 少约 1/4。
      报告本身已压到 ≈5xx px，这里再把弹窗内边距让出 12px（宽 + 高各 +12px）。 */
   #exportModal .modal-body{padding:10px 12px}
+  /* v3.5.8 P52：导出弹窗收回 ≤960px —— ui360 把 .modal-box 放到 1180px 后，
+     报告三段栅格（报头/分数条/出招战报）被整体拉宽 ≈24%（用户「整个表有点过宽」）。
+     ★只锁 #exportModal：其余弹窗沿用 1180px 版式，不受影响。 */
+  #exportModal .modal-box{max-width:960px}
 }
 /* —— ④ 闸门（#authGate）内语言开关：压过 #authGate button 的全宽主按钮规则 —— */
 #authGate .ag-lang{display:flex;justify-content:center;margin:0 0 13px}
