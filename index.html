@@ -16,7 +16,7 @@
 
 <link rel="manifest" href="manifest.webmanifest" data-page-node-id="Ujjb7vN2J2zFun44wCBIv8">
 
-<title>Canan Wiki · 3.6.0 · Characters / Imagery / Relics / Elementium</title>
+<title>Canan Wiki · 3.6.3 · Characters / Imagery / Relics / Elementium</title>
 
 <style>
 
@@ -880,7 +880,7 @@
 
     <div data-page-node-id="U3DQMnMQczfqNwA08GXIhj">
 
-      <h1 id="title" data-page-node-id="efK7lKccgtoypss7lhPAmx">Canan Wiki <span style="font-size:12px;font-weight:700;color:#4338ca;background:#eef2ff;border-radius:6px;padding:2px 8px;vertical-align:middle" data-page-node-id="8L10itvWf3BpMcGnSmAd9b">3.6.0</span></h1>
+      <h1 id="title" data-page-node-id="efK7lKccgtoypss7lhPAmx">Canan Wiki <span style="font-size:12px;font-weight:700;color:#4338ca;background:#eef2ff;border-radius:6px;padding:2px 8px;vertical-align:middle" data-page-node-id="8L10itvWf3BpMcGnSmAd9b">3.6.3</span></h1>
 
     </div>
 
@@ -1398,7 +1398,7 @@
           <!-- v3.5.0 P31：工具栏精简为「导出 / 关闭」两项（用户口径）。
                「显示武装标识」勾选框、复制文本、打印/保存PDF 一并撤下；
                武装标识改由 exportWpnVisible() 按实际装配自动决定。 -->
-          <button class="btn primary" onclick="exportViewImage()" data-page-node-id="Ui8szfAfisAqG5UEVqSDZo">导出</button>
+          <label id="expPanelWrap" style="display:inline-flex;align-items:center;gap:4px;font-size:12px;color:var(--sub);cursor:pointer;user-select:none;white-space:nowrap" onclick="event.stopPropagation()"><input type="checkbox" id="expPanelChk" onchange="exportPanelToggle(this.checked)" style="margin:0;cursor:pointer;accent-color:#4f46e5"><span id="expPanelLbl">基础面板</span></label><button class="btn primary" onclick="exportViewImage()" data-page-node-id="Ui8szfAfisAqG5UEVqSDZo">导出</button>
 
           <button class="btn" onclick="closeExport()" data-page-node-id="tEhnO5uuqLv9LakINR6QM4">关闭</button>
 
@@ -1486,7 +1486,7 @@
 
         <div class="field" style="flex:2;min-width:180px" data-page-node-id="264NlBao97SOnw2CAfiWSy"><label data-page-node-id="OAMZCcRH4GlM3vWjd6fnd7">搜索</label><input type="text" id="planLibSearch" oninput="renderPlanLib()" data-page-node-id="DwGFziQBgdAq3PRji0clPG"></div>
 
-        <div class="field" style="min-width:120px" data-page-node-id="XEhGyucbPrrX6DqrkuC51J"><label data-page-node-id="C2dcmBgflrNmeXoI7frCo4">模式筛选</label><select id="planLibMode" onchange="renderPlanLib()" style="height:34px" data-page-node-id="xwXjrmlyHlsBGO3tQZLAYf"><option value="all" data-page-node-id="evmfTVpqXpPCUGeaky4FE2">全部</option><option value="single" data-page-node-id="BOfuAOFuSHQWu3Opb51n9S">单体残梦</option><option value="group" data-page-node-id="e4QTQJWaTXDwfdpuYqDCxp">群体残梦</option><option value="custom" data-page-node-id="qsv79XK7w94ShAzexAc0of">变迁</option></select></div>
+        <div class="field" style="min-width:120px" data-page-node-id="XEhGyucbPrrX6DqrkuC51J"><label data-page-node-id="C2dcmBgflrNmeXoI7frCo4">模式筛选</label><select id="planLibMode" onchange="renderPlanLib()" style="height:34px" data-page-node-id="xwXjrmlyHlsBGO3tQZLAYf"><option value="all" data-page-node-id="evmfTVpqXpPCUGeaky4FE2">全部</option><option value="single" data-page-node-id="BOfuAOFuSHQWu3Opb51n9S">单体残梦</option><option value="group" data-page-node-id="e4QTQJWaTXDwfdpuYqDCxp">群体残梦</option><option value="custom" data-page-node-id="qsv79XK7w94ShAzexAc0of">变迁</option></select></div><div class="field" style="min-width:120px;display:none" id="planLibBqField"><label>变迁关卡</label><select id="planLibBq" onchange="renderPlanLib()" style="height:34px"><option value="all">全部关卡</option><option value="none">无生效关卡</option><option value="3003">3003 技能减耗</option><option value="3004">3004 debuff增伤</option><option value="3005">3005 血量增益</option><option value="3006">3006 群体回合延长11回合</option><option value="3007">3007 技能回复限制</option><option value="3008">3008 前后护盾</option><option value="3009">3009 群体回合延长10回合</option><option value="3010">3010 单体回合延长11回合</option><option value="3011">3011 两个敌人</option><option value="3012">3012 心象增伤</option><option value="3013">3013 心象易伤</option></select></div>
 
         <div class="field" style="min-width:120px" data-page-node-id="uHmQx5ADDO6YTgO27giWM7"><label data-page-node-id="oALuv0xGsETgQpc8q4fHeP">排序</label><select id="planLibSort" onchange="renderPlanLib()" style="height:34px" data-page-node-id="TVheDZRNPPKAJNnYJmOS4u"><option value="updated" data-page-node-id="HRvKU1C0d9Znmu6v58DW4v">最近更新</option><option value="name" data-page-node-id="hiA9aOnTxezdusr9y8DmC3">名称</option><option value="created" data-page-node-id="YM3DVxCvGwS5UgHddyelKF">最早创建</option></select></div>
 
@@ -1507,9 +1507,7 @@
 
       <div class="row" style="margin-bottom:12px;align-items:flex-end;background:#eef2ff;padding:10px;border-radius:4px;border:1px dashed var(--line)" data-page-node-id="CHDX2kEhCiwKHw9rrrwp1d">
 
-        <div class="field" style="flex:2;min-width:180px" data-page-node-id="UprMFapIle7rZEeQ816dMd"><label data-page-node-id="CXbngcQ2bh9CZkrlW1sgqw">保存当前出招</label><input type="text" id="planLibName" data-page-node-id="bGrAsEZidKkc9uTZLUtctO"></div>
-
-        <div class="field" style="flex:3;min-width:200px" data-page-node-id="pO959eJJ7QnUYlDcXRaG6G"><label data-page-node-id="yaHsb4vX8QKbjzNOewYhro">备注（可选）</label><input type="text" id="planLibNote" data-page-node-id="zDKRmAcqqkuEwVKo42usG2"></div>
+        <div class="field" style="flex:3;min-width:200px" data-page-node-id="pO959eJJ7QnUYlDcXRaG6G"><label data-page-node-id="yaHsb4vX8QKbjzNOewYhro">备注（可选；模块名称自动生成，无需填写）</label><input type="text" id="planLibNote" data-page-node-id="zDKRmAcqqkuEwVKo42usG2"></div>
 
         <button class="btn primary" title="把当前出招排表 + 三组角色 + 数据确认 + 战斗配置整份存为一个模块" onclick="planLibSaveCurrent()" data-page-node-id="OWrKAL8HKe9liEN6Nc2kjw">💾 保存当前出招</button>
 
@@ -1694,6 +1692,118 @@
 
 
 <script>
+/* ==================== P65：IndexedDB 兜底持久层 ====================
+   背景：localStorage 每源仅约 5MB 且浏览器不支持扩容。
+   本段在主库最前接管 window.localStorage（defineProperty 失败则原样退回原生，零风险）：
+     · 读 = 内存镜像；键不在镜像时回落原生（兼容既有数据与自检 stub）；
+     · 写 = 内存 + 原生（尽力镜像，超配额静默忽略）+ IndexedDB（库 canan_wiki_kv / 表 kv，异步兜底）；
+     · 原生写失败（配额超限）的键会在 IDB flags 表标记 authoritative；
+     · 启动后异步比对 IDB：原生缺失或 flags 权威且值不一致，回灌内存并刷新一次
+      （sessionStorage czy_idb_reloading 防循环；「存储体检」删除走 shim 同步清 IDB，不会复活）。
+   Node 自检环境（无 window / 无 indexedDB）全部安全降级为直通行为。 */
+(function(){
+  if(typeof window === 'undefined') return;
+  var _native = null;
+  try{ _native = window.localStorage; }catch(e){ return; }
+  if(!_native || typeof _native.getItem !== 'function') return;
+  var _mem = {};
+  try{
+    var _n = _native.length;
+    if(typeof _n === 'number'){ for(var i=0;i<_n;i++){ var _k = _native.key(i); if(_k != null) _mem[_k] = _native.getItem(_k); } }
+  }catch(e){}
+  function _keys(){
+    var s = {};
+    for(var k in _mem) s[k] = 1;
+    try{ var n = _native.length; for(var i=0;i<n;i++){ var nk = _native.key(i); if(nk != null) s[nk] = 1; } }catch(e){}
+    return Object.keys(s).sort();
+  }
+  var _dbp = null;
+  function _open(){
+    if(_dbp) return _dbp;
+    _dbp = new Promise(function(res){
+      try{
+        if(typeof indexedDB === 'undefined') return res(null);
+        var rq = indexedDB.open('canan_wiki_kv', 1);
+        rq.onupgradeneeded = function(){ try{ var db = rq.result; db.createObjectStore('kv'); db.createObjectStore('flags'); }catch(e){} };
+        rq.onsuccess = function(){ res(rq.result); };
+        rq.onerror = function(){ res(null); };
+        rq.onblocked = function(){ res(null); };
+      }catch(e){ res(null); }
+    });
+    return _dbp;
+  }
+  function _rw(fn){
+    _open().then(function(db){ if(!db) return; try{ var tx = db.transaction(['kv','flags'], 'readwrite'); fn(tx.objectStore('kv'), tx.objectStore('flags')); }catch(e){} });
+  }
+  var _shim = {
+    getItem: function(k){
+      k = String(k);
+      return Object.prototype.hasOwnProperty.call(_mem, k) ? _mem[k] : _native.getItem(k);
+    },
+    setItem: function(k, v){
+      k = String(k); v = String(v);
+      _mem[k] = v;
+      var _ok = true;
+      try{ _native.setItem(k, v); }catch(e){ _ok = false; }
+      _rw(function(kv, fl){ try{ kv.put(v, k); if(_ok) fl.delete(k); else fl.put(1, k); }catch(e){} });
+    },
+    removeItem: function(k){
+      k = String(k);
+      delete _mem[k];
+      try{ _native.removeItem(k); }catch(e){}
+      _rw(function(kv, fl){ try{ kv.delete(k); fl.delete(k); }catch(e){} });
+    },
+    clear: function(){
+      _mem = {};
+      try{ _native.clear(); }catch(e){}
+      _rw(function(kv, fl){ try{ kv.clear(); fl.clear(); }catch(e){} });
+    },
+    key: function(i){
+      var a = _keys();
+      return (i >= 0 && i < a.length) ? a[i] : null;
+    },
+    get length(){ return _keys().length; }
+  };
+  try{ Object.defineProperty(window, 'localStorage', { value: _shim, configurable: true }); }catch(e){ return; }
+  _open().then(function(db){
+    if(!db) return;
+    var fl = {};
+    new Promise(function(res){
+      var n = 0;
+      try{
+        var tx = db.transaction(['kv','flags'], 'readonly');
+        var fq = tx.objectStore('flags').openCursor();
+        fq.onsuccess = function(){
+          var c = fq.result;
+          if(c){ fl[String(c.key)] = c.value; c.continue(); return; }
+          var kq = tx.objectStore('kv').openCursor();
+          kq.onsuccess = function(){
+            var c2 = kq.result;
+            if(!c2) return res(n);
+            var k = String(c2.key), v = c2.value;
+            var has = Object.prototype.hasOwnProperty.call(_mem, k);
+            if(!has || (fl[k] && _mem[k] !== v)){ _mem[k] = v; n++; }
+            c2.continue();
+          };
+          kq.onerror = function(){ res(n); };
+        };
+        fq.onerror = function(){ res(n); };
+      }catch(e){ res(n); }
+    }).then(function(n){
+      if(n > 0){
+        try{ console.info('[P65] 从 IndexedDB 回灌 ' + n + ' 个原生缺失/超限的键，刷新页面生效'); }catch(e){}
+        var ss = null;
+        try{ ss = window.sessionStorage; }catch(e){}
+        if(ss && ss.getItem('czy_idb_reloading')) return;
+        try{ if(ss) ss.setItem('czy_idb_reloading', '1'); }catch(e){}
+        window.location.reload();
+      } else {
+        try{ window.sessionStorage.removeItem('czy_idb_reloading'); }catch(e){}
+      }
+    });
+  });
+})();
+
 const GROUP_NAMES=['后排','中排','前排'];
 /* v3.5.0 P25 曾把站位 chip 改为「纸感暖色系」（后排琥珀金 / 中排赤陶橙 / 前排绛红）。
    ★v3.5.1 P45：随整站配色回退 3.0 白底靛蓝紫，站位 chip 一并回到 3.0 口径 ——
@@ -1827,7 +1937,7 @@ const ROLE_GROUPS_DEFAULT = [
 
 
 /* 当前程序版本：页眉徽标、模式标题、导出页脚戳统一读取此常量 */
-const APP_VER = '3.6.0';
+const APP_VER = '3.6.3';
 
 
 /* v2.3.8：localStorage 键按 APP_VER 分版本隔离（同 2.3.7 规则）。
@@ -11496,7 +11606,8 @@ function toggleCellWpn(r, g, wid, on){
   if(typeof renderScores === 'function') renderScores();
 }
 
-/* 角色携带武装的导出显示：HTML 版（头像下小标签）+ 文本版（行尾 ⚔/🛡名）。
+/* 角色携带武装的导出显示：HTML 版（P60：统一 chip pill，与天赋/觉醒徽章同族，
+   排入角色名下方 chip 行）+ 文本版（行尾 ⚔/🛡名）。
    护卫被动武装不会出现在单元格 chip 里（条件触发），故在此处补齐可见性。 */
 function wpnHeaderLabel(c){
   if(!c) return '';
@@ -11505,7 +11616,8 @@ function wpnHeaderLabel(c){
   const w = weaponDB.find(x=>x.id===wid);
   if(!w) return '';
   const tag = w.slot==='sub' ? '🛡' : '⚔';
-  return `<div style="font-size:10px;color:#6d28d9;margin-top:1px" title="携带武装：${esc(w.name||wid)}">${tag} ${esc(w.name||wid)}</div>`;
+  const _wIco = w.icon ? `<img src="${esc(w.icon)}" style="width:12px;height:12px;border-radius:3px;vertical-align:middle;object-fit:cover;margin-right:2px" alt="">` : (tag + ' ');
+  return `<span style="display:inline-block;max-width:96px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;vertical-align:middle;font-size:9px;line-height:1.5;padding:0 4px;border-radius:6px;border:1px solid #ddd6fe;background:#f3e8ff;color:#6d28d9;font-weight:600;cursor:help" title="携带武装：${esc(w.name||wid)}">${_wIco}${esc(w.name||wid)}</span>`;
 }
 function wpnHeaderText(c){
   if(!c) return '';
@@ -11674,7 +11786,8 @@ function talentAwakenBadges(g){
   /* 未勾选「天赋特殊效果」的组：本组主战+sub 暴击率 +10% 补强 */
   const O={bg:'#fef3c7',bd:'#fcd34d',fg:'#92400e'};
   const bonus = st.talent.on ? '' : '<span style="display:inline-block;font-size:9px;line-height:1.5;padding:0 4px;border-radius:6px;margin:1px 0 0 0;border:1px solid '+O.bd+';background:'+O.bg+';color:'+O.fg+';cursor:help" title="本组未勾选「天赋特殊效果」：主战+sub 暴击率 +10% 补强">暴击+10%</span>';
-  return '<div style="margin-top:1px;line-height:1.4">'+tBadge+aBadge+bonus+'</div>';
+  /* P60：去外层 div 包裹 —— pill 串直接排入角色块「chip 行」flex-wrap 容器（exportActionHTML / exportReportLogHTML 两通道同构） */
+  return tBadge+aBadge+bonus;
 }
 
 /* 援护觉醒 pill（独立渲染——展示在 sub 头像下方，与 main 解耦）
@@ -11698,7 +11811,8 @@ function subAwakenBadge(g){
   /* v2.5.1：援护觉醒 pill 显示已达阶数（如「援护觉醒✓·1阶」）——仅开启且档位>0 时显示 */
   const _sAwStage = (typeof grpSubAwakenStage==='function') ? (grpSubAwakenStage(g)||0) : 0;
   const _sAwSuffix = (stt.on && _sAwStage>0 && stt.present) ? ('·'+_sAwStage+'阶') : '';
-  return '<div style="margin-top:1px;line-height:1.4"><span style="display:inline-block;font-size:9px;line-height:1.5;padding:0 4px;border-radius:6px;margin:1px 1px 0 0;border:1px solid '+bd+';background:'+bg+';color:'+fg+';cursor:help" title="'+esc(title+extra)+'">援护觉醒'+sym+_sAwSuffix+'</span></div>';
+  /* P60：去外层 div 包裹 —— pill 直接排入 sub 角色块「chip 行」（与 main 通道同构） */
+  return '<span style="display:inline-block;font-size:9px;line-height:1.5;padding:0 4px;border-radius:6px;margin:1px 1px 0 0;border:1px solid '+bd+';background:'+bg+';color:'+fg+';cursor:help" title="'+esc(title+extra)+'">援护觉醒'+sym+_sAwSuffix+'</span>';
 }
 
 function talentAwakenText(g){
@@ -17054,8 +17168,10 @@ function renderOrder(){
 
 /* 实时显示当前 SP/BP（蓝点=技能点，黄点=升华点）—— 满点=填充，空点=描边，便于一眼看出剩余点量
    每次 renderTable() 都会触发 renderOrder() -> renderLiveSpBp()，故勾选技能后自动刷新。
-   规则：未选择任何技能时默认从 initSP/initBP（通常为 0）开始；只计算到「最后一个有选中技能的回合」，
-         避免把后续回合/敌方的自然 SP 提前显示上来。calcTracker 抛错时回退到 initSP/initBP。 */
+   规则（P61 修订）：有我方选中行动时，取「最后一个有选中技能的回合」的回合末快照（避免把后续
+         回合/敌方的自然 SP 提前显示上来）；未选择任何技能时，显示「我方第一个角色行动前」的
+         开局快照（openSP/openBP：回合1开始结算 + 排在我方前的敌方行动），不再回落 initSP/initBP。
+         calcTracker 抛错或无回合数据时仍回退到 initSP/initBP。 */
 function renderLiveSpBp(){
 
   /* 优先渲染到角色表上方的顶部容器；若不存在则回退到旧底部容器（兼容 Node 回归测试）。 */
@@ -17073,9 +17189,13 @@ function renderLiveSpBp(){
 
   let spWarn = false, bpWarn = false;   /* 选了错技能导致 SP/BP 不足（赤字）时给红色提醒 */
 
+  let foundAlly = false;   /* P61：是否出现过我方选中行动（含跳过格） */
+
+  let t = null;
+
   try{
 
-    const t = calcTracker();
+    t = calcTracker();
 
     if(t && t.steps){
 
@@ -17086,6 +17206,8 @@ function renderLiveSpBp(){
         const hasAlly = turn.steps.some(s => s && s.kind==='ally' && !s.isMiss);
 
         if(hasAlly){
+
+          foundAlly = true;
 
           const last = turn.steps[turn.steps.length-1];
 
@@ -17113,6 +17235,18 @@ function renderLiveSpBp(){
     }
 
   }catch(e){ /* 状态未就绪时回退到 initSP/initBP（仍渲染，不留陈旧） */ }
+
+  /* P61：未选择任何技能时不再回落 initSP/initBP，改显示「我方第一个角色行动前」的开局快照
+     （calcTracker 的 openSP/openBP：回合1开始结算后 + 排在我方前的敌方行动）。
+     用户样例：3觉神猫/单体/我方2号位 → 2SP+1BP；勾变迁3007 → 8SP+1BP。
+     calcTracker 抛错（t 为空）或返回缺 openSP 时维持原 initSP/initBP 回退。 */
+  if(!foundAlly && t && typeof t.openSP==='number' && typeof t.openBP==='number'){
+
+    finalSP = t.openSP;
+
+    finalBP = t.openBP;
+
+  }
 
   finalSP = Math.max(0, Math.min(capSP, finalSP));
 
@@ -17209,6 +17343,19 @@ function calcTracker(){
 
   /* 初始点同样受各自上限约束（旧存档可能存在 initSP>10 / initBP>cap 的情况） */
   let SP=clamp(state.initSP, capSP), BP=clamp(state.initBP, cap);
+
+  /* P61：开局快照 ——「我方第一个角色行动前」的 SP/BP（renderLiveSpBp 在未选任何技能时显示）。
+     定格点 = 回合1开始结算（觉醒→天赋→变迁3007）后，按行动序排在首个我方行动之前的敌方
+     行动（各 +1SP）之后；判定与 buildRoundActors 排序同源：有速度数据时敌方 speed 大于
+     我方最快参战组组速者排在我方前（计入快照），否则（手动次序，我方优先）敌方全排我方后。
+     未选技能时我方组不进 actors，故以速度对比定位我方虚拟行动位（groupSpeedVal 同口径）。 */
+  let openSP=SP, openBP=BP, openTaken=false;
+  const _openSpd = hasSpeedData();
+  const _openMaxAlly = state.groups.reduce((mx,g,i)=>{
+    const cell=((state.rounds&&state.rounds[0])||[])[i];
+    if(!cell || cell.who==='none') return mx;
+    return Math.max(mx, groupSpeedVal(i)||0);
+  },0);
 
   /* 角色天赋 / 角色觉醒：改为「按角色组分别勾选」（state.groups[g].talentFx / awakenFx，默认开启） */
 
@@ -17355,6 +17502,12 @@ function calcTracker(){
     }
 
     actors.forEach(a=>{
+
+      /* P61：开局快照定格 —— 首个我方行动前、或首个「不快于我方最快参战组」的敌方行动前
+        （该敌方按行动序排在我方之后，不计入开局快照）。 */
+      if(r===0 && !openTaken && (a.kind==='ally' || !_openSpd || (a.speed||0) <= _openMaxAlly)){
+        openSP=SP; openBP=BP; openTaken=true;
+      }
 
       let warn='', costDesc='';
 
@@ -17672,11 +17825,14 @@ function calcTracker(){
 
     });
 
+    /* P61：回合1全为「快于我方的敌方」（或我方首个行动排在回合末）时，回合末定格 = 我方行动前。 */
+    if(r===0 && !openTaken){ openSP=SP; openBP=BP; openTaken=true; }
+
     steps.push({round:r+1, steps:turnSteps, startBattery:turnStartBattery});
 
   }
 
-  return {steps, finalSP:SP, finalBP:BP, finalBattery:battery};
+  return {steps, finalSP:SP, finalBP:BP, finalBattery:battery, openSP, openBP};
 
 }
 
@@ -20237,6 +20393,8 @@ function resetMultOverride(r, g){
    若目标技能在联动源释放后又被用过（本次非首次），则该次不再享受减耗。
    例：和服亚丝娜「闪光穿刺」fx 含「幻月」消耗-1 → 释放闪光穿刺后，幻月下一次使用 4→3；
        幻月 fx 含「闪光穿刺」消耗-1 → 释放幻月后，闪光穿刺下一次使用 0→0（已最低，不变）。
+   P62 用户裁决：窗口内同一源技能多次释放不再叠加（各源技能各计一次）——
+   亚丝娜 1/2 技能（闪光穿刺/幻月）互相减耗恒为一次，幻月最低 3 费。
    返回本技能对「当前格技能」产生的减耗量（仅当「当前格技能」自上次使用以来释放过联动源）。 */
 /* v2.6.3：觉醒「指定技能消耗降低N点」——读取当前格行动者的觉醒档位，返回该技能应减少的消耗点数。
    数据源 awakening.costReduceByName（按技能名索引）+ stageMap 门控；未开觉醒 / 未达档位 → 0。
@@ -20297,6 +20455,7 @@ function skillCostLinkReduce(g, r, sk){
   }
   let reduce = 0;
   const permCounted = {};   /* 永久减耗只算一次（不可叠加，如女仆黑子甜心蛋糕） */
+  const linkCounted = {};   /* 联动减耗只算一次：同一源技能只计一次（P62 用户裁决） */
   for(let rr = r - 1; rr >= 0; rr--){
     const cell = (state.rounds[rr] && state.rounds[rr][g]) || {who:'none'};
     if(cell.who==='none') continue;
@@ -20306,10 +20465,14 @@ function skillCostLinkReduce(g, r, sk){
     const aid = cell.who==='main' ? grp.mainId : cell.who==='sub' ? grp.subId : '';
     const prevSk = aid ? getSkill(aid, prevSkillId) : null;
     if(!prevSk || !prevSk.effect) continue;
-    /* a) 「目标技能名」消耗-N（一次性，如亚丝娜 闪光穿刺/幻月；窗口内多次释放可叠加） */
+    /* a) 「目标技能名」消耗-N（一次性，如亚丝娜 闪光穿刺/幻月）。
+       P62 用户裁决：同一源技能只计一次——窗口内重复释放同一联动源不再叠加
+       （如重复闪光穿刺，幻月恒 4→3，不会低于 3 费）。
+       注：b) 分支「N技能减少X点消耗」的可叠加条目（女仆黑子 女仆侍奉 / 折原临也 抖S）
+       属数据原文口径，不受本裁决影响。 */
     if(rr > lastUsed){
       const m = String(prevSk.effect).match(re);
-      if(m) reduce += Math.abs(parseInt(m[1], 10) || 0);
+      if(m && !linkCounted[prevSk.id]){ linkCounted[prevSk.id] = true; reduce += Math.abs(parseInt(m[1], 10) || 0); }
     }
     /* b) 「N技能[和M技能][永久]减少X点消耗」（如女仆黑子：女仆侍奉→2技能-1可叠加；甜心蛋糕→1/2技能永久-1；
            折原临也 抖S→2技能-1可叠加） */
@@ -23528,6 +23691,23 @@ function exportVerDate(){
 
 
 
+/* P59：导出报告角色名旁的「心象携带」标识——仅心象 ON 且该角色确有携带时显示（en 档走 DICT「心象」词条） */
+function xiangCarrierBadgeHTML(charId){
+  try{
+    if(!state.xiangDmgFx) return '';
+    var _xid = getCharXiang(charId);
+    if(!_xid) return '';
+    var _x = xiangList().find(function(x){ return x && x.id === _xid; });
+    var _nm = _x ? ((_x.name != null && _x.name !== '') ? _x.name : _xid) : _xid;
+    /* P60b：chip 带真图标（EMBED_XIANG_ICON 通道），无图标回退纯文字——与武装 chip 同一视觉语言 */
+    var _ic = '';
+    try{ _ic = (typeof xiangIconFor === 'function' && _x) ? (xiangIconFor(_x, '') || '') : ''; }catch(e){ _ic = ''; }
+    var _ico = _ic ? '<img src="' + esc(_ic) + '" style="width:12px;height:12px;border-radius:3px;vertical-align:middle;object-fit:cover;margin-right:2px" alt="">' : '';
+    return '<span style="display:inline-block;max-width:96px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;vertical-align:middle;margin:0;padding:0 4px;border-radius:6px;border:1px solid var(--brand-soft);background:var(--brand-soft);color:var(--brand);font-size:9px;font-weight:600;line-height:1.5" title="' + XZ('\u5fc3\u8c61') + '\u00b7' + esc(_nm) + '">'
+      + _ico + XZ('\u5fc3\u8c61') + '\u00b7' + esc(_nm) + '</span>';
+  }catch(e){ return ''; }
+}
+
 function exportActionHTML(opts){
 
   opts = opts || {};
@@ -23582,15 +23762,13 @@ function exportActionHTML(opts){
         ${m?`<div style="display:flex;flex-direction:column;align-items:center;line-height:1.15">
           ${charAvatarHTML(m,26)}
           <div style="font-size:10px;margin-top:1px">${_eqMTile}${esc(m.name)} <span style="${_starStyle}">${_mStar}★</span></div>
-          ${wpnHeaderLabel(m)}
-          ${talentAwakenBadges(g)}
+          <div style="display:flex;flex-wrap:wrap;justify-content:center;align-items:flex-start;gap:2px;margin-top:2px;max-width:124px">${wpnHeaderLabel(m)}${xiangCarrierBadgeHTML(m.id)}${talentAwakenBadges(g)}</div>
         </div>`:''}
         <span style="color:#9ca3af;font-size:11px;align-self:center;padding:0 2px">+</span>
         ${s?`<div style="display:flex;flex-direction:column;align-items:center;line-height:1.15">
           ${charAvatarHTML(s,26)}
           <div style="font-size:10px;margin-top:1px">${_eqSTile}${esc(s.name)} <span style="${_starStyle}">${_sStar}★</span></div>
-          ${wpnHeaderLabel(s)}
-          ${subAwakenBadge(g)}
+          <div style="display:flex;flex-wrap:wrap;justify-content:center;align-items:flex-start;gap:2px;margin-top:2px;max-width:124px">${wpnHeaderLabel(s)}${xiangCarrierBadgeHTML(s.id)}${subAwakenBadge(g)}</div>
         </div>`:''}
       </div>
     </th>`;
@@ -23739,7 +23917,7 @@ function exportActionHTML(opts){
 
     const _proof = _proofCache[g];
 
-    h+=`<td colspan="2" style="text-align:center;font-weight:600">${sm.toFixed(2)}${_proof>0?` <span style="color:#9333ea;font-size:10px">(额外伤害:${_proof.toFixed(0)})</span>`:''}</td>`;
+    h+=`<td style="text-align:center;font-weight:600">${sm.toFixed(2)}${_proof>0?` <span style="color:#9333ea;font-size:10px">(额外伤害:${_proof.toFixed(0)})</span>`:''}</td>`;
 
   }
 
@@ -24218,14 +24396,14 @@ function exportReportLogHTML(){
       h += '<div style="display:flex;flex-direction:column;align-items:center;line-height:1.15">'
         + charAvatarHTML(m, 22)
         + '<div style="font-size:8.5px;line-height:1.1">' + _eqMTile + esc(m.name) + ' <span style="' + _starStyle + '">' + _mStar + '★</span></div>'
-        + wpnHeaderLabel(m) + talentAwakenBadges(g) + '</div>';
+        + '<div style="display:flex;flex-wrap:wrap;justify-content:center;align-items:flex-start;gap:2px;margin-top:2px;max-width:112px">' + wpnHeaderLabel(m) + xiangCarrierBadgeHTML(m.id) + talentAwakenBadges(g) + '</div></div>';
     }
     if(m && s2) h += '<span style="color:#9ca3af;font-size:11px;align-self:center;padding:0 2px">+</span>';
     if(s2){
       h += '<div style="display:flex;flex-direction:column;align-items:center;line-height:1.15">'
         + charAvatarHTML(s2, 22)
         + '<div style="font-size:8.5px;line-height:1.1">' + _eqSTile + esc(s2.name) + ' <span style="' + _starStyle + '">' + _sStar + '★</span></div>'
-        + wpnHeaderLabel(s2) + subAwakenBadge(g) + '</div>';
+        + '<div style="display:flex;flex-wrap:wrap;justify-content:center;align-items:flex-start;gap:2px;margin-top:2px;max-width:112px">' + wpnHeaderLabel(s2) + xiangCarrierBadgeHTML(s2.id) + subAwakenBadge(g) + '</div></div>';
     }
     h +=   '</div></div>';
   }
@@ -24303,7 +24481,7 @@ function exportReportLogHTML(){
     h += '</div>';
   }
   /* v3.5.0 P26：基础面板**并入本容器**（与出招排表同栅格、同列宽、同组序）——形成「上方出招 · 下方各组基础数据」的上下对应，不再另起独立区域。 */
-  h += exportGroupBasePanelHTML();
+  if(exportPanelVisible()) h += exportGroupBasePanelHTML();
   /* v3.5.0 P29：倍率合计同样**并入本容器**（同栅格、同组序）——「三组合计」由独立列上提到段标右侧。 */
   h += exportReportTotalHTML();
   h += '</div>';
@@ -24345,10 +24523,7 @@ function exportReportTotalHTML(){
       + (_proofs[g] > 0 ? ' <span style="color:#4338ca;font-size:10px">(' + esc('\u989d\u5916\u4f24\u5bb3') + ':' + _proofs[g].toFixed(0) + ')</span>' : '') + '</div>';
   }
   h += '</div>';
-  if(_proofAll > 0){
-    h += '<div style="padding:1px 9px;border-top:1px solid var(--line);font-size:10px;color:var(--sub);line-height:1.45">'
-      + esc('\u989d\u5916\u4f24\u5bb3\u5408\u8ba1\uff08\u795e\u732b\u9ed1\u732b \u00b7 \u8bc1\u660e\u4e4b\u94c1\uff1a\u771f\u5b9e\u4f24\u5bb3\uff0c\u4e0d\u8ba1\u5165\u500d\u7387\uff09\uff1a+' + _proofAll.toFixed(0)) + '</div>';
-  }
+  /* P58：额外伤害合计说明行撤下（用户裁决；各组数值小字与计算口径不变） */
   return h;
 }
 function exportDamageHTML(){
@@ -24379,11 +24554,9 @@ function exportDamageText(){
 
   const s = calcScores();
 
-  /* v2.3.2：神猫黑猫·证明之铁 额外伤害合计，用于文本导出单独说明 */
-  const _totalProof = s.per.reduce((a,p)=>a+(+p.proofDmg||0),0);
+  /* P58：文本侧「额外伤害合计」行撤下（用户裁决） */
 
   t += `\n\n评分: 非酋${fmt(s.score1)} / 暴击${fmt(s.score2)} / 欧皇${fmt(s.score3)}\n`;
-  if(_totalProof>0) t += `\n神猫黑猫·证明之铁 额外伤害（真实伤害，不计入倍率，已计入基础得分）：+${_totalProof.toFixed(0)}\n`;
   /* v2.3.6：神猫专属天赋「审判之力」层数 / 加成说明（每层 +7%，上限 5 层） */
   const _jd = exportKuronekoJudgeNote();
   if(_jd) t += `\n${_jd}\n`;
@@ -24393,13 +24566,23 @@ function exportDamageText(){
   /* v2.1.9：删除明细段（与导出图片一致：只保留出招文本 + 评分 + 装备区，不重复展示每组倍率拆解） */
 
   /* v3.5.0 P31：页脚戳撤下（与 HTML 版一致；版本 + 日期由报表标题携带）。 */
-  t += exportGroupBasePanelText();
+  if(exportPanelVisible()) t += exportGroupBasePanelText();
 
   return t;
 
 }
 
 
+
+/* P56：导出报告「各组基础面板」显隐（默认显示；localStorage czy_expPanel，仅作用于伤害计算报告） */
+function exportPanelVisible(){
+  /* P56b：默认不显示（用户裁决）；只有显式勾选过（czy_expPanel==='1'）才显示 */
+  try{ return localStorage.getItem('czy_expPanel') === '1'; }catch(e){ return false; }
+}
+function exportPanelToggle(v){
+  try{ localStorage.setItem('czy_expPanel', v ? '1' : '0'); }catch(e){}
+  showExport(currentExportType);
+}
 
 function showExport(type){
 
@@ -24426,6 +24609,11 @@ function showExport(type){
     currentExportText=XZtext(exportDamageText());
 
   }
+
+  /* P56：选项行只在伤害报告显示（出招排表无基础面板段）；打开时同步勾选态与双语文案 */
+  var _pc=document.getElementById('expPanelWrap'); if(_pc) _pc.style.display=(type==='action')?'none':'inline-flex';
+  var _pk=document.getElementById('expPanelChk'); if(_pk) _pk.checked=exportPanelVisible();
+  var _pl=document.getElementById('expPanelLbl'); if(_pl) _pl.textContent=XZ('\u57fa\u7840\u9762\u677f');
 
   document.getElementById('exportModal').style.display='flex';
 
@@ -25659,23 +25847,116 @@ function planLibFind(id){ return planLibLoad().find(x=>x.id===id) || null; }
 
 
 
-/* 保存当前出招为模块；同名则询问是否覆盖 */
+/* P64：变迁关卡号反推（快照内变迁效果字段 → 游戏关卡编号，全局单选 ⇒ 至多一个生效） */
+function planSnapBq(s){
+  if(!s) return '';
+  if(s.customSpMinus2 === true) return '3003';
+  if(s.debuffBoost && s.debuffBoost.enabled) return '3004';
+  if(s.hpGain && s.hpGain.enabled) return '3005';
+  if(s.roundExtend === 'g11') return '3006';
+  if(s.spLimit === true) return '3007';
+  if(s.shields && s.shields.enabled) return '3008';
+  if(s.roundExtend === 'g10') return '3009';
+  if(s.roundExtend === 's11') return '3010';
+  if(s.twoEnemies === true) return '3011';
+  if(s.xiangBoost && s.xiangBoost.enabled) return '3012';
+  if(s.xiangVuln && s.xiangVuln.enabled) return '3013';
+  return '';
+}
+
+/* P64：模块标准名 = 模式前缀 +（变迁关卡号）+ 三组主战简称（大河/炮姐/一方…），不带日期 ⇒ 同名即同配置 */
+function planAutoName(snap){
+  const mode = (snap && snap.mode) || 'custom';
+  const pre = mode === 'single' ? '单体' : (mode === 'group' ? '群体' : '变迁');
+  const no = planSnapBq(snap);
+  const names = ((snap && snap.groups) || []).map(g=>{
+    return planShortName(g && ((g._mainName != null && g._mainName !== '') ? g._mainName : planCharName(g.mainId)));
+  }).filter(Boolean);
+  const sups = [];
+  ((snap && snap.groups) || []).forEach(g=>{
+    const s = planShortName(g && ((g._subName != null && g._subName !== '') ? g._subName : planCharName(g.subId)));
+    if(s && sups.indexOf(s) < 0) sups.push(s);
+  });
+  const parts = [pre + (no || ''), names.join('/')];
+  if(sups.length) parts.push('SUP:' + sups.join('/'));
+  return parts.filter(Boolean).join('·');
+}
+
+/* P64：主战简称 —— 先查形态全名精确命中，再查基名（复用 CHAR_ALIAS 键匹配，形态变体自动继承） */
+const PLAN_SHORT = {
+  '和服亚丝娜':'和亚','御坂美琴':'炮姐','一方通行':'一方','上条当麻':'当麻','白井黑子':'黑子',
+  '逢坂大河':'大河','女仆大河':'大河','食蜂操祈':'食蜂','初春饰利':'初春','晓古城':'古城',
+  '姬柊雪菜':'雪菜','里见莲太郎':'莲太郎','蓝原延珠':'延珠','椎名真白':'真白','平和岛静雄':'静雄',
+  '折原临也':'临也','游佐惠美':'惠美','高坂桐乃':'桐乃','有田春雪':'春雪','藤和艾莉欧':'艾莉欧',
+  '高须龙儿':'龙儿','司波达也':'达也','司波深雪':'深雪','初音未来':'初音','真奥贞夫':'真奥',
+  '加贺香子':'香子','凑智花':'智花','MHCR-Eins':'Eins','MHCR-Zwei':'Zwei','MHCR-Drei':'Drei','CMR-91':'CMR'
+};
+function planShortName(full){
+  const nm = String(full==null?'':full).trim();
+  if(!nm) return '';
+  if(PLAN_SHORT[nm]) return PLAN_SHORT[nm];
+  let base = '';
+  for(const k in CHAR_ALIAS){ if(nm.indexOf(k) >= 0 && k.length > base.length) base = k; }
+  let out = PLAN_SHORT[base] || base;
+  if(!out) out = nm.split('·')[0].trim();
+  return out || nm;
+}
+
+/* P64：历史模块名一次性刷成标准名（标记 czy_planLibNameVer 防重入） */
+function planLibMigrateNames(){
+  try{
+    if(localStorage.getItem('czy_planLibNameVer') === '4') return;
+    const list = planLibLoad();
+    let changed = false;
+    list.forEach(e=>{
+      const base = planAutoName(e.snap);
+      let nm = base, k = 2;
+      while(list.some(x=>x !== e && x.name === nm)) nm = base + '(' + (k++) + ')';
+      if(e.name !== nm){ e.name = nm; changed = true; }
+    });
+    if(changed) planLibSave(list);
+    localStorage.setItem('czy_planLibNameVer', '4');
+  }catch(e){}
+}
+
+/* 保存当前出招为模块（P64 标准自动命名；自动名同名一律另存序号副本，显式名同名仍询问覆盖） */
 
 function planLibAdd(name, note){
-
-  const nm = String(name==null?'':name).trim();
-
-  if(!nm){ planLibAlert('请先填写模块名称。'); return null; }
 
   const list = planLibLoad();
 
   const snap = planSnapshot();
 
+  /* P64：名称留空自动起标准名（模式 + 变迁关卡号 + 三组主战简称 + SUP 简称，无日期）。
+     P64d：标准名相同 ⇒ 一律另存 (2)/(3) 序号副本——同阵容仍可能有不同出招（技能/回合/备注），不覆盖。 */
+
+  let _skipConfirm = false;
+
+  let nm = String(name==null?'':name).trim();
+
+  if(!nm){
+
+    nm = planAutoName(snap);
+
+    if(list.some(x=>x.name===nm)){
+
+      /* P64d：不再询问覆盖——同标准名仍可能是不同出招（技能/回合/备注可不同），一律另存序号副本 */
+
+      const base = nm;
+
+      let k = 2;
+
+      while(list.some(x=>x.name===nm)) nm = base + '(' + (k++) + ')';
+
+    }
+
+  }
+
   const exist = list.find(x=>x.name===nm);
 
   if(exist){
 
-    if(!planLibConfirm('已存在同名模块「'+nm+'」，要用当前出招覆盖它吗？')) return null;
+    if(!_skipConfirm && !planLibConfirm('已存在同名模块「'+nm+'」，要用当前出招覆盖它吗？')) return null;
 
     exist.snap = snap;
 
@@ -26088,13 +26369,11 @@ function planLibFmtTime(ts){
 
 function planLibSaveCurrent(){
 
-  const ni = document.getElementById('planLibName');
+  /* P64：不再自定义名称——一律自动起标准名，仅备注可手填 */
 
   const ti = document.getElementById('planLibNote');
 
-  const e = planLibAdd(ni ? ni.value : '', ti ? ti.value : '');
-
-  if(e && ni) ni.value = '';
+  const e = planLibAdd('', ti ? ti.value : '');
 
   try{ renderPlanLib(); }catch(err){}
 
@@ -26106,19 +26385,19 @@ function planLibSaveCurrent(){
 
 function planLibRenamePrompt(id){
 
+  /* P64：不再支持自定义出招名——入口改为只编辑备注，名称保持自动标准名 */
+
   const e = planLibFind(id);
 
   if(!e) return null;
 
-  let nm = null, note = e.note;
+  if(typeof prompt !== 'function') return null;
 
-  if(typeof prompt==='function'){ nm = prompt('重命名模块', e.name); }
+  const nt = prompt('备注（留空表示不改）', e.note||'');
 
-  if(nm==null) return null;
+  if(nt == null) return null;
 
-  if(typeof prompt==='function'){ const nt = prompt('备注（留空表示不改）', e.note||''); if(nt!=null) note = nt; }
-
-  const r = planLibRename(id, nm, note);
+  const r = planLibRename(id, e.name, nt);
 
   try{ renderPlanLib(); }catch(err){}
 
@@ -26130,7 +26409,7 @@ function planLibRenamePrompt(id){
 
 function planLibResetFilters(){
 
-  const map = {planLibSearch:'', planLibMode:'all', planLibSort:'updated', planLibPageSize:'20'};
+  const map = {planLibSearch:'', planLibMode:'all', planLibBq:'all', planLibSort:'updated', planLibPageSize:'20'};
 
   for(const id in map){
 
@@ -26156,6 +26435,7 @@ function planLibFilterState(){
   return {
     q: String((qEl && qEl.value) || '').trim().toLowerCase(),
     mode: (mEl && mEl.value) || 'all',
+    bq: (function(){ const el = document.getElementById('planLibBq'); return (el && el.value) || 'all'; })(),
     sort: (sEl && sEl.value) || 'updated',
     pageSize: Math.max(5, Math.min(100, +(pEl && pEl.value) || 20))
   };
@@ -26203,7 +26483,7 @@ function planLibRenderDetail(){
     +   '<div class="toolbar" style="gap:6px;margin-top:10px">'
     +     '<button class="btn primary" title="一键还原这套出招（含角色组与数据确认）" onclick="planLibApply(\'' + e.id + '\')">载入</button>'
     +     '<button class="btn" title="用当前页面的出招覆盖此模块" onclick="planLibUpdate(\'' + e.id + '\')">覆盖更新</button>'
-    +     '<button class="btn" onclick="planLibRenamePrompt(\'' + e.id + '\')">重命名</button>'
+    +     '<button class="btn" onclick="planLibRenamePrompt(\'' + e.id + '\')">备注</button>'
     +     '<button class="btn danger" onclick="planLibRemove(\'' + e.id + '\');renderPlanLib();">删除</button>'
     +   '</div>'
     + '</div>';
@@ -26214,11 +26494,19 @@ function renderPlanLib(){
   const box = document.getElementById('planLibList');
   const pagerBox = document.getElementById('planLibPager');
   if(!box) return '';
+  planLibMigrateNames();
+  const _bqField = document.getElementById('planLibBqField');
+  if(_bqField && _bqField.style){
+    const _mEl = document.getElementById('planLibMode');
+    _bqField.style.display = (_mEl && _mEl.value === 'custom') ? '' : 'none';
+  }
   const list = planLibLoad();
   const f = planLibFilterState();
   let filtered = list.filter(e => {
     if(!e || !e.snap) return false;
     if(f.mode !== 'all' && e.snap.mode !== f.mode) return false;
+    /* P64：变迁模式下按「已生效关卡」细分筛选（快照变迁效果字段反推关卡号） */
+    if(f.mode === 'custom' && f.bq && f.bq !== 'all' && (planSnapBq(e.snap) || 'none') !== f.bq) return false;
     if(f.q){
       const hay = [e.name, e.note, planLibSummary(e)].join(' ').toLowerCase();
       if(!hay.includes(f.q)) return false;
@@ -33726,7 +34014,7 @@ window.__build = buildDefaultCharDB;
 
 <script data-auth-gate="1">
 /* ============================================================================
-   Canan Wiki · 访问口令闸门（v3.6.0 · 服务端校验 + 每日临时口令 + 池可勾选）
+   Canan Wiki · 访问口令闸门（v3.6.3 · 服务端校验 + 每日临时口令 + 池可勾选）
    ---------------------------------------------------------------------------
    机制
      · 口令由服务端校验（Cloudflare Pages Functions：/api/auth 与 /api/verify）；
@@ -33757,7 +34045,7 @@ window.__build = buildDefaultCharDB;
      ★池与派生算法必须与服务端 _worker.js 完全同源，改一处必改两处。
      ★散列用下方纯 JS SHA-256（不用 crypto.subtle）：subtle 仅在安全上下文可用，
        而本档常以 file:// 双击打开；纯 JS 实现无此限制，且能保证与服务端逐位一致。 */
-  var WEEK_EPOCH  = Date.UTC(2026, 0, 5) / 1000;   /* 纪元锚点：2026-01-05（周一 · 日更下仅作整数天对齐锚点） */
+  var WEEK_EPOCH  = Date.UTC(2026, 0, 4, 16) / 1000;   /* 纪元锚点：2026-01-05 北京时间 0 点（UTC 前日 16:00 · 每日 0 点换码 P63） */
   var WEEK_CYCLE  = 1;                             /* 每 1 天换一位（一天一换 · v3.4.0） */
   var WEEK_SALT   = 'canan|weekly|v1';             /* 派生盐（与版本号无关，改了全池重排） */
   var WEEK_AVOID  = 20;                             /* 与最近 N 个周期避让（日更下 = 20 天不重复） */
@@ -34176,7 +34464,8 @@ window.__build = buildDefaultCharDB;
       mPre:'校验失败（', mEnd:'），请稍后再试',
       mRecheck:'正在联网复核授权…',
       mNoNet:'网络不可用，无法复核授权。请联网后重试，或直接输入口令。',
-      mDead:'授权已失效，请重新输入口令。'
+      mDead:'授权已失效，请重新输入口令。',
+      logout:'注销', logoutT:'清除本机授权并返回口令输入（用于换口令登录）'
     },
     en: {
       title:'Canan Wiki', sub:'Enter your access password to continue',
@@ -34198,7 +34487,8 @@ window.__build = buildDefaultCharDB;
       mPre:'Verification failed (', mEnd:'). Please try again later.',
       mRecheck:'Re-checking authorization…',
       mNoNet:'Network unavailable — cannot re-check. Reconnect and retry, or enter a password.',
-      mDead:'Authorization is no longer valid. Please enter your password again.'
+      mDead:'Authorization is no longer valid. Please enter your password again.',
+      logout:'Log out', logoutT:'Clear local authorization and return to the gate (to switch password)'
     }
   };
   function gt(){ return GT[gateLang()] || GT.en; }
@@ -34295,9 +34585,25 @@ window.__build = buildDefaultCharDB;
                      ' · ' + graceNote();
     el.style.color = (n <= 3) ? '#dc2626' : ((n <= 7) ? '#b45309' : '');
   }
+  function paintLogout(){
+    if(!localOk()) return;
+    var host = document.querySelector('.toolbar'); if(!host) return;
+    var el = document.getElementById('authLogout');
+    if(!el){
+      el = document.createElement('button');
+      el.id = 'authLogout';
+      el.setAttribute('data-i18n-skip', '');
+      el.style.cssText = 'margin-left:6px;padding:1px 9px;font:inherit;font-size:11px;line-height:16px;border:1px solid rgba(128,128,128,.35);border-radius:999px;background:transparent;color:inherit;opacity:.65;cursor:pointer;vertical-align:middle;';
+      el.addEventListener('click', function(){ try{ clearRec(); }catch(e){} location.reload(); });
+      host.appendChild(el);
+    }
+    el.textContent = gt().logout;
+    el.title = gt().logoutT;
+  }
   function paintBadge(){
     if(!localOk()) return;
     var host = document.querySelector('.toolbar'); if(!host) return;
+    paintLogout();
     var el = document.getElementById('authBadge');
     if(!el){
       el = document.createElement('span');
@@ -34508,7 +34814,7 @@ window.__build = buildDefaultCharDB;
   /* ---------- ①′ 手工补译表（导出层 / 功能控件 / 组合片段）----------
      ★键一律 \uXXXX 转义：中文键以明文落进页面会被「源码零残留汉字」「中文串计数」这类断言当成正文命中。
      ★只在 DICT 里没有同名键时才覆盖（put 语义），避免盖掉自动生成的数据名译文。 */
-  var EXTRA = {"\u66b4\u51fb\u5206":"Crit Score","\u4f24\u5bb3\u8ba1\u7b97\u62a5\u544a":"Damage Report","\u51fa\u62db\u6392\u8868\u6a21\u677f":"Action Plan Template","\u5bfc\u51fa \u00b7 \u51fa\u62db\u6392\u8868":"Export \u00b7 Action Plan","\u5bfc\u51fa \u00b7 \u4f24\u5bb3\u8ba1\u7b97\u62a5\u544a":"Export \u00b7 Damage Report","\u5bfc\u51fa\u6392\u8868\u6a21\u677f(HTML\u52fe\u9009)":"Export Plan Template (HTML)","\u88c5\u5907\u7a7f\u6234":"Equipment","\u672a\u7ed1\u4e3b\u6218":"(no main)","\u672a\u7ed1sub":"(no sub)","\u8df3\u8fc7":"Skip","\u603b\u8840\u91cf":"Total HP","\u6700\u7ec8\u653b\u51fb\u529b":"Final ATK","\u66b4\u4f24":"Crit DMG","\u524d\u6392\u76fe":"Front Shield","\u540e\u6392\u76fe":"Rear Shield","\u76fe\u7834\u4e8e":"Shield broken at","\u672a\u7834":"intact","\u975e\u914b":"Unlucky","\u6b27\u7687":"Lucky","\u66b4\u51fb":"Crit","\u89c9\u9192":"Awakening","\uff08\u5929\u8d4b\u5173\u00b7\u66b4\u51fb+10%\u8865\u5f3a\uff09":" (Talent off \u00b7 +10% Crit bonus)","\u65e0":"None","\u4e0d\u826f":"Offbeat Trend","\u6850\u6850":"The Pretender","\u5907\u6ce8\uff08\u53ef\u9009\uff09":"Notes (optional)","\uff08\u672a\u88c5\u914d\u6b66\u88c5\uff09":"(no Armament)","\u5e38\u9a7b\uff08\u65e0\u6761\u4ef6\uff09":"Always (unconditional)","\uff08\u53d8\u8fc1\u6a21\u5f0f\u53ef\u6539\uff09":"(editable in Variant mode)","\uff08\u8be5\u7ec4\u672a\u9009\u62e9\u89d2\u8272\uff09":"(no character selected)","\u53cb\u65b9\u5168\u4f53\uff08\u5982\u91d1\u521a\u6775\uff09":"All allies (e.g. Vajra)","\u751f\u6548\u56de\u5408\uff08\u9017\u53f7\u5206\u9694\uff09":"Active turns (comma-separated)","\u6211\u65b9\u5168\u4f53\uff08\u4e09\u7ec4\u5171\u4eab\uff09":"All allies (3 groups)","\u5c0f\u7ec4\uff08\u5982\u96c5\u6069\u683c\u5229\u4f69\u5c14\uff09":"Subgroup (e.g. Yggdrasil)","\u4ec5\u8bb0\u5f55\uff0c\u4e0d\u8ba1\u5165\u4f24\u5bb3\u603b\u5206":"Logged only, not scored","\u2605\u7eaf\u5c55\u793a\uff0c\u4e0d\u53c2\u4e0e\u4efb\u4f55\u8ba1\u7b97":"\u2605 Display only, not calculated","\u654c\u65b9\u6bcf\u5c42\u653b\u51fb +\uff08\u4ec5\u5c55\u793a\uff09":"Enemy +ATK per stack (display only)","\u5b8c\u6210\u6392\u62db\uff0c\u67e5\u770b\u6570\u636e\u786e\u8ba4 \u2192":"Done \u2192 Data Check","\u786e\u8ba4\u65e0\u8bef\uff0c\u67e5\u770b\u4f24\u5bb3\u8bc4\u5206 \u2192":"Confirmed \u2192 Score","\u4fdd\u5b58 / \u8f7d\u5165\u6574\u5957\u51fa\u62db\u65b9\u6848":"Save / Load full plan","\u6309\u884c\u52a8\u6b21\u5e8f\u9010\u6b65\u8ba1\u7b97 \u00b7 \u5b9e\u65f6":"Step-by-step \u00b7 live","\u9650\u5b9a\u6a21\u5757 \u00b7 \u4ec5\u90e8\u5206\u89d2\u8272\u5f00\u653e":"Limited modules \u00b7 some characters","\u6bcf\u6280\u80fd\u500d\u7387 + \u6bcf\u7ec4\u989d\u5916\u4f24\u5bb3\u9879":"Per-skill multiplier + group bonus","\u4ec5\u6280\u80fd\u76ee\u6807\u542b\u300c\u524d\u6392\u300d\u65f6\u8ba1\u5165":"Counts only if front row is targeted","\u4ec5\u6280\u80fd\u76ee\u6807\u542b\u300c\u4e2d\u6392\u300d\u65f6\u8ba1\u5165":"Counts only if middle row is targeted","\u4ec5\u6280\u80fd\u76ee\u6807\u542b\u300c\u540e\u6392\u300d\u65f6\u8ba1\u5165":"Counts only if back row is targeted","\u88c5\u5907\u7c7b\u578b(\u4e0d\u826f/\u6850\u6850/\u521b\u4f24)":"Equip set (relic)","3 \u6761\u5171\u9e23 + 1 \u4e2a\u4e13\u5c5e\u69fd":"3 resonances + 1 exclusive slot","\u624b\u52a8\u884c\u52a8\u6b21\u5e8f\uff08\u52fe\u9009\u6bcf\u7ec4\u51fa\u624b\u987a\u5e8f\uff09\uff1a":"Manual action order (per group):","\u6392\u540d":"Ranking","\u8bc4\u5206":"Score","\u7ec4\u7ea7\u6570":"Group-level values","\u4ec5\u5df2\u5efa\u6a21\u9879":"Modeled items only","\u53ea\u8bfb\u67e5\u9605 \u00b7 \u89d2\u8272\u6570\u636e\u5168\u90e8\u5185\u7f6e":"Read-only \u00b7 all data built in","\ud83d\udcd6 \u89d2\u8272\u7b80\u4ecb":"\ud83d\udcd6 Character Bio","\ud83d\udcca \u89e3\u6790\u6570\u503c":"\ud83d\udcca Effects","2 \u4ef6\u5957 \u00b7 \u6240\u5728\u7ec4":"2-pc \u00b7 squad","\u5269\u4f59":"Remaining","\u8fde\u643a":"Combo","\u5347\u534e":"Ascension","\u6613\u4f24":"Vulnerable","\u6cbb\u7597":"Heal","\u6108\u5408":"Recovery","\u51cf\u4f24":"DMG Cut","\u52a0\u653b":"ATK Up","\u5c01\u6280":"Seal","\u9a71\u6563":"Dispel","\u51c0\u5316":"Cleanse","\u5206\u62c5":"Share","\u865a\u5f31":"Weaken","\u51cf\u653b":"ATK Down","\u91cd\u4f24":"Heavy Wound","\u53cd\u4f24":"Reflect","\u62a4\u76fe":"Shield","\u7206\u53d1":"Burst","\u653b\u51fb":"Attack","\u81ea\u8eab":"Self","\u7279\u6b8a":"Special","\u884c\u52a8\u589e\u52a0":"Extra Action","\u66b4\u51fb\u51e0\u7387":"Crit Rate","\u66b4\u51fb\u7387":"Crit Rate","\u66b4\u51fb\u4f24\u5bb3":"Crit DMG","\u653b\u51fb\u52a0\u6210":"ATK Up","\u751f\u547d\u52a0\u6210":"HP Up","\u7269\u9632\u52a0\u6210":"PDEF Up","\u5f02\u9632\u52a0\u6210":"EDEF Up","\u6700\u7ec8\u4f24\u5bb3\u52a0\u6210":"Final DMG Up","\u6700\u7ec8\u4f24\u5bb3\u51cf\u514d":"Final DMG Cut","debuff\u589e\u4f24":"Debuff DMG Up","\u6cbb\u7597\u53ef\u66b4\u51fb":"Heal Can Crit","\u7834\u76fe\u4f24\u5bb3\u53ef\u66b4\u51fb":"Shield-Break Can Crit","\u5fc3\u8c61\u589e\u4f24":"Imagery DMG Up","\u4e24\u4e2a\u654c\u4eba":"Two Enemies","\u7fa4\u4f53\u56de\u5408\u5ef6\u957f11\u56de\u5408":"Group \u00b7 extend to 11 turns","\u7fa4\u4f53\u56de\u5408\u5ef6\u957f10\u56de\u5408":"Group \u00b7 extend to 10 turns","\u5355\u4f53\u56de\u5408\u5ef6\u957f11\u56de\u5408":"Single \u00b7 extend to 11 turns","\u8840\u91cf\u589e\u76ca":"HP Gain","\u6280\u80fd\u56de\u590d\u9650\u5236":"SP Regen Limit","\u5fc3\u8c61\u6613\u4f24":"Imagery Vulnerability","\u524d\u540e\u62a4\u76fe":"Front/Rear Shields","\u2460\u7ec4\uff08\u540e\u6392\uff09 \u2014 \u603b\u8840\u91cf":"Group 1 \u00b7 Total HP","\u2461\u7ec4\uff08\u4e2d\u6392\uff09 \u2014 \u603b\u8840\u91cf":"Group 2 \u00b7 Total HP","\u2462\u7ec4\uff08\u524d\u6392\uff09 \u2014 \u603b\u8840\u91cf":"Group 3 \u00b7 Total HP","\u2460\u7ec4\uff08\u540e\u6392\uff09 \u2014 \u6700\u7ec8\u653b\u51fb\u529b":"Group 1 \u00b7 Final ATK","\u2461\u7ec4\uff08\u4e2d\u6392\uff09 \u2014 \u6700\u7ec8\u653b\u51fb\u529b":"Group 2 \u00b7 Final ATK","\u2462\u7ec4\uff08\u524d\u6392\uff09 \u2014 \u6700\u7ec8\u653b\u51fb\u529b":"Group 3 \u00b7 Final ATK","\u2460\u7ec4\uff08\u540e\u6392\uff09 \u2014 \u66b4\u51fb\u4f24\u5bb3\uff08%\uff0c\u51c0\u52a0\u6210\uff09":"Group 1 \u00b7 Crit DMG (net %)","\u2461\u7ec4\uff08\u4e2d\u6392\uff09 \u2014 \u66b4\u51fb\u4f24\u5bb3\uff08%\uff0c\u51c0\u52a0\u6210\uff09":"Group 2 \u00b7 Crit DMG (net %)","\u2462\u7ec4\uff08\u524d\u6392\uff09 \u2014 \u66b4\u51fb\u4f24\u5bb3\uff08%\uff0c\u51c0\u52a0\u6210\uff09":"Group 3 \u00b7 Crit DMG (net %)","\u7b2c 1 \u56de\u5408 \u00b7 SP/BP \u5269\u4f59":"Turn 1 \u00b7 SP/BP left","\u7b2c 2 \u56de\u5408 \u00b7 SP/BP \u5269\u4f59":"Turn 2 \u00b7 SP/BP left","\u7b2c 3 \u56de\u5408 \u00b7 SP/BP \u5269\u4f59":"Turn 3 \u00b7 SP/BP left","\u7b2c 4 \u56de\u5408 \u00b7 SP/BP \u5269\u4f59":"Turn 4 \u00b7 SP/BP left","\u7b2c 5 \u56de\u5408 \u00b7 SP/BP \u5269\u4f59":"Turn 5 \u00b7 SP/BP left","\u7b2c 6 \u56de\u5408 \u00b7 SP/BP \u5269\u4f59":"Turn 6 \u00b7 SP/BP left","\u7b2c 7 \u56de\u5408 \u00b7 SP/BP \u5269\u4f59":"Turn 7 \u00b7 SP/BP left","\u7b2c 8 \u56de\u5408 \u00b7 SP/BP \u5269\u4f59":"Turn 8 \u00b7 SP/BP left","\u7b2c 9 \u56de\u5408 \u00b7 SP/BP \u5269\u4f59":"Turn 9 \u00b7 SP/BP left","\u7b2c 10 \u56de\u5408 \u00b7 SP/BP \u5269\u4f59":"Turn 10 \u00b7 SP/BP left","\u7b2c 11 \u56de\u5408 \u00b7 SP/BP \u5269\u4f59":"Turn 11 \u00b7 SP/BP left","\u7b2c 12 \u56de\u5408 \u00b7 SP/BP \u5269\u4f59":"Turn 12 \u00b7 SP/BP left"};
+  var EXTRA = {"\u57fa\u7840\u9762\u677f":"Base Panel","\u66b4\u51fb\u5206":"Crit Score","\u4f24\u5bb3\u8ba1\u7b97\u62a5\u544a":"Damage Report","\u51fa\u62db\u6392\u8868\u6a21\u677f":"Action Plan Template","\u5bfc\u51fa \u00b7 \u51fa\u62db\u6392\u8868":"Export \u00b7 Action Plan","\u5bfc\u51fa \u00b7 \u4f24\u5bb3\u8ba1\u7b97\u62a5\u544a":"Export \u00b7 Damage Report","\u5bfc\u51fa\u6392\u8868\u6a21\u677f(HTML\u52fe\u9009)":"Export Plan Template (HTML)","\u88c5\u5907\u7a7f\u6234":"Equipment","\u672a\u7ed1\u4e3b\u6218":"(no main)","\u672a\u7ed1sub":"(no sub)","\u8df3\u8fc7":"Skip","\u603b\u8840\u91cf":"Total HP","\u6700\u7ec8\u653b\u51fb\u529b":"Final ATK","\u66b4\u4f24":"Crit DMG","\u524d\u6392\u76fe":"Front Shield","\u540e\u6392\u76fe":"Rear Shield","\u76fe\u7834\u4e8e":"Shield broken at","\u672a\u7834":"intact","\u975e\u914b":"Unlucky","\u6b27\u7687":"Lucky","\u66b4\u51fb":"Crit","\u89c9\u9192":"Awakening","\uff08\u5929\u8d4b\u5173\u00b7\u66b4\u51fb+10%\u8865\u5f3a\uff09":" (Talent off \u00b7 +10% Crit bonus)","\u65e0":"None","\u4e0d\u826f":"Offbeat Trend","\u6850\u6850":"The Pretender","\u5907\u6ce8\uff08\u53ef\u9009\uff09":"Notes (optional)","\uff08\u672a\u88c5\u914d\u6b66\u88c5\uff09":"(no Armament)","\u5e38\u9a7b\uff08\u65e0\u6761\u4ef6\uff09":"Always (unconditional)","\uff08\u53d8\u8fc1\u6a21\u5f0f\u53ef\u6539\uff09":"(editable in Variant mode)","\uff08\u8be5\u7ec4\u672a\u9009\u62e9\u89d2\u8272\uff09":"(no character selected)","\u53cb\u65b9\u5168\u4f53\uff08\u5982\u91d1\u521a\u6775\uff09":"All allies (e.g. Vajra)","\u751f\u6548\u56de\u5408\uff08\u9017\u53f7\u5206\u9694\uff09":"Active turns (comma-separated)","\u6211\u65b9\u5168\u4f53\uff08\u4e09\u7ec4\u5171\u4eab\uff09":"All allies (3 groups)","\u5c0f\u7ec4\uff08\u5982\u96c5\u6069\u683c\u5229\u4f69\u5c14\uff09":"Subgroup (e.g. Yggdrasil)","\u4ec5\u8bb0\u5f55\uff0c\u4e0d\u8ba1\u5165\u4f24\u5bb3\u603b\u5206":"Logged only, not scored","\u2605\u7eaf\u5c55\u793a\uff0c\u4e0d\u53c2\u4e0e\u4efb\u4f55\u8ba1\u7b97":"\u2605 Display only, not calculated","\u654c\u65b9\u6bcf\u5c42\u653b\u51fb +\uff08\u4ec5\u5c55\u793a\uff09":"Enemy +ATK per stack (display only)","\u5b8c\u6210\u6392\u62db\uff0c\u67e5\u770b\u6570\u636e\u786e\u8ba4 \u2192":"Done \u2192 Data Check","\u786e\u8ba4\u65e0\u8bef\uff0c\u67e5\u770b\u4f24\u5bb3\u8bc4\u5206 \u2192":"Confirmed \u2192 Score","\u4fdd\u5b58 / \u8f7d\u5165\u6574\u5957\u51fa\u62db\u65b9\u6848":"Save / Load full plan","\u6309\u884c\u52a8\u6b21\u5e8f\u9010\u6b65\u8ba1\u7b97 \u00b7 \u5b9e\u65f6":"Step-by-step \u00b7 live","\u9650\u5b9a\u6a21\u5757 \u00b7 \u4ec5\u90e8\u5206\u89d2\u8272\u5f00\u653e":"Limited modules \u00b7 some characters","\u6bcf\u6280\u80fd\u500d\u7387 + \u6bcf\u7ec4\u989d\u5916\u4f24\u5bb3\u9879":"Per-skill multiplier + group bonus","\u4ec5\u6280\u80fd\u76ee\u6807\u542b\u300c\u524d\u6392\u300d\u65f6\u8ba1\u5165":"Counts only if front row is targeted","\u4ec5\u6280\u80fd\u76ee\u6807\u542b\u300c\u4e2d\u6392\u300d\u65f6\u8ba1\u5165":"Counts only if middle row is targeted","\u4ec5\u6280\u80fd\u76ee\u6807\u542b\u300c\u540e\u6392\u300d\u65f6\u8ba1\u5165":"Counts only if back row is targeted","\u88c5\u5907\u7c7b\u578b(\u4e0d\u826f/\u6850\u6850/\u521b\u4f24)":"Equip set (relic)","3 \u6761\u5171\u9e23 + 1 \u4e2a\u4e13\u5c5e\u69fd":"3 resonances + 1 exclusive slot","\u624b\u52a8\u884c\u52a8\u6b21\u5e8f\uff08\u52fe\u9009\u6bcf\u7ec4\u51fa\u624b\u987a\u5e8f\uff09\uff1a":"Manual action order (per group):","\u6392\u540d":"Ranking","\u8bc4\u5206":"Score","\u7ec4\u7ea7\u6570":"Group-level values","\u4ec5\u5df2\u5efa\u6a21\u9879":"Modeled items only","\u53ea\u8bfb\u67e5\u9605 \u00b7 \u89d2\u8272\u6570\u636e\u5168\u90e8\u5185\u7f6e":"Read-only \u00b7 all data built in","\ud83d\udcd6 \u89d2\u8272\u7b80\u4ecb":"\ud83d\udcd6 Character Bio","\ud83d\udcca \u89e3\u6790\u6570\u503c":"\ud83d\udcca Effects","2 \u4ef6\u5957 \u00b7 \u6240\u5728\u7ec4":"2-pc \u00b7 squad","\u5269\u4f59":"Remaining","\u8fde\u643a":"Combo","\u5347\u534e":"Ascension","\u6613\u4f24":"Vulnerable","\u6cbb\u7597":"Heal","\u6108\u5408":"Recovery","\u51cf\u4f24":"DMG Cut","\u52a0\u653b":"ATK Up","\u5c01\u6280":"Seal","\u9a71\u6563":"Dispel","\u51c0\u5316":"Cleanse","\u5206\u62c5":"Share","\u865a\u5f31":"Weaken","\u51cf\u653b":"ATK Down","\u91cd\u4f24":"Heavy Wound","\u53cd\u4f24":"Reflect","\u62a4\u76fe":"Shield","\u7206\u53d1":"Burst","\u653b\u51fb":"Attack","\u81ea\u8eab":"Self","\u7279\u6b8a":"Special","\u884c\u52a8\u589e\u52a0":"Extra Action","\u66b4\u51fb\u51e0\u7387":"Crit Rate","\u66b4\u51fb\u7387":"Crit Rate","\u66b4\u51fb\u4f24\u5bb3":"Crit DMG","\u653b\u51fb\u52a0\u6210":"ATK Up","\u751f\u547d\u52a0\u6210":"HP Up","\u7269\u9632\u52a0\u6210":"PDEF Up","\u5f02\u9632\u52a0\u6210":"EDEF Up","\u6700\u7ec8\u4f24\u5bb3\u52a0\u6210":"Final DMG Up","\u6700\u7ec8\u4f24\u5bb3\u51cf\u514d":"Final DMG Cut","debuff\u589e\u4f24":"Debuff DMG Up","\u6cbb\u7597\u53ef\u66b4\u51fb":"Heal Can Crit","\u7834\u76fe\u4f24\u5bb3\u53ef\u66b4\u51fb":"Shield-Break Can Crit","\u5fc3\u8c61\u589e\u4f24":"Imagery DMG Up","\u4e24\u4e2a\u654c\u4eba":"Two Enemies","\u7fa4\u4f53\u56de\u5408\u5ef6\u957f11\u56de\u5408":"Group \u00b7 extend to 11 turns","\u7fa4\u4f53\u56de\u5408\u5ef6\u957f10\u56de\u5408":"Group \u00b7 extend to 10 turns","\u5355\u4f53\u56de\u5408\u5ef6\u957f11\u56de\u5408":"Single \u00b7 extend to 11 turns","\u8840\u91cf\u589e\u76ca":"HP Gain","\u6280\u80fd\u56de\u590d\u9650\u5236":"SP Regen Limit","\u5fc3\u8c61\u6613\u4f24":"Imagery Vulnerability","\u524d\u540e\u62a4\u76fe":"Front/Rear Shields","\u2460\u7ec4\uff08\u540e\u6392\uff09 \u2014 \u603b\u8840\u91cf":"Group 1 \u00b7 Total HP","\u2461\u7ec4\uff08\u4e2d\u6392\uff09 \u2014 \u603b\u8840\u91cf":"Group 2 \u00b7 Total HP","\u2462\u7ec4\uff08\u524d\u6392\uff09 \u2014 \u603b\u8840\u91cf":"Group 3 \u00b7 Total HP","\u2460\u7ec4\uff08\u540e\u6392\uff09 \u2014 \u6700\u7ec8\u653b\u51fb\u529b":"Group 1 \u00b7 Final ATK","\u2461\u7ec4\uff08\u4e2d\u6392\uff09 \u2014 \u6700\u7ec8\u653b\u51fb\u529b":"Group 2 \u00b7 Final ATK","\u2462\u7ec4\uff08\u524d\u6392\uff09 \u2014 \u6700\u7ec8\u653b\u51fb\u529b":"Group 3 \u00b7 Final ATK","\u2460\u7ec4\uff08\u540e\u6392\uff09 \u2014 \u66b4\u51fb\u4f24\u5bb3\uff08%\uff0c\u51c0\u52a0\u6210\uff09":"Group 1 \u00b7 Crit DMG (net %)","\u2461\u7ec4\uff08\u4e2d\u6392\uff09 \u2014 \u66b4\u51fb\u4f24\u5bb3\uff08%\uff0c\u51c0\u52a0\u6210\uff09":"Group 2 \u00b7 Crit DMG (net %)","\u2462\u7ec4\uff08\u524d\u6392\uff09 \u2014 \u66b4\u51fb\u4f24\u5bb3\uff08%\uff0c\u51c0\u52a0\u6210\uff09":"Group 3 \u00b7 Crit DMG (net %)","\u7b2c 1 \u56de\u5408 \u00b7 SP/BP \u5269\u4f59":"Turn 1 \u00b7 SP/BP left","\u7b2c 2 \u56de\u5408 \u00b7 SP/BP \u5269\u4f59":"Turn 2 \u00b7 SP/BP left","\u7b2c 3 \u56de\u5408 \u00b7 SP/BP \u5269\u4f59":"Turn 3 \u00b7 SP/BP left","\u7b2c 4 \u56de\u5408 \u00b7 SP/BP \u5269\u4f59":"Turn 4 \u00b7 SP/BP left","\u7b2c 5 \u56de\u5408 \u00b7 SP/BP \u5269\u4f59":"Turn 5 \u00b7 SP/BP left","\u7b2c 6 \u56de\u5408 \u00b7 SP/BP \u5269\u4f59":"Turn 6 \u00b7 SP/BP left","\u7b2c 7 \u56de\u5408 \u00b7 SP/BP \u5269\u4f59":"Turn 7 \u00b7 SP/BP left","\u7b2c 8 \u56de\u5408 \u00b7 SP/BP \u5269\u4f59":"Turn 8 \u00b7 SP/BP left","\u7b2c 9 \u56de\u5408 \u00b7 SP/BP \u5269\u4f59":"Turn 9 \u00b7 SP/BP left","\u7b2c 10 \u56de\u5408 \u00b7 SP/BP \u5269\u4f59":"Turn 10 \u00b7 SP/BP left","\u7b2c 11 \u56de\u5408 \u00b7 SP/BP \u5269\u4f59":"Turn 11 \u00b7 SP/BP left","\u7b2c 12 \u56de\u5408 \u00b7 SP/BP \u5269\u4f59":"Turn 12 \u00b7 SP/BP left"};
   for(var _ek in EXTRA){ if(DICT[_ek] == null) DICT[_ek] = EXTRA[_ek]; }
 
   /* ---------- ①″ 第二批手工补译（组合片段收尾 + 页面小标题）---------- */
