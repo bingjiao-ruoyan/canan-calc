@@ -13850,8 +13850,9 @@ const BQ_ROUND_MODES = {
 const BQ_ROUND_KEYS = ['geRoundExtend','geRoundExtendG10','geRoundExtendS11'];
 /* v3.1.0：前后护盾关卡（3008）默认回合数 —— 勾选时写入、取消时按需还原（见 onStageFxChange）。 */
 const BQ_SHIELD_ROUNDS = 8;
-/* v3.1.1：前后护盾关卡（3008）默认自定义「最终攻击力」= 10000（三组；只改写自动态的组、保留已有自定义值）。 */
-const BQ_SHIELD_ATK = 10000;
+/* P66（2026-09-27）：撤下 v3.1.1「勾 3008 默认自定义最终攻击力 10000」——
+   前后护盾不再改写任何组攻击力，保持角色默认（自动推算，geShAtkN 留空 = 自动）。
+   原默认攻击力常量与注入/还原分支一并移除（用户裁决：不再默认 1W）。 */
 
 /* 关卡敌人配置联动（尊重 enemiesTouched） */
 function applyBqEnemyCount(n){
@@ -14063,34 +14064,8 @@ function onStageFxChange(){
       _rEl.value = state._roundsBackup; state._roundsBackup = 0;
     }
   }
-  /* v3.1.1：前后护盾关卡（3008）默认自定义「最终攻击力」= 10000 ——
-     勾选时把三组中仍为「自动推算」(panel = 0) 的组按 setGroupFinalPanel 的反算口径写入 10000
-     （存储值 = (10000 - 装备加成)/(1 + 觉醒加攻%)；★不能直写 grp.panel ——
-     有觉醒 / 装备的组显示值会 ≠ 10000），已有自定义值的组保留不动，同时备份原 panel；
-     取消勾选（含改点别的关卡 —— bqExclusive 会把 shields.enabled 置 false）时，
-     把「当前最终攻击力仍 = 10000」的组还原为备份值。与回合数 8 同款「按需还原、尊重手改」语义；
-     只影响护盾这一关，其它变迁效果与三种模式一律不受影响。 */
-  if(_shNew && state.shields.enabled){
-    state._shAtkBackup = state.groups.map(function(g){ return (+g.panel || 0); });
-    state.groups.forEach(function(g, i){
-      if(!g || (+g.panel || 0) > 0) return;                     /* 已有自定义值：保留 */
-      const _eq = (typeof groupEquipPanel === 'function') ? (groupEquipPanel(g) || 0) : 0;
-      const _aw = (typeof groupPanelAwPct === 'function') ? (groupPanelAwPct(i) || 0) : 0;
-      g.panel = Math.max(0, (BQ_SHIELD_ATK - _eq)/(1 + _aw/100));
-    });
-    if(typeof hpGainAtkSyncInputs === 'function') hpGainAtkSyncInputs();
-  }else if(_shWas && !state.shields.enabled){
-    if(Array.isArray(state._shAtkBackup)){
-      state.groups.forEach(function(g, i){
-        if(!g) return;
-        const _f = Math.round(((typeof groupPanelAtk === 'function') ? (groupPanelAtk(i) || 0) : 0)
-                   + ((typeof groupEquipPanel === 'function') ? (groupEquipPanel(g) || 0) : 0));
-        if(_f === BQ_SHIELD_ATK) g.panel = state._shAtkBackup[i] || 0;   /* 未被手改 ⇒ 按需还原 */
-      });
-      state._shAtkBackup = null;
-      if(typeof hpGainAtkSyncInputs === 'function') hpGainAtkSyncInputs();
-    }
-  }
+  /* P66（2026-09-27）：撤下 v3.1.1 的「勾 3008 注入 1W 攻击力 / 取消还原」双分支 ——
+     前后护盾只管盾血与破盾推演，组攻击力一律保持角色默认（自动推算），不再默认 1W。 */
   /* v2.4.4：前后护盾仅支持 3 敌（敌方前/中/后排阵型）——开启时强制敌方角色数=3 */
   if(state.shields.enabled && (+state.enemies||1) !== 3){
     state.enemies = 3;
