@@ -16,7 +16,7 @@
 
 <link rel="manifest" href="manifest.webmanifest" data-page-node-id="Ujjb7vN2J2zFun44wCBIv8">
 
-<title>Canan Wiki · 3.6.3 · Characters / Imagery / Relics / Elementium</title>
+<title>Canan Wiki · 3.6.4 · Characters / Imagery / Relics / Elementium</title>
 
 <style>
 
@@ -880,7 +880,7 @@
 
     <div data-page-node-id="U3DQMnMQczfqNwA08GXIhj">
 
-      <h1 id="title" data-page-node-id="efK7lKccgtoypss7lhPAmx">Canan Wiki <span style="font-size:12px;font-weight:700;color:#4338ca;background:#eef2ff;border-radius:6px;padding:2px 8px;vertical-align:middle" data-page-node-id="8L10itvWf3BpMcGnSmAd9b">3.6.3</span></h1>
+      <h1 id="title" data-page-node-id="efK7lKccgtoypss7lhPAmx">Canan Wiki <span style="font-size:12px;font-weight:700;color:#4338ca;background:#eef2ff;border-radius:6px;padding:2px 8px;vertical-align:middle" data-page-node-id="8L10itvWf3BpMcGnSmAd9b">3.6.4</span></h1>
 
     </div>
 
@@ -1067,9 +1067,9 @@
               <div class="field" data-page-node-id="stFxCritDmg2"><label id="geCritDmgLbl2" data-page-node-id="stFxCritDmg2L">③组（前排） — 暴击伤害（%，净加成）</label><input type="number" id="geCritDmg2" value="0" min="0" step="0.01" disabled oninput="onHpGainCritInput(2,this.value)" data-page-node-id="stFxCritDmg2I"></div>
             </div>
             <div style="display:flex;flex-wrap:wrap;gap:14px;align-items:flex-end;margin-top:8px" data-page-node-id="stFxHpGainCritRow">
-              <label style="display:inline-flex;align-items:center;gap:6px;font-size:13px;padding-bottom:6px" data-page-node-id="stFxHealCritLbl" title="v2.5.4：勾选后本模式下所有瞬发治疗默认 100% 暴击（技能即时治疗 / 觉醒即时治疗），治疗量 ×(1+暴击伤害%/100)；HOT/再生类不暴击。暴击伤害按三个角色组分别录入，治疗按施放者所在组的暴伤计算（①组奶妈吃①组暴伤）。暴击伤害按净加成口径录入：游戏内暴伤面板 = 基础 100% + 净加成（默认 60% ⇒ 面板 160%）。">
+              <label style="display:inline-flex;align-items:center;gap:6px;font-size:13px;padding-bottom:6px" data-page-node-id="stFxHealCritLbl" title="v2.5.4（P70 反转）：本模式下所有瞬发治疗默认 100% 暴击，勾选「治疗不暴击」才关闭（技能即时治疗 / 觉醒即时治疗），治疗量 ×(1+暴击伤害%/100)；HOT/再生类不暴击。暴击伤害按三个角色组分别录入，治疗按施放者所在组的暴伤计算（①组奶妈吃①组暴伤）。暴击伤害按净加成口径录入：游戏内暴伤面板 = 基础 100% + 净加成（默认 70% ⇒ 面板 170%）。">
                 <input type="checkbox" id="geHealCrit" disabled onchange="onStageFxChange()" data-page-node-id="stFxHealCritChk">
-                <span data-page-node-id="stFxHealCritTxt">治疗可暴击（100%暴击：勾选后瞬发治疗按施放者所在组暴伤的暴击奶量计入）</span>
+                <span data-page-node-id="stFxHealCritTxt">治疗不暴击（默认 100% 暴击：瞬发治疗按施放者所在组暴伤的暴击奶量计入；勾选后不暴击）</span>
               </label>
             </div>
           </div>
@@ -1105,9 +1105,9 @@
               <div class="field" data-page-node-id="stFxShAtk2"><label id="geShAtkLbl2" data-page-node-id="stFxShAtk2L">③组（前排） — 最终攻击力</label><input type="number" id="geShAtk2" value="" min="0" step="1" inputmode="numeric" title="★只接受整数（自动剔除小数点）。留空 / 清除 = 回到自动推算；填值 = 自定义最终攻击力（含藏品·整数）。灰底 = 自动、白底 = 自定义。打盾探测伤害按此攻击力结算。" oninput="onHpGainAtkInput(2,this.value,'geShAtk2')" onkeydown="intKeyGuard(event)" onchange="hpGainAtkCommit(2,this,'geShAtk2')" data-page-node-id="stFxShAtk2I"></div>
             </div>
             <div style="display:flex;flex-wrap:wrap;gap:14px;align-items:flex-end;margin-top:8px" data-page-node-id="stFxShCritRow">
-              <label style="display:inline-flex;align-items:center;gap:6px;font-size:13px;padding-bottom:6px" data-page-node-id="stFxShCritLbl" title="v3.0.3：勾选后打盾伤害按 100% 暴击结算（探测伤害 ×(1+出手组暴击伤害%/100)），破盾点随之提前。暴伤与「数据确认区 → 暴击伤害 %」同源双向联动（与血量增益面板三组暴伤是同一个值）。净加成口径：游戏内暴伤面板 = 基础 100% + 净加成（默认 60% ⇒ 面板 160%）。">
+              <label style="display:inline-flex;align-items:center;gap:6px;font-size:13px;padding-bottom:6px" data-page-node-id="stFxShCritLbl" title="v3.0.3（P70 反转）：默认打盾伤害按 100% 暴击结算（探测伤害 ×(1+出手组暴击伤害%/100)），破盾点随之提前，勾选「破盾不暴击」才关闭。暴伤与「数据确认区 → 暴击伤害 %」同源双向联动（与血量增益面板三组暴伤是同一个值）。净加成口径：游戏内暴伤面板 = 基础 100% + 净加成（默认 70% ⇒ 面板 170%）。">
                 <input type="checkbox" id="geShieldCrit" disabled onchange="onStageFxChange()" data-page-node-id="stFxShCritChk">
-                <span data-page-node-id="stFxShCritTxt">破盾伤害可暴击（100% 暴击：打盾伤害按出手组本组暴伤结算，破盾点提前）</span>
+                <span data-page-node-id="stFxShCritTxt">破盾不暴击（默认 100% 暴击：打盾伤害按出手组本组暴伤结算、破盾点提前；勾选后不暴击）</span>
               </label>
             </div>
             <div style="display:flex;flex-wrap:wrap;gap:14px;margin-top:8px" data-page-node-id="stFxShCritDmgInputs">
@@ -1830,11 +1830,11 @@ let state = {
 
   groups:[
 
-    { mainId:'', subId:'', weaponPct:0, critRate:35, critDmg:60, talentFx:true, awakenFx:true, mainAwakenFx:true, subAwakenFx:true, mainAwakenStage:5, subAwakenStage:5 },
+    { mainId:'', subId:'', weaponPct:0, critRate:35, critDmg:70, talentFx:true, awakenFx:true, mainAwakenFx:true, subAwakenFx:true, mainAwakenStage:5, subAwakenStage:5 },
 
-    { mainId:'', subId:'', weaponPct:0, critRate:35, critDmg:60, talentFx:true, awakenFx:true, mainAwakenFx:true, subAwakenFx:true, mainAwakenStage:5, subAwakenStage:5 },
+    { mainId:'', subId:'', weaponPct:0, critRate:35, critDmg:70, talentFx:true, awakenFx:true, mainAwakenFx:true, subAwakenFx:true, mainAwakenStage:5, subAwakenStage:5 },
 
-    { mainId:'', subId:'', weaponPct:0, critRate:35, critDmg:60, talentFx:true, awakenFx:true, mainAwakenFx:true, subAwakenFx:true, mainAwakenStage:5, subAwakenStage:5 }
+    { mainId:'', subId:'', weaponPct:0, critRate:35, critDmg:70, talentFx:true, awakenFx:true, mainAwakenFx:true, subAwakenFx:true, mainAwakenStage:5, subAwakenStage:5 }
 
   ],
 
@@ -1857,7 +1857,7 @@ let state = {
 
   /* v2.4.4：新增变迁效果 —— 血量增益（hp[g]=该组总血量数值；每回合开始-7%含首回合、首回合轮到行动时-40%（v2.5.5），50%血以上按区间给最终伤害加成）。
      2026-09-06 修正：heal[g]（每回合治疗）废弃——不再手填，由出招排表中该组释放的治疗/愈合类技能实时自动折算（groupHealAt）。字段保留仅为旧存档兼容。 */
-  hpGain: { enabled:false, hp:[0,0,0], heal:[0,0,0], healCrit:false },
+  hpGain: { enabled:false, hp:[0,0,0], heal:[0,0,0], healCrit:true },
 
   /* v2.4.4 / v3.0.13：回合延长 —— '' 关闭；'g11' 群体11回合(3006) / 'g10' 群体10回合(3009) / 's11' 单体11回合(3010)。
      三档互斥（属变迁效果全局单选子集）；勾选写对应回合数并记住原值，取消还原（用户手动改过则不覆盖）。 */
@@ -1871,7 +1871,7 @@ let state = {
        v3.1.6：口径修正 —— 取消原「我方全体最终伤害加成（终伤乘区）」，改并入增伤乘区与增伤相加） */
   /* v3.0.3：破盾伤害可暴击（crit=true → 探测打盾伤害 ×(1+该出手组暴伤%/100)，100% 暴击口径，
      与血量增益「治疗可暴击」同构；暴伤本体存 state.groups[g].critDmg，与数据确认区同源） */
-  shields: { enabled:true, frontHp:60000, backHp:100000, crit:true },
+  shields: { enabled:false, frontHp:60000, backHp:100000, crit:true },
 
   /* v2.4.4：玩家是否手动改过敌人数（改过之后模式/变迁效果不再自动改写敌人数） */
   enemiesTouched: false,
@@ -1937,7 +1937,7 @@ const ROLE_GROUPS_DEFAULT = [
 
 
 /* 当前程序版本：页眉徽标、模式标题、导出页脚戳统一读取此常量 */
-const APP_VER = '3.6.3';
+const APP_VER = '3.6.4';
 
 
 /* v2.3.8：localStorage 键按 APP_VER 分版本隔离（同 2.3.7 规则）。
@@ -2982,7 +2982,7 @@ function healLvlFactor(sk, lvl){
    （单一数据源 state.groups[g].critDmg；血量增益面板三组输入为镜像，双向同步）——
    治疗按施放者所在组 g 的暴伤计算（①组奶妈吃①组暴伤、②组吃②组，三组互不影响）。
    暴击伤害按净加成口径录入（游戏内暴伤面板 = 基础 100% + 净加成；
-   默认净加成 60% ⇒ 面板 160% → 录入 60 即 ×1.6）。
+   默认净加成 70% ⇒ 面板 170% → 录入 70 即 ×1.7）。
    HOT/再生类不参与暴击（v2.5.3 用户修正口径）。 */
 function healCritMul(g){
   const hg = state.hpGain || {};
@@ -13713,12 +13713,16 @@ function syncCustomFxInputs(){
   ['geHp0','geHp1','geHp2'].forEach((id,i)=> setVal(id, +(hg.hp||[])[i]||0));
   hpGainAtkSyncInputs();
   hpGainCritSyncInputs();   /* v2.5.4：血量增益面板三组暴伤镜像 = 数据确认区各组暴击伤害（同源） */
+  /* P70（2026-09-28）：healCrit 缺字段兜底=默认暴击 + 反转回填「治疗不暴击」（勾上才不暴击） */
+  if(!state.hpGain) state.hpGain = {enabled:false, hp:[0,0,0], heal:[0,0,0]};
+  if(typeof state.hpGain.healCrit !== 'boolean') state.hpGain.healCrit = true;
+  setChk('geHealCrit', !state.hpGain.healCrit);
   /* v2.4.4 修正：每回合治疗已废弃输入，治疗由治疗技能实时自动折算（groupHealAt），旧 geHeal 输入已移除 */
-  const sh = state.shields || {enabled:true, frontHp:60000, backHp:100000, crit:true};
+  const sh = state.shields || {enabled:false, frontHp:60000, backHp:100000, crit:true};
   setChk('geShield', !!sh.enabled);
   setVal('geShieldFrontHp', +sh.frontHp||0);
   setVal('geShieldBackHp', +sh.backHp||0);
-  setChk('geShieldCrit', !!sh.crit);   /* v3.0.3：破盾伤害可暴击 */
+  setChk('geShieldCrit', !sh.crit);   /* P70：反转勾选「破盾不暴击」，勾上才不暴击 */
   /* v3.0.13：回合延长三档（互斥）回填 —— state.roundExtend 为枚举字符串 */
   BQ_ROUND_KEYS.forEach(_k => setChk(_k, !!(state.roundExtend && BQ_ROUND_MODES[state.roundExtend] && BQ_ROUND_MODES[state.roundExtend].chk === _k)));
   setChk('geSpLimit', !!state.spLimit);
@@ -14048,10 +14052,10 @@ function hpGainCritSyncInputs(){
 }
 function onStageFxChange(){
   if(typeof document==='undefined') return;
-  if(!state.hpGain) state.hpGain = {enabled:false, hp:[0,0,0], heal:[0,0,0], healCrit:false};
-  if(typeof state.hpGain.healCrit !== 'boolean') state.hpGain.healCrit = false;
-  if(!state.shields) state.shields = {enabled:true, frontHp:60000, backHp:100000, crit:true};
-  if(typeof state.shields.crit !== 'boolean') state.shields.crit = false;
+  if(!state.hpGain) state.hpGain = {enabled:false, hp:[0,0,0], heal:[0,0,0], healCrit:true};
+  if(typeof state.hpGain.healCrit !== 'boolean') state.hpGain.healCrit = true;
+  if(!state.shields) state.shields = {enabled:false, frontHp:60000, backHp:100000, crit:true};
+  if(typeof state.shields.crit !== 'boolean') state.shields.crit = true;
   const num=id=>{ const el=document.getElementById(id); return el? Math.max(0, +el.value||0):0; };
   const chk=id=>{ const el=document.getElementById(id); return el? !!el.checked:false; };
   /* v3.0.13b：记录旧值 —— 用户点第二个开关时第一个的 checkbox 仍亮着，
@@ -14059,15 +14063,16 @@ function onStageFxChange(){
   const _hgWas = !!state.hpGain.enabled, _shWas = !!state.shields.enabled;
   state.hpGain.enabled = chk('geHpGain');
   ['geHp0','geHp1','geHp2'].forEach((id,i)=>{ state.hpGain.hp[i]  = num(id); });
-  /* v2.5.4：治疗可暴击开关；暴击伤害本体存 state.groups[g].critDmg（数据确认区同源），
-     由 onHpGainCritInput 单独接线，此处不再读 */
-  state.hpGain.healCrit = chk('geHealCrit');
+  /* P70（2026-09-28）：治疗默认暴击；「治疗不暴击」勾上才关闭（勾选语义反转）。
+     暴击伤害本体存 state.groups[g].critDmg（数据确认区同源），由 onHpGainCritInput 单独接线 */
+  state.hpGain.healCrit = !chk('geHealCrit');
   /* v2.4.4 修正：每回合治疗不再读取输入（geHeal 已移除），治疗由治疗技能实时自动折算（groupHealAt） */
   state.shields.enabled = chk('geShield');
   state.shields.frontHp  = num('geShieldFrontHp');
   state.shields.backHp   = num('geShieldBackHp');
-  /* v3.0.3：破盾伤害可暴击开关；暴伤本体存 state.groups[g].critDmg（数据确认区同源），由 onHpGainCritInput 接线 */
-  state.shields.crit = chk('geShieldCrit');
+  /* P70（2026-09-28）：破盾默认暴击；「破盾不暴击」勾上才关闭（勾选语义反转）。
+     暴伤本体存 state.groups[g].critDmg（数据确认区同源），由 onHpGainCritInput 接线 */
+  state.shields.crit = !chk('geShieldCrit');
   /* v2.4.4：前后护盾仅支持 3 敌（敌方前/中/后排阵型）——开启时强制敌方角色数=3 */
   /* v3.0.13：变迁效果全局单选（血量增益 / 前后护盾 二者互斥，并取消其它变迁效果）。
      ★两项可能同时亮着 ⇒ 以「本次刚开启」的那一项为准（旧 false → 新 true）；
@@ -21351,6 +21356,14 @@ function migrateState(){
     if(Array.isArray(state.groups)) state.groups.forEach(function(gg){ if(gg && +gg.critDmg === 50) gg.critDmg = 60; });
     state._critDmgDefVer = 1;
   }
+  /* v3.6.3 P69（2026-09-28）：默认暴击伤害（净加成）由 60% 上调为 70%（游戏内面板 170%）。
+     只做一次：仅把『恰好等于旧默认 60』的组升为 70 —— 手改过其它值的组一律不动；
+     新档 / 「重置」直接就是 70（见 DEFAULT_STATE 与 resetAll）。
+     ★置于 v3.1.1（50→60）之后 ⇒ 旧档 50 经 60 一路升到最新默认 70。 */
+  if(!state._critDmgDefVer2){
+    if(Array.isArray(state.groups)) state.groups.forEach(function(gg){ if(gg && +gg.critDmg === 60) gg.critDmg = 70; });
+    state._critDmgDefVer2 = 1;
+  }
   /* v2.7.0：【虚拟模型】血量假定档位物化（旧存档无该字段 ⇒ 100 / 100；
      非法值（NaN / 越界 / 非整数）一律钳制为 0..100 整数）。 */
   if(!state.xiangAsm || typeof state.xiangAsm !== 'object') state.xiangAsm = { enemyHp: 100, allyHp: 100 };
@@ -21537,9 +21550,9 @@ function migrateState(){
   if(!BQ_ROUND_MODES[state.roundExtend]) state.roundExtend = '';
   if(typeof state.spLimit !== 'boolean') state.spLimit = false;
   if(typeof state.shields !== 'object' || state.shields === null){
-    state.shields = { enabled:true, frontHp:60000, backHp:100000, crit:true };
+    state.shields = { enabled:false, frontHp:60000, backHp:100000, crit:true };
   } else {
-    if(typeof state.shields.enabled !== 'boolean') state.shields.enabled = true;
+    if(typeof state.shields.enabled !== 'boolean') state.shields.enabled = false;
     if(typeof state.shields.frontHp !== 'number') state.shields.frontHp = 60000;
     if(typeof state.shields.backHp !== 'number') state.shields.backHp = 100000;
     delete state.shields.frontRound;   /* v2.4.4 旧字段（破盾回合）已废弃，改为自动推算 */
@@ -25614,13 +25627,13 @@ const PLAN_GHOST_DEFAULTS = {
 
   customSpMinus2Val: 2,
 
-  hpGain:            { enabled:false, hp:[0,0,0], heal:[0,0,0], healCrit:false },
+  hpGain:            { enabled:false, hp:[0,0,0], heal:[0,0,0], healCrit:true },
 
   roundExtend:       '',
 
   spLimit:           false,
 
-  shields:           { enabled:true, frontHp:60000, backHp:100000, crit:true },
+  shields:           { enabled:false, frontHp:60000, backHp:100000, crit:true },
 
   enemiesTouched:    false,
 
@@ -33839,11 +33852,11 @@ function resetAll(){
 
   state = {
 
-    mode:'custom', numRounds:7, enemies:3, cap:20, capSP:SP_CAP_DEFAULT,
+    mode:'custom', numRounds:7, enemies:1, cap:20, capSP:SP_CAP_DEFAULT,
 
-    initSP:0, initBP:0, enemySpeeds:[1252,1252,1252],
+    initSP:0, initBP:0, enemySpeeds:[1252],
 
-    groups: JSON.parse(JSON.stringify(ROLE_GROUPS_DEFAULT)).map(g=>(Object.assign(g,{panel:0,talent:0,equipType:'none',mainEquip:'none',subEquip:'none',mainKurooVal:0,subKurooVal:0,mainTraumaVal:0,subTraumaVal:0,critRate:35,critDmg:60,talentFx:true,awakenFx:true,mainAwakenFx:true,subAwakenFx:true,mainAwakenStage:5,subAwakenStage:5}))),
+    groups: JSON.parse(JSON.stringify(ROLE_GROUPS_DEFAULT)).map(g=>(Object.assign(g,{panel:0,talent:0,equipType:'none',mainEquip:'none',subEquip:'none',mainKurooVal:0,subKurooVal:0,mainTraumaVal:0,subTraumaVal:0,critRate:35,critDmg:70,talentFx:true,awakenFx:true,mainAwakenFx:true,subAwakenFx:true,mainAwakenStage:5,subAwakenStage:5}))),
 
     rounds:[], confirmBuffs:[],
 
@@ -33859,10 +33872,14 @@ function resetAll(){
     /* v2.6.6.8：三项新增变迁效果回到默认（两个敌人关 / 心象增伤关 / 心象易伤关） */
     twoEnemies:false,
 
-    /* P67（2026-09-28）：重置后变迁效果回默认 —— 前后护盾默认开启（与初始 state 同口径：
-       enabled:true + 破盾伤害可暴击 crit:true；重置不跑 migrateState，故此处须显式带 shields 键，
-       否则 UI 勾着而 shieldRebuild 读不到 state.shields 会静默不生效） */
-    shields: { enabled:true, frontHp:60000, backHp:100000, crit:true },
+    /* P67b（2026-09-28）：重置后显式带 shields 键（enabled:false 默认不勾；破盾可暴击 crit:true
+       默认勾 —— 勾上前后护盾即默认 100% 暴击，取消该勾才不暴击。重置不跑 migrateState，
+       缺键则回落对象，口径不受影响，显式写出更稳） */
+    shields: { enabled:false, frontHp:60000, backHp:100000, crit:true },
+
+    /* P70（2026-09-28）：重置后显式带 hpGain 键（healCrit:true 默认暴击——勾上血量增益即默认
+       100% 暴击，勾「治疗不暴击」才关闭。重置不跑 migrateState，缺键则回落，显式写出更稳） */
+    hpGain: { enabled:false, hp:[0,0,0], heal:[0,0,0], healCrit:true },
 
     xiangBoost: { enabled:false, xVuln:200, rounds:[3,6,9], roundVuln:50 },
 
@@ -33870,7 +33887,7 @@ function resetAll(){
 
   };
 
-  state.groups.forEach(g=>Object.assign(g,{panel:0,talent:0,equipType:'none',mainEquip:'none',subEquip:'none',mainKurooVal:0,subKurooVal:0,mainTraumaVal:0,subTraumaVal:0,critRate:35,critDmg:60,talentFx:true,awakenFx:true,mainAwakenFx:true,subAwakenFx:true,mainAwakenStage:5,subAwakenStage:5}));
+  state.groups.forEach(g=>Object.assign(g,{panel:0,talent:0,equipType:'none',mainEquip:'none',subEquip:'none',mainKurooVal:0,subKurooVal:0,mainTraumaVal:0,subTraumaVal:0,critRate:35,critDmg:70,talentFx:true,awakenFx:true,mainAwakenFx:true,subAwakenFx:true,mainAwakenStage:5,subAwakenStage:5}));
 
   ensureRounds();
 
@@ -34052,7 +34069,7 @@ window.__build = buildDefaultCharDB;
 
 <script data-auth-gate="1">
 /* ============================================================================
-   Canan Wiki · 访问口令闸门（v3.6.3 · 服务端校验 + 每日临时口令 + 池可勾选）
+   Canan Wiki · 访问口令闸门（v3.6.4 · 服务端校验 + 每日临时口令 + 池可勾选）
    ---------------------------------------------------------------------------
    机制
      · 口令由服务端校验（Cloudflare Pages Functions：/api/auth 与 /api/verify）；
