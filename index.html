@@ -1871,7 +1871,7 @@ let state = {
        v3.1.6：口径修正 —— 取消原「我方全体最终伤害加成（终伤乘区）」，改并入增伤乘区与增伤相加） */
   /* v3.0.3：破盾伤害可暴击（crit=true → 探测打盾伤害 ×(1+该出手组暴伤%/100)，100% 暴击口径，
      与血量增益「治疗可暴击」同构；暴伤本体存 state.groups[g].critDmg，与数据确认区同源） */
-  shields: { enabled:false, frontHp:60000, backHp:100000, crit:false },
+  shields: { enabled:true, frontHp:60000, backHp:100000, crit:true },
 
   /* v2.4.4：玩家是否手动改过敌人数（改过之后模式/变迁效果不再自动改写敌人数） */
   enemiesTouched: false,
@@ -12378,7 +12378,7 @@ function costLabel(costType, n){
 /* ============ 主战专属天赋 → 可计算增益（自动带入数据确认） ============
    解析主战角色专属天赋文本，提取能在倍率公式中直接使用的常驻增益。
    返回 { vuln, dmgUp, skill1, skill2, ult, cond, desc }：
-     vuln    = 使敌人受到的伤害+X%（常驻易伤，如和服亚丝娜·闪光 +25%）
+     vuln    = 使敌人受到的伤害+X%（易伤型天赋；时序见 P67：亚丝娜=行动时施加、食蜂=行动结束后施加）
      dmgUp   = 己方/小组伤害提升+X%（常驻增伤，如蝴蝶黑雪姬·黑雪公主 +20%）
      skill1/2/ult = 升华技后 一号/二号/升华技 增伤%（如和服夏娜·火翼讨伐者 1号+15%/2号+24%）
      cond    = 有触发条件的增益描述（仅展示，不强制代入，避免误算）
@@ -12525,6 +12525,30 @@ function markGateAt(g, who, r, selfMarks){
     return false;
   }catch(e){ return false; }
 }
+/* P67：被标记目标所在排（打盾排分配用）——组内时间线上最近一次施加标记的技能，按其目标排取行：
+   cat 含「后排」→ back /「前排」→ front；其后被「清除敌方标记」则置空。与 markActive 状态机同口径
+   （per-group 逐回合推进；标记技 = 体术达人·前排攻击 / 魔法禁锢·后排攻击）。 */
+function markRowAt(g, r){
+  try{
+    const rounds = state.rounds || [];
+    let row = null;
+    const R = Math.max(0, +r || 0);
+    for(let rr = 0; rr <= R; rr++){
+      const cell = rounds[rr] && rounds[rr][g];
+      if(!cell || cell.who === 'none') continue;
+      let sk = null;
+      try{ const ai = getActorSkill(rr, g); sk = ai && ai.skill; }catch(e2){}
+      if(!sk) continue;
+      const fx = String(sk.effect || sk.fx || '');
+      if(/添加标记「|标记攻击对象/.test(fx)){
+        const cat = String(sk.cat || '');
+        if(cat.indexOf('后排') >= 0) row = 'back';
+        else if(cat.indexOf('前排') >= 0) row = 'front';
+      } else if(/清除敌方标记/.test(fx)) row = null;
+    }
+    return row;
+  }catch(e){ return null; }
+}
 /* 「天赋触发」实时判定（女仆逢坂大河·暴走女仆：「连续两回合使用一号位技能，或连续两回合
    使用二号位技能后，造成的伤害提升20%持续1回合」）——觉醒5「暴怒女仆：触发时…」以此为准：
    r 回合之前的两个连续回合，该组是否由该角色连续使用同一位置技能（位次按技能顺序 / 消耗判定）。 */
@@ -12547,7 +12571,7 @@ function talentTriggerAt(g, who, r){
   }catch(e){ return false; }
 }
 function parseTalentGain(mainChar){
-  const res = {vuln:0, dmgUp:0, skill1:0, skill2:0, ult:0, cond:'', desc:'', vulnPostAct:false,
+  const res = {vuln:0, dmgUp:0, skill1:0, skill2:0, ult:0, cond:'', desc:'', vulnPostAct:false, vulnOnAct:false,
                /* v3.2.2：「使用升华技后…持续N回合」型增伤（白井黑子·750「大能力者」）——
                   释放窗口型，由 talentGainForCell 按最近一次升华技的回合判定有效期 */
                dmgUpAfterUlt:null, dmgUpAfterSkill:null};
@@ -12625,6 +12649,9 @@ function parseTalentGain(mainChar){
        她【首次出手那一拍】不计入（本次伤害早于施加时点），其后的每一拍才计入。
        食蜂操祈·精神抑制：「食蜂操祈行动结束时，对未携带可驱散增益效果的敌人添加20.00%易伤效果」。 */
     res.vulnPostAct = /(?:行动|出手|回合)\s*结束\s*(?:时|后)|行动后|出手后/.test(fx.slice(0, m.index));
+    /* P67（2026-09-28）：「释放任意技能」触发型（和服亚丝娜·闪光）——施加时点 = 行动当拍，
+       自身该拍即可吃到（T ≥ T0 含首拍）；与「行动结束时」型（食蜂操祈，T > T0 首拍不计）区分。 */
+    res.vulnOnAct = !res.vulnPostAct && /释放任意技能|使用任意技能/.test(fx.slice(0, m.index));
   }
   /* 常驻增伤：己方全体/我方全体/己方/我方/所在小组/队伍 造成的伤害提升 X% （无触发条件才计入，如黑雪公主需敌人被击败→不计） */
   m = fx.match(/(?:己方全体|我方全体|己方|我方|所在小组|队伍)(?:造成的)?伤害(?:提升|提高|增加)\s*[+＋]?\s*([\d.]+)\s*%/);
@@ -13687,7 +13714,7 @@ function syncCustomFxInputs(){
   hpGainAtkSyncInputs();
   hpGainCritSyncInputs();   /* v2.5.4：血量增益面板三组暴伤镜像 = 数据确认区各组暴击伤害（同源） */
   /* v2.4.4 修正：每回合治疗已废弃输入，治疗由治疗技能实时自动折算（groupHealAt），旧 geHeal 输入已移除 */
-  const sh = state.shields || {enabled:false, frontHp:60000, backHp:100000};
+  const sh = state.shields || {enabled:true, frontHp:60000, backHp:100000, crit:true};
   setChk('geShield', !!sh.enabled);
   setVal('geShieldFrontHp', +sh.frontHp||0);
   setVal('geShieldBackHp', +sh.backHp||0);
@@ -14023,7 +14050,7 @@ function onStageFxChange(){
   if(typeof document==='undefined') return;
   if(!state.hpGain) state.hpGain = {enabled:false, hp:[0,0,0], heal:[0,0,0], healCrit:false};
   if(typeof state.hpGain.healCrit !== 'boolean') state.hpGain.healCrit = false;
-  if(!state.shields) state.shields = {enabled:false, frontHp:60000, backHp:100000, crit:false};
+  if(!state.shields) state.shields = {enabled:true, frontHp:60000, backHp:100000, crit:true};
   if(typeof state.shields.crit !== 'boolean') state.shields.crit = false;
   const num=id=>{ const el=document.getElementById(id); return el? Math.max(0, +el.value||0):0; };
   const chk=id=>{ const el=document.getElementById(id); return el? !!el.checked:false; };
@@ -16920,7 +16947,7 @@ function talentDetailHTML(g){
     h += '<div style="margin-top:2px">' + esc(tl.fx || '') + '</div>';
     /* 引擎实际识别出的通道（与 parseTalentGain / parseTalentSpBp 同源，非人工罗列） */
     const ch = [];
-    if((+tg.vuln||0) > 0) ch.push('易伤 +' + tg.vuln + '%' + (tg.vulnPostAct ? '（行动结束后施加）' : ''));
+    if((+tg.vuln||0) > 0) ch.push('易伤 +' + tg.vuln + '%' + (tg.vulnPostAct ? '（行动结束后施加）' : (tg.vulnOnAct ? '（行动时施加）' : '')));
     if((+tg.dmgUp||0) > 0) ch.push('增伤 +' + tg.dmgUp + '%');
     if(tg.dmgUpAfterUlt) ch.push('升华技后增伤 +' + tg.dmgUpAfterUlt.pct + '%（' + tg.dmgUpAfterUlt.dur + '回合）');
     if(tg.dmgUpAfterSkill) ch.push('释放「' + (tg.dmgUpAfterSkill.names||[]).join('/') + '」后增伤 +' + tg.dmgUpAfterSkill.pct + '%');
@@ -19732,31 +19759,34 @@ function shieldRowSkillTitle(r, g){
   }
   return '技能：' + nm + '｜类别：' + cat + '｜打盾口径：' + how;
 }
-function shieldProbeRec(r, g, dmgPerEnemy, sk){
+function shieldProbeRec(r, g, dmgPerEnemy, sk, markSplit){
   if(!_shProbeDmg[r]) _shProbeDmg[r] = [];
   const cell = _shProbeDmg[r][g] || (_shProbeDmg[r][g] = {front:0, back:0});
   const d = +dmgPerEnemy||0;
+  /* P67：标记型升华（被标记者）+群体攻击 → 打盾按排重分配：被标记排吃全额 ultUp（dMk）、
+     其余排不吃（dNo）；markSplit 缺省 = 旧行为（每盾各吃一份含 1/N 均摊值的 d）。 */
+  const _rowD = (row) => (markSplit ? ((markSplit.row === row) ? (+markSplit.dMk||0) : (+markSplit.dNo||0)) : d);
   const cat = String((sk && sk.cat) || '');
   /* ★v3.1.9：「前中攻击」含「中」字（'前中攻击'.indexOf('中排') === 1），必须先于「中排」判定，
      否则会被当成「中排攻击 → 不打盾」—— 与本函数原有注释「前排攻击/前中攻击：打前排盾」自相矛盾。
      前中两排中只有前排有盾（中排无盾）⇒ 仅打前盾。 */
-  if(cat.indexOf('前中') >= 0){ cell.front += d; return; }    /* 前中攻击（双体）→ 仅打前排盾 */
+  if(cat.indexOf('前中') >= 0){ cell.front += _rowD('front'); return; }    /* 前中攻击（双体）→ 仅打前排盾 */
   if(cat.indexOf('中排') >= 0) return;                       /* 中排攻击：中排无盾，对盾无效 */
   if(cat.indexOf('后排') >= 0){                               /* 后排攻击：仅当后排敌存在（3敌）才算后排盾 */
-    if((+state.enemies||1) >= 3) cell.back += d;
+    if((+state.enemies||1) >= 3) cell.back += _rowD('back');
     return;
   }
-  if(cat.indexOf('前排') >= 0){ cell.front += d; return; }    /* 前排攻击：打前排盾 */
+  if(cat.indexOf('前排') >= 0){ cell.front += _rowD('front'); return; }    /* 前排攻击：打前排盾 */
   /* v3.0.8：群体攻击 —— 登记了非标准分排分布时按【排份额】分配（默认：前后盾各吃一份单体伤害）。
      前排盾吃 front 份额、后排盾吃 back 份额（仅 3 敌）、中排份额不打盾；两盾合计仍 ≈ d。 */
   const _shr = groupRowShares(sk);
   if(_shr){
-    cell.front += d * (+_shr.front||0) + d * (+_shr.mid||0) * 0;   /* 中排份额不打盾 */
-    if((+state.enemies||1) >= 3) cell.back += d * (+_shr.back||0);
+    cell.front += _rowD('front') * (+_shr.front||0) + d * (+_shr.mid||0) * 0;   /* 中排份额不打盾 */
+    if((+state.enemies||1) >= 3) cell.back += _rowD('back') * (+_shr.back||0);
     return;
   }
-  cell.front += d;                                            /* 群体攻击/未标注：前后盾各吃一份单体伤害 */
-  if((+state.enemies||1) >= 3) cell.back += d;
+  cell.front += _rowD('front');                               /* 群体攻击/未标注：前后盾各吃一份单体伤害 */
+  if((+state.enemies||1) >= 3) cell.back += _rowD('back');
 }
 /* 由探测伤害基线推算破盾点（速度序行动时间线，未入演员表的格子按组序补在回合末尾） */
 function shieldSeal(){
@@ -20557,7 +20587,7 @@ function getActorSkill(r, g){
 
 }
 
-/* 主战专属天赋 → 该格增益%：常驻易伤/增伤 + 升华技后技能位增伤（如和服亚丝娜易伤+25% 常驻、
+/* 主战专属天赋 → 该格增益%：常驻易伤/增伤 + 升华技后技能位增伤（如和服亚丝娜易伤+25%=「行动时施加」型·T≥T0、
    和服夏娜升华后 1号+15%/2号+24% 持续4回合）。返回 {pct, vulnPct, desc} */
 /* 跨组易伤共享：每个主战角色组的「易伤贡献」全场共享（任何主战施加的易伤全场生效，所有组同值同显示）。
    每组的贡献优先级：② 格子级天赋输入（非0，取第一格）> ① 整组天赋输入（非0）> 角色库自动解析（如亚丝娜25%）。
@@ -20673,7 +20703,7 @@ function crossGroupVuln(){
      T = r*N + posOf[g]（computeActionPos），团队减益的既有窗口即「不含释放者当拍」。
      · 「行动结束后施加」型天赋：仅对 T > T0 的出手计入（T0 = 该组首次「主战出手」坐标）；
        她首次出手当拍不计，其后的每一拍（含她自己后续回合）恒计入。
-     · 常驻型易伤天赋（和服亚丝娜·闪光 等）不含「行动结束」字样 ⇒ 逐位不变。
+     · P67：「释放任意技能」型（和服亚丝娜·闪光）=「行动时施加」—— T ≥ T0 含首拍，她当拍即吃、其前各拍不计。
      · 该组从未由主战出手 ⇒ 恒不计。 */
 let _apCacheKey = '', _apCacheVal = null;
 function actionPosCached(){
@@ -20688,6 +20718,15 @@ function talentVulnPostAct(g){
   if(!grpTalentFx(g)) return false;
   const tg = parseTalentGain(getChar(grp.mainId));
   return !!tg.vulnPostAct && ((+tg.vuln||0) > 0);
+}
+/* P67：「行动时施加」型（和服亚丝娜·闪光「释放任意技能，将使敌方剩余生命值高于70%的角色，
+   受到的伤害提高25.00%」）—— 行动当拍即施加，自身首拍计入（T ≥ T0，含首拍）；
+   与 postAct（T > T0）的差异就在首拍（用户 2026-09-28 裁决：她自己可以吃到自己的易伤）。 */
+function talentVulnOnAct(g){
+  const grp = (state.groups||[])[g]; if(!grp) return false;
+  if(!grpTalentFx(g)) return false;
+  const tg = parseTalentGain(getChar(grp.mainId));
+  return !!tg.vulnOnAct && ((+tg.vuln||0) > 0);
 }
 /* 该组首次「主战出手」的时间线坐标；从未由主战出手返回 null */
 function groupFirstMainActT(g){
@@ -20707,6 +20746,10 @@ function groupTalentVulnContribAt(g, T){
   if(talentVulnPostAct(g)){
     const T0 = groupFirstMainActT(g);
     if(T0 == null || !(T > T0)) return 0;
+  } else if(talentVulnOnAct(g)){
+    /* P67：行动时施加 —— T ≥ T0 含首拍（她自己当拍即吃，2026-09-28 用户裁决） */
+    const T0 = groupFirstMainActT(g);
+    if(T0 == null || !(T >= T0)) return 0;
   }
   return v;
 }
@@ -21494,9 +21537,9 @@ function migrateState(){
   if(!BQ_ROUND_MODES[state.roundExtend]) state.roundExtend = '';
   if(typeof state.spLimit !== 'boolean') state.spLimit = false;
   if(typeof state.shields !== 'object' || state.shields === null){
-    state.shields = { enabled:false, frontHp:60000, backHp:100000 };
+    state.shields = { enabled:true, frontHp:60000, backHp:100000, crit:true };
   } else {
-    if(typeof state.shields.enabled !== 'boolean') state.shields.enabled = false;
+    if(typeof state.shields.enabled !== 'boolean') state.shields.enabled = true;
     if(typeof state.shields.frontHp !== 'number') state.shields.frontHp = 60000;
     if(typeof state.shields.backHp !== 'number') state.shields.backHp = 100000;
     delete state.shields.frontRound;   /* v2.4.4 旧字段（破盾回合）已废弃，改为自动推算 */
@@ -22443,7 +22486,22 @@ function computeGroupScores(g){
     /* v2.4.4：前后护盾——探测遍（_shPass=0）按技能目标类别拆分记录每格分排伤害基线（单体伤害口径），供破盾点推算 */
     if(_shPass === 0){
       /* v3.0.3：打盾伤害按 100% 暴击折算（未启用/未勾选时 shieldCritMul 恒 1，口径与旧版一致） */
-      shieldProbeRec(r, g, _effDmg * _effPanel / 100 * shieldCritMul(g), sk);   /* v3.1.9b：打盾走「每敌」口径 */
+      /* P67：标记型升华（被标记者）+群体攻击 → 打盾按排重分配：被标记排吃全额 ultUp、其余排不吃
+         （旧版把 875/3 均摊值平均打进前后两盾 → 标记后排时后盾破盾点显著偏晚、前盾偏早）。 */
+      let _mkSplit = null;
+      const _uGate = ultUpGatedValue(r, g, sk, actorInfo, sb);
+      if(_uGate > 0 && sb && sb.ultName === '被标记者' && sk && String(sk.cat||'').indexOf('群体攻击') === 0){
+        const _Ssum = wp + buff + equip + xbuff2;
+        const _Sden = 1 + _Ssum/100;
+        if(_Sden > 0){
+          const _dBase = _effDmg * _effPanel / 100 * shieldCritMul(g);
+          const _Sno = _Ssum - _uGate;
+          _mkSplit = { row: markRowAt(g, r),
+                       dNo: _dBase * (1 + _Sno/100) / _Sden,
+                       dMk: _dBase * (1 + (_Sno + (+sb.ultUp||0))/100) / _Sden };
+        }
+      }
+      shieldProbeRec(r, g, _effDmg * _effPanel / 100 * shieldCritMul(g), sk, _mkSplit);   /* v3.1.9b：打盾走「每敌」口径 */
     }
 
     /* 武装倍率贡献（用于②③展示「武装」分项）：本格总倍率中由武装 pct 带来的部分 */
@@ -25562,7 +25620,7 @@ const PLAN_GHOST_DEFAULTS = {
 
   spLimit:           false,
 
-  shields:           { enabled:false, frontHp:60000, backHp:100000 },
+  shields:           { enabled:true, frontHp:60000, backHp:100000, crit:true },
 
   enemiesTouched:    false,
 
@@ -33781,9 +33839,9 @@ function resetAll(){
 
   state = {
 
-    mode:'custom', numRounds:7, enemies:1, cap:20, capSP:SP_CAP_DEFAULT,
+    mode:'custom', numRounds:7, enemies:3, cap:20, capSP:SP_CAP_DEFAULT,
 
-    initSP:0, initBP:0, enemySpeeds:[1252],
+    initSP:0, initBP:0, enemySpeeds:[1252,1252,1252],
 
     groups: JSON.parse(JSON.stringify(ROLE_GROUPS_DEFAULT)).map(g=>(Object.assign(g,{panel:0,talent:0,equipType:'none',mainEquip:'none',subEquip:'none',mainKurooVal:0,subKurooVal:0,mainTraumaVal:0,subTraumaVal:0,critRate:35,critDmg:60,talentFx:true,awakenFx:true,mainAwakenFx:true,subAwakenFx:true,mainAwakenStage:5,subAwakenStage:5}))),
 
@@ -33800,6 +33858,11 @@ function resetAll(){
 
     /* v2.6.6.8：三项新增变迁效果回到默认（两个敌人关 / 心象增伤关 / 心象易伤关） */
     twoEnemies:false,
+
+    /* P67（2026-09-28）：重置后变迁效果回默认 —— 前后护盾默认开启（与初始 state 同口径：
+       enabled:true + 破盾伤害可暴击 crit:true；重置不跑 migrateState，故此处须显式带 shields 键，
+       否则 UI 勾着而 shieldRebuild 读不到 state.shields 会静默不生效） */
+    shields: { enabled:true, frontHp:60000, backHp:100000, crit:true },
 
     xiangBoost: { enabled:false, xVuln:200, rounds:[3,6,9], roundVuln:50 },
 
