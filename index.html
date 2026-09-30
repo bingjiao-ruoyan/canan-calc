@@ -11515,11 +11515,27 @@ function xiangContribsOf(gg){
   return out;
 }
 
+/* P102（2026-09-30 用户裁决）：跨组「我方全体」类心象的基数 = 受方本组【主战角色】基础攻击力（单槽）。
+   游戏原文区分两种措辞：心象技能「角色基础攻击」= 所在【整个小队】（主战+援护，不含藏品）；
+                        跨组增益「其主战角色基础攻击力」= 受方本组【主战角色】单槽。
+   scope 'squad'（携带组自身）仍走携带组整队面板（c.atk，v2.6.6.10 口径不变）。
+   显式面板组：按角色派生值占比拆分主战份额，保持 override 感知。 */
+function xiangCrossBaseAtk(g){
+  const grp = (state && state.groups && state.groups[g]) || null; if(!grp) return 0;
+  const m = (typeof atkPanelBaseOf === 'function') ? atkPanelBaseOf(grp.mainId, 'main', g) : 0;
+  if(!(+grp.panel > 0)) return m;                                   /* 自动面板：主战角色派生面板 */
+  const s = (typeof atkPanelBaseOf === 'function') ? atkPanelBaseOf(grp.subId, 'sub', g) : 0;
+  const sum = m + s;
+  return sum > 0 ? ((typeof groupPanelAtk === 'function' ? groupPanelAtk(g) : (+grp.panel || 0)) * (m / sum))
+                 : (typeof groupPanelAtk === 'function' ? groupPanelAtk(g) : (+grp.panel || 0));
+}
+
 /* 心象伤害（倍率口径，per-enemy）：按携带者组逐回合推演。
    v2.6.6.10 口径定稿：基数 = 携带小组的攻击力【不计算藏品加成】= grp.panel；
-   折算：X% × grp.panel / _effPanel（_effPanel 含藏品，是「倍率」的 100% 基准）。
+   P102（2026-09-30）：跨组「我方全体」类改按受方【主战角色】基础攻击力（xiangCrossBaseAtk）。
+   折算：X% × 基数 / _effPanel（_effPanel 含藏品，是「倍率」的 100% 基准）。
    最后 ×敌人数（对命中目标各结算一次）× (1 + 心象易伤%)。
-   返回 { byRound:[每回合倍率], total:合计倍率, parts:[...] }；未携带 / 空库 / 开关关闭恒 0。 */
+   返回 { byRound:[每回合倍率], total:合计倍率, parts:[...], dmgByRound/dmgTotal:[本次施放伤害] }；未携带 / 空库 / 开关关闭恒 0。 */
 function simulateGroupXinxiang(g){
   const nR = (state.rounds || []).length;
   const out = { byRound: new Array(nR).fill(0), total: 0, parts: [], dmgByRound: new Array(nR).fill(0), dmgTotal: 0 };
@@ -11530,7 +11546,8 @@ function simulateGroupXinxiang(g){
   const grp = state.groups[g] || {};
   /* _effPanel = 小组最终攻击力（groupPanelAtk + 藏品/装备加成）；「倍率」以它为 100% 基准 ⇒ 作折算分母。
      v3.0.1：基数与分母同源（此前分母用 groupPanelAtk 口径、分子直读 grp.panel ⇒ 自动分支下分子恒 0）。 */
-  const ownAtk = ((typeof groupPanelAtk === 'function') ? groupPanelAtk(g) : (+grp.panel || 0));   /* P100：受方本组攻击力（不含藏品口径） */
+  const ownAtk = ((typeof groupPanelAtk === 'function') ? groupPanelAtk(g) : (+grp.panel || 0));   /* 受方本组【整队】攻击力（不含藏品口径） */
+  const crossBase = ((typeof xiangCrossBaseAtk === 'function') ? xiangCrossBaseAtk(g) : ownAtk);  /* P102：跨组「其主战角色」基数 = 受方主战单槽 */
   const panel  = ownAtk + (typeof groupEquipPanel === 'function' ? groupEquipPanel(grp) : 0);
   if(!(panel > 0)) return out;
 
@@ -11553,19 +11570,20 @@ function simulateGroupXinxiang(g){
       contribs.forEach(c=>{
         const p = c.pctAt(r) || 0;
         if(!(p > 0)) return;
-        /* P100（2026-09-30 用户裁决，跨组口径替代 v2.6.6.10）：「我方全体/全队」类（scope 'all'）
-           游戏原文「增加X%【其主战角色】基础攻击力的心象伤害」——「其」= 受益方各自 ⇒
-           基数取受方本组攻击力 ownAtk（不含藏品口径，与 squad 同源）；受益方=携带组时与 c.atk 同值。
-           scope 'squad'（仅携带组）保持携带组面板（v2.6.6.10 口径不变）。 */
-        add += p * ((c.scope === 'all') ? ownAtk : c.atk) / panel;
+        /* P102（2026-09-30 用户裁决，细化 P100）：游戏原文区分两种措辞 ——
+           ①「角色基础攻击」= 所在【整个小队】（主战+援护，不含藏品）⇒ scope 'squad' 走 c.atk；
+           ②「其主战角色基础攻击力」= 受方本组【主战角色】单槽 ⇒ scope 'all' 走 crossBase。
+           「仅限心象部分」：本区分只影响心象段，技能本体伤害口径不动。 */
+        add += p * ((c.scope === 'all') ? crossBase : c.atk) / panel;
       });
       if(add <= 0) continue;
       const _vf = 1 + xiangVulnBonusPct(r)/100;
       const v = add * enemies * _vf;
       out.byRound[r] = v;
       out.total += v;
-      /* P101：单目标单次伤害（与倍率同源，不含敌人数）= 原始倍率% × 基数 ÷ 100 ×(1+心象易伤%) */
-      const _dmg = add * _vf / 100 * panel;
+      /* P101b：本次施放造成的伤害（与倍率同源，含敌人数）= 原始倍率% × 基数 ÷ 100 × 敌人数 ×(1+心象易伤%)
+         用户口径（2026-09-30）：「单次」= 这次施放造成的伤害（含全部命中目标），而非「单个敌人」。 */
+      const _dmg = add * enemies * _vf / 100 * panel;
       out.dmgByRound[r] = _dmg;
       out.dmgTotal += _dmg;
     }
@@ -11580,7 +11598,7 @@ function simulateGroupXinxiang(g){
 }
 
 /* ===== P100（2026-09-30）：心象数据核对板块（倍率明细页专用） =====
-   每组展示：携带卡（main/sub：卡名 Lv · 专属技能表 · scope 标记）· 属性加成 chips · 每回合心象单次伤害 · 合计。
+   每组展示：携带卡（main/sub：卡名 Lv · 专属技能表 · scope 标记）· 属性加成 chips · 每回合心象伤害（本次施放 · 含敌人数） · 合计。
    纯展示：数值全部与 simulateGroupXinxiang 同源，不改变任何计算路径。 */
 function confirmXiangBoardHTML(){
   if(typeof document==='undefined') return '';
@@ -11589,7 +11607,7 @@ function confirmXiangBoardHTML(){
   const sims = [0,1,2].map(gg=>{ try{ return simulateGroupXinxiang(gg); }catch(e){ return { byRound:[], total:0, parts:[] }; } });
   let h = '<div class="confirm-region" style="margin-top:12px">';
   h += '<div class="confirm-region-title">心象数据核对'
-    + '<span style="font-size:11px;font-weight:400;color:var(--sub)">口径：单次伤害 = 原始倍率% × 小组攻击力（不含藏品）÷ 100 ×（1+心象易伤%）；单次=对单个目标一次结算（多目标时 ×敌人数）；「我方全体」类跨组按受方本组攻击力折算（P100）；不计入暴击/终伤</span>'
+    + '<span style="font-size:11px;font-weight:400;color:var(--sub)">口径：心象伤害 = 原始倍率% × 基数 ÷ 100 × 敌人数 ×（1+心象易伤%）；「角色基础攻击」类基数=所在小队（主战+援护，不含藏品），「其主战角色基础攻击力」类跨组基数=受方本组主战角色（P102）；单次=本次施放对全部命中目标造成的伤害；不计入暴击/终伤</span>'
     + (!_on ? '<span style="font-size:11px;color:#b45309;font-weight:400">（「✦ 心象伤害效果」未开启：心象伤害不计入总分）</span>' : '')
     + '</div>';
   h += '<div class="tbl-wrap"><table class="skill confirm-input-table"><thead>';
