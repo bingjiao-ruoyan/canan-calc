@@ -1058,9 +1058,9 @@
               <div class="field" data-page-node-id="stFxHp2"><label id="geHpLbl2" data-page-node-id="stFxHp2L">③组（前排） — 总血量</label><input type="number" id="geHp2" value="0" min="0" step="1" disabled oninput="onStageFxChange()" data-page-node-id="stFxHp2I"></div>
             </div>
             <div style="display:flex;flex-wrap:wrap;gap:14px;margin-top:8px" data-page-node-id="stFxHpGainAtkInputs">
-              <div class="field" data-page-node-id="stFxAtk0"><label id="geAtkLbl0" data-page-node-id="stFxAtk0L">①组（后排） — 最终攻击力</label><input type="number" id="geAtk0" value="" min="0" step="1" inputmode="numeric" title="★只接受整数（自动剔除小数点）。留空 / 清除 = 回到自动推算（LV70攻击力 + 380 起的口径）；填值 = 自定义最终攻击力（含藏品·整数）。灰底 = 自动、白底 = 自定义。" oninput="onHpGainAtkInput(0,this.value)" onkeydown="intKeyGuard(event)" onchange="hpGainAtkCommit(0,this)" data-page-node-id="stFxAtk0I"></div>
-              <div class="field" data-page-node-id="stFxAtk1"><label id="geAtkLbl1" data-page-node-id="stFxAtk1L">②组（中排） — 最终攻击力</label><input type="number" id="geAtk1" value="" min="0" step="1" inputmode="numeric" title="★只接受整数（自动剔除小数点）。留空 / 清除 = 回到自动推算（LV70攻击力 + 380 起的口径）；填值 = 自定义最终攻击力（含藏品·整数）。灰底 = 自动、白底 = 自定义。" oninput="onHpGainAtkInput(1,this.value)" onkeydown="intKeyGuard(event)" onchange="hpGainAtkCommit(1,this)" data-page-node-id="stFxAtk1I"></div>
-              <div class="field" data-page-node-id="stFxAtk2"><label id="geAtkLbl2" data-page-node-id="stFxAtk2L">③组（前排） — 最终攻击力</label><input type="number" id="geAtk2" value="" min="0" step="1" inputmode="numeric" title="★只接受整数（自动剔除小数点）。留空 / 清除 = 回到自动推算（LV70攻击力 + 380 起的口径）；填值 = 自定义最终攻击力（含藏品·整数）。灰底 = 自动、白底 = 自定义。" oninput="onHpGainAtkInput(2,this.value)" onkeydown="intKeyGuard(event)" onchange="hpGainAtkCommit(2,this)" data-page-node-id="stFxAtk2I"></div>
+              <div class="field" data-page-node-id="stFxAtk0"><label id="geAtkLbl0" data-page-node-id="stFxAtk0L">①组（后排） — 最终攻击力</label><input type="number" id="geAtk0" value="" min="0" step="1" inputmode="numeric" title="★只接受整数（自动剔除小数点）。留空 / 清除 = 回到自动推算（LV70攻击力 + 380 起的口径）；填值 = 自定义最终攻击力（含藏品+心象·整数）。灰底 = 自动、白底 = 自定义。" oninput="onHpGainAtkInput(0,this.value)" onkeydown="intKeyGuard(event)" onchange="hpGainAtkCommit(0,this)" data-page-node-id="stFxAtk0I"></div>
+              <div class="field" data-page-node-id="stFxAtk1"><label id="geAtkLbl1" data-page-node-id="stFxAtk1L">②组（中排） — 最终攻击力</label><input type="number" id="geAtk1" value="" min="0" step="1" inputmode="numeric" title="★只接受整数（自动剔除小数点）。留空 / 清除 = 回到自动推算（LV70攻击力 + 380 起的口径）；填值 = 自定义最终攻击力（含藏品+心象·整数）。灰底 = 自动、白底 = 自定义。" oninput="onHpGainAtkInput(1,this.value)" onkeydown="intKeyGuard(event)" onchange="hpGainAtkCommit(1,this)" data-page-node-id="stFxAtk1I"></div>
+              <div class="field" data-page-node-id="stFxAtk2"><label id="geAtkLbl2" data-page-node-id="stFxAtk2L">③组（前排） — 最终攻击力</label><input type="number" id="geAtk2" value="" min="0" step="1" inputmode="numeric" title="★只接受整数（自动剔除小数点）。留空 / 清除 = 回到自动推算（LV70攻击力 + 380 起的口径）；填值 = 自定义最终攻击力（含藏品+心象·整数）。灰底 = 自动、白底 = 自定义。" oninput="onHpGainAtkInput(2,this.value)" onkeydown="intKeyGuard(event)" onchange="hpGainAtkCommit(2,this)" data-page-node-id="stFxAtk2I"></div>
             </div>
             <div style="display:flex;flex-wrap:wrap;gap:14px;margin-top:8px" data-page-node-id="stFxHpGainCritInputs">
               <div class="field" data-page-node-id="stFxCritDmg0"><label id="geCritDmgLbl0" data-page-node-id="stFxCritDmg0L">①组（后排） — 暴击伤害（%，净加成）</label><input type="number" id="geCritDmg0" value="0" min="0" step="0.01" disabled oninput="onHpGainCritInput(0,this.value)" data-page-node-id="stFxCritDmg0I"></div>
@@ -1101,9 +1101,9 @@
               <div class="field" data-page-node-id="stFxShBack"><label data-page-node-id="stFxShBackL">后排护盾血量</label><input type="number" id="geShieldBackHp" value="100000" min="0" step="1000" disabled oninput="onStageFxChange()" data-page-node-id="stFxShBackI"></div>
             </div>
             <div style="display:flex;flex-wrap:wrap;gap:14px;margin-top:8px" data-page-node-id="stFxShAtkInputs">
-              <div class="field" data-page-node-id="stFxShAtk0"><label id="geShAtkLbl0" data-page-node-id="stFxShAtk0L">①组（后排） — 最终攻击力</label><input type="number" id="geShAtk0" value="" min="0" step="1" inputmode="numeric" title="★只接受整数（自动剔除小数点）。留空 / 清除 = 回到自动推算；填值 = 自定义最终攻击力（含藏品·整数）。灰底 = 自动、白底 = 自定义。打盾探测伤害按此攻击力结算。" oninput="onHpGainAtkInput(0,this.value,'geShAtk0')" onkeydown="intKeyGuard(event)" onchange="hpGainAtkCommit(0,this,'geShAtk0')" data-page-node-id="stFxShAtk0I"></div>
-              <div class="field" data-page-node-id="stFxShAtk1"><label id="geShAtkLbl1" data-page-node-id="stFxShAtk1L">②组（中排） — 最终攻击力</label><input type="number" id="geShAtk1" value="" min="0" step="1" inputmode="numeric" title="★只接受整数（自动剔除小数点）。留空 / 清除 = 回到自动推算；填值 = 自定义最终攻击力（含藏品·整数）。灰底 = 自动、白底 = 自定义。打盾探测伤害按此攻击力结算。" oninput="onHpGainAtkInput(1,this.value,'geShAtk1')" onkeydown="intKeyGuard(event)" onchange="hpGainAtkCommit(1,this,'geShAtk1')" data-page-node-id="stFxShAtk1I"></div>
-              <div class="field" data-page-node-id="stFxShAtk2"><label id="geShAtkLbl2" data-page-node-id="stFxShAtk2L">③组（前排） — 最终攻击力</label><input type="number" id="geShAtk2" value="" min="0" step="1" inputmode="numeric" title="★只接受整数（自动剔除小数点）。留空 / 清除 = 回到自动推算；填值 = 自定义最终攻击力（含藏品·整数）。灰底 = 自动、白底 = 自定义。打盾探测伤害按此攻击力结算。" oninput="onHpGainAtkInput(2,this.value,'geShAtk2')" onkeydown="intKeyGuard(event)" onchange="hpGainAtkCommit(2,this,'geShAtk2')" data-page-node-id="stFxShAtk2I"></div>
+              <div class="field" data-page-node-id="stFxShAtk0"><label id="geShAtkLbl0" data-page-node-id="stFxShAtk0L">①组（后排） — 最终攻击力</label><input type="number" id="geShAtk0" value="" min="0" step="1" inputmode="numeric" title="★只接受整数（自动剔除小数点）。留空 / 清除 = 回到自动推算；填值 = 自定义最终攻击力（含藏品+心象·整数）。灰底 = 自动、白底 = 自定义。打盾探测伤害按此攻击力结算。" oninput="onHpGainAtkInput(0,this.value,'geShAtk0')" onkeydown="intKeyGuard(event)" onchange="hpGainAtkCommit(0,this,'geShAtk0')" data-page-node-id="stFxShAtk0I"></div>
+              <div class="field" data-page-node-id="stFxShAtk1"><label id="geShAtkLbl1" data-page-node-id="stFxShAtk1L">②组（中排） — 最终攻击力</label><input type="number" id="geShAtk1" value="" min="0" step="1" inputmode="numeric" title="★只接受整数（自动剔除小数点）。留空 / 清除 = 回到自动推算；填值 = 自定义最终攻击力（含藏品+心象·整数）。灰底 = 自动、白底 = 自定义。打盾探测伤害按此攻击力结算。" oninput="onHpGainAtkInput(1,this.value,'geShAtk1')" onkeydown="intKeyGuard(event)" onchange="hpGainAtkCommit(1,this,'geShAtk1')" data-page-node-id="stFxShAtk1I"></div>
+              <div class="field" data-page-node-id="stFxShAtk2"><label id="geShAtkLbl2" data-page-node-id="stFxShAtk2L">③组（前排） — 最终攻击力</label><input type="number" id="geShAtk2" value="" min="0" step="1" inputmode="numeric" title="★只接受整数（自动剔除小数点）。留空 / 清除 = 回到自动推算；填值 = 自定义最终攻击力（含藏品+心象·整数）。灰底 = 自动、白底 = 自定义。打盾探测伤害按此攻击力结算。" oninput="onHpGainAtkInput(2,this.value,'geShAtk2')" onkeydown="intKeyGuard(event)" onchange="hpGainAtkCommit(2,this,'geShAtk2')" data-page-node-id="stFxShAtk2I"></div>
             </div>
             <div style="display:flex;flex-wrap:wrap;gap:14px;align-items:flex-end;margin-top:8px" data-page-node-id="stFxShCritRow">
               <label style="display:inline-flex;align-items:center;gap:6px;font-size:13px;padding-bottom:6px" data-page-node-id="stFxShCritLbl" title="v3.0.3（P70 反转）：默认打盾伤害按 100% 暴击结算（探测伤害 ×(1+出手组暴击伤害%/100)），破盾点随之提前，勾选「破盾不暴击」才关闭。暴伤与「数据确认区 → 暴击伤害 %」同源双向联动（与血量增益面板三组暴伤是同一个值）。净加成口径：游戏内暴伤面板 = 基础 100% + 净加成（默认 70% ⇒ 面板 170%）。">
@@ -1893,10 +1893,10 @@ let state = {
      武装本身的装配 / 出招格下拉选择 / 出招排表勾选释放不受影响。 */
   weaponDmgFx: false,
 
-  /* v2.6.6.10：全局「✦ 心象伤害效果」总开关（默认 false = 关闭，与「⚔ 武装增伤效果」一致）。
-     只控制心象伤害（独立额外伤害段）是否计入总分；心象的装配 / 下拉 / 浏览不受影响。
-     ★2026-09-13 用户裁决：默认不勾选（心象需手动开启才计入总分）。 */
-  xiangDmgFx: false,
+  /* v2.6.6.10：全局「✦ 心象伤害效果」总开关。
+     只控制心象伤害（独立额外伤害段）与心象属性加成（含 P94 心象攻击 flat）是否计入总分；心象的装配 / 下拉 / 浏览不受影响。
+     ★2026-09-13 用户裁决：默认不勾选 ⇒ ★★P98（2026-09-30 用户裁决改判）：默认开启。 */
+  xiangDmgFx: true,
 
   /* v2.7.0：【虚拟模型】血量假定档位（%）。本器没有敌方 / 我方血量的逐回合推演，
      血量类心象条件（hpLow / hpHigh / allyHpLow / allyHpHigh）用它近似 ——
@@ -11183,8 +11183,8 @@ function xiangVulnBonusPct(r){
 
 /* 某组在第 r 回合释放的技能名（未出手 / 空 ⇒ ''） */
 /* ===== v2.6.6.10：全局「✦ 心象伤害效果」开关（与「⚔ 武装增伤效果」同构）=====
-   默认【关闭】（state.xiangDmgFx !== true ⇒ 关闭；旧存档无该字段时同样视为关闭）。
-   ★2026-09-13 用户裁决：心象勾选默认不开启。
+   ★P98（2026-09-30 用户裁决改判）：默认【开启】——初始值 / 重置 / 旧档缺字段物化均为 true；
+   仅显式 false（用户手动取消勾选）保持关闭（判定仍用 state.xiangDmgFx === true）。
    关闭后【只关效果、不关心象】：心象仍可装配、出招格照常显示、心象库照常浏览，
    仅心象伤害（独立额外伤害段）不计入总分。 */
 function xiangDmgFxOn(){ return state.xiangDmgFx === true; }
@@ -11242,6 +11242,15 @@ function xiangAtkFlatOf(g, who){
     lv = +statVal(cid, col.atk) || 0;
   }catch(e){ lv = 0; }
   return lv * pct / 100;
+}
+
+/* ===== P98（2026-09-30 用户裁决）：组级心象攻击 flat 合计（main + sub）=====
+   「最终攻击力」显示/回写口径：显示 = P + C + F、回写 = （填值 − 藏品 − 心象)/（1 + 觉醒加攻%），
+   F 与藏品 1470 同层（P94 裁决）；关闭「✦ 心象伤害效果」时恒 0 ⇒ 显示与旧版完全一致。 */
+function xiangAtkFlatGroup(g){
+  let v = 0;
+  try{ v = (xiangAtkFlatOf(g, 'main') || 0) + (xiangAtkFlatOf(g, 'sub') || 0); }catch(e){ v = 0; }
+  return v;
 }
 /* 终伤 / 暴击：按该组 main + sub 累加（本器终伤与暴击本就是组级） */
 function xiangStatGroupSum(g, key){
@@ -13906,10 +13915,11 @@ function setGroupFinalPanel(g, v){
     if(_el2 && _el2 === _aeG) v = intOnlyInput(_el2);
   }
   const eq = (typeof groupEquipPanel==='function') ? (groupEquipPanel(grp)||0) : 0;
+  const _xF = (typeof xiangAtkFlatGroup==='function') ? (xiangAtkFlatGroup(g)||0) : 0;   /* P98：心象攻击 flat 同层扣除 */
   const fin = Math.round(+v||0);
-  if(fin > 0 && (fin - eq) > 0){
+  if(fin > 0 && (fin - eq - _xF) > 0){
     const aw = (typeof groupPanelAwPct==='function') ? (groupPanelAwPct(g)||0) : 0;
-    grp.panel = Math.max(0, (fin - eq)/(1 + aw/100));
+    grp.panel = Math.max(0, (fin - eq - _xF)/(1 + aw/100));
   } else {
     grp.panel = 0;
   }
@@ -14019,11 +14029,12 @@ function onHpGainAtkInput(g, v, srcId){
   const _el = document.getElementById(srcId || ('geAtk'+g));
   if(_el && _el === document.activeElement) v = intOnlyInput(_el);
   const eq = (typeof groupEquipPanel==='function') ? (groupEquipPanel(grp)||0) : 0;
+  const _xF = (typeof xiangAtkFlatGroup==='function') ? (xiangAtkFlatGroup(g)||0) : 0;   /* P98：心象攻击 flat 同层扣除 */
   const fin = Math.max(0, Math.round(+v||0));
-  /* v3.0.1：与 setGroupFinalPanel 同口径——存储值 = 不含觉醒的基础面板；清空 = 回到自动推算 */
-  if(fin > 0 && (fin - eq) > 0){
+  /* v3.0.1：与 setGroupFinalPanel 同口径——存储值 = 不含觉醒的基础面板；清空 = 回到自动推算（P98 起另扣心象） */
+  if(fin > 0 && (fin - eq - _xF) > 0){
     const aw = (typeof groupPanelAwPct==='function') ? (groupPanelAwPct(g)||0) : 0;
-    grp.panel = Math.max(0, (fin - eq)/(1 + aw/100));
+    grp.panel = Math.max(0, (fin - eq - _xF)/(1 + aw/100));
   } else {
     grp.panel = 0;
   }
@@ -14045,14 +14056,15 @@ function hpGainAtkSyncInputs(){
   for(let g=0; g<3; g++){
     const grp = state.groups[g] || {};
     const eq = (typeof groupEquipPanel==='function') ? (groupEquipPanel(grp)||0) : 0;
+    const _xF = (typeof xiangAtkFlatGroup==='function') ? (xiangAtkFlatGroup(g)||0) : 0;   /* P98：心象攻击 flat 并入显示 */
     const base = (typeof groupPanelAtk==='function') ? groupPanelAtk(g) : (+grp.panel||0);
-    const fin = Math.round(base + eq);          /* ★v3.0.2 整数口径 */
+    const fin = Math.round(base + eq + _xF);          /* ★v3.0.2 整数口径 · P98 含心象 */
     const isCus = (+grp.panel||0) > 0;
     const el = document.getElementById('geAtk'+g);
     if(el){
       el.placeholder = '留空 = 自动 ' + fin;
       el.title = isCus ? ('自定义最终攻击力（整数）：清空 = 回到自动推算（' + fin + '）')
-                       : ('留空 = 自动推算，本组自动值 ' + fin + '；填值 = 自定义覆盖（含藏品·整数）');
+                       : ('留空 = 自动推算，本组自动值 ' + fin + '；填值 = 自定义覆盖（含藏品+心象·整数）');
       if(el.style) el.style.background = isCus ? '' : 'var(--bg2,#f3f4f6)';
       if(el !== _ae){                            /* ★不回写正在编辑的框 */
         const nv = isCus ? String(fin) : '';
@@ -14081,7 +14093,7 @@ function hpGainAtkSyncInputs(){
     if(el4){
       el4.placeholder = '留空 = 自动 ' + fin;
       el4.title = isCus ? ('自定义最终攻击力（整数）：清空 = 回到自动推算（' + fin + '）')
-                        : ('留空 = 自动推算，本组自动值 ' + fin + '；填值 = 自定义覆盖（含藏品·整数）');
+                        : ('留空 = 自动推算，本组自动值 ' + fin + '；填值 = 自定义覆盖（含藏品+心象·整数）');
       if(el4.style) el4.style.background = isCus ? '' : 'var(--bg2,#f3f4f6)';
       if(el4 !== _ae){                           /* ★不回写正在编辑的框 */
         const nv = isCus ? String(fin) : '';
@@ -14102,8 +14114,9 @@ function hpGainAtkCommit(g, el, srcId){
   if(!elx) return;
   const grp = state.groups[g] || (state.groups[g]={});
   const eq = (typeof groupEquipPanel==='function') ? (groupEquipPanel(grp)||0) : 0;
+  const _xF = (typeof xiangAtkFlatGroup==='function') ? (xiangAtkFlatGroup(g)||0) : 0;   /* P98：心象攻击 flat 同层 */
   const raw = Math.max(0, Math.round(+intOnlyInput(elx) || 0));
-  const v = (raw > eq) ? raw : 0;
+  const v = (raw > eq + _xF) ? raw : 0;
   elx.value = v > 0 ? String(v) : '';
   onHpGainAtkInput(g, v, srcId);
   if(typeof hpGainAtkSyncInputs==='function') hpGainAtkSyncInputs();
@@ -18072,22 +18085,23 @@ function renderConfirm(){
         /* v3.0.1：恢复可编辑 —— 灰底 = v3.0 自动推算，白底 = 用户自定义；
            引擎侧取数统一走 groupPanelAtk(g)（自定义优先，否则自动推算）；清空 / ↺自动 = 回到自动。 */
         const eqBonus = groupEquipPanel(grp);
+        const _xF = (typeof xiangAtkFlatGroup==='function') ? (xiangAtkFlatGroup(g)||0) : 0;   /* P98：心象攻击 flat 并入显示 */
         const _pbAuto = (typeof autoGroupPanel==='function') ? autoGroupPanel(g) : (+grp.panel||0);
-        const _autoFin = Math.round(_pbAuto + eqBonus);                                                          /* v3.0.2 整数口径 */
-        const effP = Math.round(((typeof groupPanelAtk==='function') ? groupPanelAtk(g) : _pbAuto) + eqBonus);   /* v3.0.2 整数口径 */
+        const _autoFin = Math.round(_pbAuto + eqBonus + _xF);                                                          /* v3.0.2 整数口径 */
+        const effP = Math.round(((typeof groupPanelAtk==='function') ? groupPanelAtk(g) : _pbAuto) + eqBonus + _xF);   /* v3.0.2 整数口径 */
         /* v3.1.2：这一格正被编辑时，value 用框内当前文本 —— 否则逐字输入的前缀（如 10000 的 1）
            会被重绘成自动推算值：前缀 ≤ 装备加成时 setGroupFinalPanel 判无效、panel 归 0 ⇒ 整串字打不进去。
            ★与 hpGainAtkSyncInputs「不回写正在编辑的框」同款保护。 */
         const _aeP = (typeof document!=='undefined') ? document.activeElement : null;
         const _effPShow = (_aeP && (_aeP.id === ('cfAtkPanel'+g) || _aeP.id === ('cf2AtkPanel'+g))) ? String(_aeP.value == null ? '' : _aeP.value) : String(effP);
         const _isCus = (+grp.panel||0) > 0;
-        const _panelTip = '★只接受整数（输入时自动剔除小数点）。直接填游戏内看到的最终攻击力（含藏品）即可，无需自己扣藏品；系统按「（填值 - 藏品加成）/（1 + 觉醒加攻%）」写回内部面板，藏品加成本组为 +' + eqBonus + '。'
+        const _panelTip = '★只接受整数（输入时自动剔除小数点）。直接填游戏内看到的最终攻击力（含藏品与心象攻击）即可，无需自己扣藏品；系统按「（填值 - 藏品加成）/（1 + 觉醒加攻%）」写回内部面板，藏品加成本组为 +' + eqBonus + (_xF>0 ? '、心象攻击 +' + Math.round(_xF) : '') + '。'
           + '清空或点「↺ 自动」= 回到自动推算（角色面板 = (LV60攻击力 + 380) × (1 + 25% + 60%) × (1 + 基础攻击力%)，取自「数值统计」atk60 列；★形态档位选「6★·70级」时改取 LV70 三列。本组自动值 = ' + _autoFin + '）。'
-          + '总攻击 = 角色面板 × (1 + 攻击力%) + 藏品攻击力(含藏品 +' + eqBonus + ')。与「血量增益面板 → 最终攻击力」同源双向联动。';
+          + '总攻击 = 角色面板 × (1 + 攻击力%) + 藏品攻击力(含藏品 +' + eqBonus + (_xF>0 ? '、心象 +' + Math.round(_xF) : '') + ')。与「血量增益面板 → 最终攻击力」同源双向联动。';
         h += '<td><input type="number" step="1" inputmode="numeric" id="cfAtkPanel' + g + '" value="' + _effPShow + '"'
           + (_isCus ? '' : ' style="background:var(--bg2,#f3f4f6)"')
           + ' oninput="setGroupFinalPanel(' + g + ',this.value)" onkeydown="intKeyGuard(event)" onchange="renderConfirm()" title="' + _panelTip + '">'
-          + ' <span style="font-size:10px;color:var(--sub)">' + (_isCus ? '自定义' : '自动推算') + ' · 含藏品 +' + eqBonus + '</span>'
+          + ' <span style="font-size:10px;color:var(--sub)">' + (_isCus ? '自定义' : '自动推算') + ' · 含藏品 +' + eqBonus + (_xF>0 ? ' · 心象 +' + Math.round(_xF) : '') + '</span>'
           + (_isCus ? ' <button type="button" style="font-size:10px;padding:1px 6px;margin-left:2px;cursor:pointer" onclick="resetGroupFinalPanel(' + g + ')" title="清掉自定义值，回到 v3.0 自动推算（' + _autoFin + '）">↺ 自动</button>' : '')
           + '</td>';
 
@@ -21777,8 +21791,9 @@ function migrateState(){
 
   /* v2.6.5：新字段「⚔ 武装增伤效果」——旧存档无此字段一律按默认关闭处理（显式物化，便于导出/签名一致）。 */
   if(typeof state.weaponDmgFx !== 'boolean') state.weaponDmgFx = false;
-  /* v2.6.6.10：心象开关默认【关闭】（旧存档无该字段 ⇒ false；★2026-09-13 用户裁决） */
-  if(typeof state.xiangDmgFx !== 'boolean') state.xiangDmgFx = false;
+  /* v2.6.6.10：心象开关默认【关闭】（旧存档无该字段 ⇒ false；★2026-09-13 用户裁决）
+     ★P98（2026-09-30 用户裁决改判）：默认改【开启】——旧档缺字段物化为 true（显式 false 保持） */
+  if(typeof state.xiangDmgFx !== 'boolean') state.xiangDmgFx = true;
   /* v3.0：攻击力口径订正——角色面板改为引擎自动推算，旧存档里手工填写/默认带出的 grp.panel 一律作废（清零）。
      显式设置（套件 / 迁移后再写入）仍优先。只做一次。 */
   if(!state._atkPanelVer){
@@ -26649,7 +26664,8 @@ function planLibApply(id){
 
   /* v2.6.5：武装增伤效果开关随模块一起存取（旧模块无该字段 → 保持本版默认关闭） */
   state.weaponDmgFx = (s.weaponDmgFx === true);
-  state.xiangDmgFx  = (s.xiangDmgFx === true);
+  /* ★P98（2026-09-30 用户裁决）：心象默认开启 ⇒ 存取侧缺字段视为开；显式 false（手动取消）保持关 */
+  state.xiangDmgFx  = (s.xiangDmgFx !== false);
   /* v2.7.0：虚拟模型档位（旧模块无该字段 ⇒ 100 / 100；非法值钳制 0..100 整数） */
   state.xiangAsm = (s.xiangAsm && typeof s.xiangAsm === 'object')
     ? {
@@ -34341,8 +34357,9 @@ function resetAll(){
     /* v2.6.5：重置时「⚔ 武装增伤效果」回到默认（关闭） */
     weaponDmgFx:false,
 
-    /* v2.6.6.10：重置时「✦ 心象伤害效果」回到默认（关闭 —— 与武装开关一致） */
-    xiangDmgFx:false,
+    /* v2.6.6.10：重置时「✦ 心象伤害效果」回到默认
+       （★★P98 2026-09-30 用户裁决改判：默认【开启】；原 2026-09-13 关闭裁决作废） */
+    xiangDmgFx:true,
 
     /* v2.7.0：重置时【虚拟模型】血量假定档位回默认（100 / 100） */
     xiangAsm:{ enemyHp:100, allyHp:100 },
