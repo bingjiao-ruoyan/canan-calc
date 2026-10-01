@@ -25586,7 +25586,8 @@ function exportStageFxData(){
   for(let g=0; g<3; g++){
     const grp = state.groups[g] || {};
     const atk = ((typeof groupPanelAtk==='function') ? groupPanelAtk(g) : (+grp.panel||0))
-              + (typeof groupEquipPanel==='function' ? (groupEquipPanel(grp)||0) : 0);
+              + (typeof groupEquipPanel==='function' ? (groupEquipPanel(grp)||0) : 0)
+              + (typeof xiangAtkFlatGroup==='function' ? (xiangAtkFlatGroup(g)||0) : 0);   /* P119：报告攻击力并入心象 flat（与 UI「角色最终面板」同口径） */
     const gh = (typeof groupHead==='function') ? (groupHead(g)||'') : '';
     rows.push({
       g: g,
