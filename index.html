@@ -16,7 +16,7 @@
 
 <link rel="manifest" href="manifest.webmanifest" data-page-node-id="Ujjb7vN2J2zFun44wCBIv8">
 
-<title>Canan Wiki · 3.7.1 · Characters / Imagery / Relics / Elementium</title>
+<title>Canan Wiki · 3.7.2 · Characters / Imagery / Relics / Elementium</title>
 
 <style>
 
@@ -880,7 +880,7 @@
 
     <div data-page-node-id="U3DQMnMQczfqNwA08GXIhj">
 
-      <h1 id="title" data-page-node-id="efK7lKccgtoypss7lhPAmx">Canan Wiki <span style="font-size:12px;font-weight:700;color:#4338ca;background:#eef2ff;border-radius:6px;padding:2px 8px;vertical-align:middle" data-page-node-id="8L10itvWf3BpMcGnSmAd9b">3.7.1</span></h1>
+      <h1 id="title" data-page-node-id="efK7lKccgtoypss7lhPAmx">Canan Wiki <span style="font-size:12px;font-weight:700;color:#4338ca;background:#eef2ff;border-radius:6px;padding:2px 8px;vertical-align:middle" data-page-node-id="8L10itvWf3BpMcGnSmAd9b">3.7.2</span></h1>
 
     </div>
 
@@ -1938,7 +1938,7 @@ const ROLE_GROUPS_DEFAULT = [
 
 
 /* 当前程序版本：页眉徽标、模式标题、导出页脚戳统一读取此常量 */
-const APP_VER = '3.7.1';
+const APP_VER = '3.7.2';
 
 
 /* v2.3.8：localStorage 键按 APP_VER 分版本隔离（同 2.3.7 规则）。
@@ -3367,7 +3367,7 @@ function computeRoundBuffs(){
     if(!_rl) continue;
     for(let rr=_rl.r0; rr<newSelfBuffs.length; rr++){
       if(!newSelfBuffs[rr][_rl.g]._selfDmg) newSelfBuffs[rr][_rl.g]._selfDmg=[];
-      newSelfBuffs[rr][_rl.g]._selfDmg.push({v:_rl.pct, scope:null, name:'界·真红5层'});
+      newSelfBuffs[rr][_rl.g]._selfDmg.push({v:_rl.pct, scope:null, independent:true, name:'界·真红5层'});
       newSelfBuffs[rr][_rl.g].dmgUp = (newSelfBuffs[rr][_rl.g].dmgUp||0) + _rl.pct;   /* 兼容旧读取 */
     }
   }
@@ -13578,8 +13578,15 @@ function talentCritGrant(tl, g){
   const spec = (mainChar.talents||[]).find(x=>!['元气','热血','生机'].includes(x.n));
   if(!spec || spec !== tl) return base;
   const awVal = groupAwakeningTalentCritRatePct(g);
-  if(!(awVal > 0)) return base;
-  return {critRate: awVal, critDmg: base.critDmg, scope: base.scope, dur: base.dur, overridden:true};
+  /* P112：user manual override（talentCritOv / talentCritDmgOv）——与觉醒覆写同源、按原 scope 分派，
+     故 team 型只进 crossGroupCrit()、本组/自身型只进本组累加，不会双计。 */
+  const _ovR = (+grp.talentCritOv||0), _ovD = (+grp.talentCritDmgOv||0);
+  if(_ovR > 0 || _ovD > 0 || awVal > 0){
+    return { critRate: (_ovR > 0) ? _ovR : (awVal > 0 ? awVal : (+base.critRate||0)),
+             critDmg:  (_ovD > 0) ? _ovD : (+base.critDmg||0),
+             scope: base.scope, dur: base.dur, overridden:true };
+  }
+  return base;
 }
 
 /* 觉醒「主战专属天赋·增伤/dmgUp%」覆写查询：返回该角色觉醒带来的天赋增伤覆写值%（已判定主战觉醒开关；无则返回 0）。
@@ -17246,9 +17253,39 @@ function renderGroupFxToggles(){
 
 /* 天赋行状态：为「角色配置 → 角色数据 → 角色天赋效果 %」提供「状态 + 自动值」内联提示。
    auto = 自动解析（含觉醒覆写）后的生效值；ov = 用户在①整组填的覆盖值（0 = 不覆盖）。 */
+/* P111：概率型增伤识别（游佐惠美·651「勇者行动时，有70%概率受到血脉祝福，提升本次伤害18%」）——
+   期望值 = 概率 × 增伤（用户 2026-10-01 裁决）；「勇者行动时…本次伤害」= 仅主战本人出手格生效。 */
+function probDmgUpTalentOf(c){
+  if(!c) return null;
+  const t = (c.talents||[]).find(x=>!['元气','热血','生机'].includes(x.n));
+  if(!t || !t.fx) return null;
+  const m = String(t.fx).match(/有\s*([\d.]+)\s*%\s*概率[^。；;]{0,24}?(?:提升|增加|提高)本次伤害\s*([\d.]+)\s*%/);
+  if(!m) return null;
+  const prob = +m[1], pct = +m[2];
+  return { prob, pct, exp: Math.round(prob * pct) / 100 };
+}
+/* P111：专属天赋「暴击率」授予查询（有纪·801 / 亚丝娜·751 / 界 亚丝娜·751 / 泳装御坂美琴）——
+   引擎已按 parseSkillCritGrant 计入 grpCritRate（本组）/ crossGroupCrit（全队·3 组），无可覆盖 % 通道；
+   此处仅取 {critRate, scope} 供 UI 分类与明细展示（scope: team=全队 3 组 / group|self=本组）。 */
+function specTalentCritOf(c){
+  if(!c) return null;
+  const t = (c.talents||[]).find(x=>!['元气','热血','生机'].includes(x.n));
+  if(!t || typeof parseSkillCritGrant!=='function') return null;
+  const g = parseSkillCritGrant(t, 0);
+  if(!g || (!((+g.critRate||0) > 0) && !((+g.critDmg||0) > 0))) return null;
+  return { critRate:+g.critRate||0, critDmg:+g.critDmg||0, scope:g.scope||'self' };
+}
+/* P112（2026-10-01）：天赋「用户手动覆盖」读取器（0 = 不覆盖，走引擎自动折算）。
+   与 talentRowState 的 type 一一对应：· crit 型（专属天赋暴击率/暴伤授予、阈值暴击）→ critRate/critDmg 两通道；
+   · total 型（增伤/易伤单值总当量：升华技独立乘区、跨组共享易伤等）→ total；· none 型（资源/倍率，无可覆盖 % 通道）→ 全 0。
+   ★新增/改名必须同步 talentRowState 分支设置 ovKind、引擎消费点（grpCritRate/grpCritDmg、crossGroupCrit、铁砂/水花）与 UI 渲染分支。 */
+function talentOvShapeOf(g){
+  const grp = (state.groups || [])[g] || {};
+  return { kind:'none', total:(+grp.talent||0), critRate:(+grp.talentCritOv||0), critDmg:(+grp.talentCritDmgOv||0) };
+}
 function talentRowState(g){
   const grp = (state.groups && state.groups[g]) || {};
-  const r = { present:false, name:'', type:'', auto:0, autoTxt:'', ov:0, on:true };
+  const r = { present:false, name:'', type:'', auto:0, autoTxt:'', ov:0, ovKind:'total', on:true };
   r.on = (typeof grpTalentFx === 'function') ? grpTalentFx(g) : true;
   const c = getChar(grp.mainId);
   if(!c) return r;
@@ -17275,6 +17312,12 @@ function talentRowState(g){
     const _pct = _spV > 0 ? _spV : (+sg.pct||0);
     r.auto = Math.round((+sg.prob||0) * _pct * 100) / 100;
     r.autoTxt = '期望 ' + r.auto + '%（' + Math.round((+sg.prob||0)*100) + '% × ' + _pct + '%）';
+  } else if(probDmgUpTalentOf(c)){
+    /* P111：概率型增伤（游佐惠美·651）—— 期望 = 概率 × 增伤；引擎在 talentGainForCell 折入 tg.dmgUp（仅主战出手格） */
+    const _pu = probDmgUpTalentOf(c);
+    r.type = '概率型增伤';
+    r.auto = _pu.exp;
+    r.autoTxt = '期望 ' + _pu.exp + '%（' + _pu.prob + '% × ' + _pu.pct + '%·仅本人）';
   } else if((+tg.dmgUp||0) > 0){
     r.type = '增伤';
     r.auto = _awD > 0 ? _awD : (+tg.dmgUp||0);
@@ -17322,6 +17365,45 @@ function talentRowState(g){
     r.auto = 0;
     r.autoTxt = _rc.join(' · ');
     r.isResource = true;
+    r.ovKind = 'none';   /* P112：SP/BP 资源型无 % 通道，UI 保留提示而非输入框 */
+  } else if(ironSandTalentOf(c)){
+    /* P110：铁砂（死库水御坂美琴·798）—— ironSandUpOf 折入升华技增伤，引擎按出招回放折算「铁砂层数 × 每层%」，无可覆盖 % 通道 */
+    r.type = '增伤(铁砂层数)';
+    r.auto = 0;
+    r.autoTxt = '升华技 × 铁砂层数（每层+N%·随出招回放）';
+    r.isResource = true;
+  } else if(zanshinTalentOf(c)){
+    /* P110：残心（有纪（天使）·481）—— zanshinCritRatio 折入暴伤/暴击率，引擎按出招回放折算「残心层数」，无可覆盖 % 通道 */
+    r.type = '暴击增益(残心层数)';
+    r.auto = 0;
+    r.autoTxt = '暴伤/暴击率 × 残心层数（随出招回放·常驻近似）';
+    r.isResource = true;
+    r.ovKind = 'crit';   /* P112：双通道可手动覆盖（暴击率 / 暴伤） */
+  } else if(shuiHuaCfgOf(g)){
+    /* P110：水花（亚子（夏日）·561）—— shuiHuaVulnContribAt 折入碧水之心易伤，引擎按出招回放折算「水花层数 × 每层%」，无可覆盖 % 通道 */
+    r.type = '易伤(水花层数)';
+    r.auto = 0;
+    r.autoTxt = '碧水之心易伤 × 水花层数（每层+N%·随出招回放）';
+    r.isResource = true;
+  } else if(evolutionTalentOf(c)){
+    /* P110：战术进化（司波达也·729）—— evolutionStacksInfo 折入暴伤，引擎按出招回放叠层（至上限 N 层），无可覆盖 % 通道 */
+    r.type = '暴伤(战术进化层数)';
+    r.auto = 0;
+    r.autoTxt = '暴击伤害 × 叠层（上限N层·随出招回放）';
+    r.isResource = true;
+    r.ovKind = 'crit';   /* P112：暴伤通道可手动覆盖（talentCritDmgOv） */
+  } else if(specTalentCritOf(c)){
+    /* P111：专属天赋暴击率授予（有纪·801 / 亚丝娜·751 / 界 亚丝娜·751 / 泳装御坂美琴）——
+       引擎已计入（本组 grpCritRate / 全队 crossGroupCrit），无可覆盖 % 通道；按作用域如实标注。 */
+    const _cc = specTalentCritOf(c);
+    r.type = '暴击率增益(天赋)';
+    r.auto = 0;
+    const _ccP = [];
+    if(_cc.critRate > 0) _ccP.push('暴击率 +' + _cc.critRate + '%');
+    if(_cc.critDmg > 0)  _ccP.push('暴击伤害 +' + _cc.critDmg + '%');
+    r.autoTxt = _ccP.join(' / ') + '（' + (_cc.scope === 'team' ? '全队 3 组' : '仅本组') + '·引擎已计入）';
+    r.isResource = true;
+    r.ovKind = 'crit';   /* P112：恢复手动覆盖入口（talentCritOv / talentCritDmgOv，0=走自动值） */
   } else {
     r.type = '未建模';
     r.autoTxt = '无（纯文案 / 条件型，不计分）';
@@ -17380,19 +17462,43 @@ function talentDetailHTML(g){
     if(/矢量操控/.test((tl&&tl.n)||'')) ch.push('矢量操控 每层电池电量+3%(觉醒3.6%·上限5层)增伤');
     if(/双尾女仆/.test((tl&&tl.n)||'')) ch.push('双尾女仆 每层+15%(觉醒20%·上限4层·仅2号位技能)增伤');
     if(/情报贩子/.test((tl&&tl.n)||'')) ch.push('情报贩子 固定+20%增伤(本组·场上存在减益)');
+    /* P110：铁砂 / 水花 / 残心 为独立引擎通道（同矢量操控类），引擎按出招回放折算，补展示以免误判「无可建模通道」 */
+    if(ironSandTalentOf(c)){ const _t=ironSandTalentOf(c); const _m=String(_t.fx||'').match(/对该目标的升华技提升\s*([\d.]+)\s*%/); const _per=_m?(+_m[1]):0; ch.push('铁砂 升华技每层铁砂+'+_per+'%增伤(随出招回放)'); }
+    if(shuiHuaCfgOf(g)){ const _cfg=shuiHuaCfgOf(g); ch.push('水花 碧水之心易伤×水花层数(每层+'+_cfg.per+'%·随出招回放)'); }
+    if(zanshinTalentOf(c)){ const _cfg=zanshinCfgOf(g); if(_cfg) ch.push('残心 ≥'+_cfg.th1+'枚→暴伤+'+_cfg.cd1+'% · ≥'+_cfg.th2+'枚→暴击率+'+_cfg.cr2+'%(随出招回放·常驻近似)'); }
     const _evo = (typeof evolutionStacksInfo === 'function' && (state.rounds||[]).length)
       ? evolutionStacksInfo(g, (state.rounds||[]).length - 1) : null;
-    if(_evo && _evo.pct > 0) ch.push('【战术进化】×' + _evo.stacks + '/' + _evo.cap + ' · 暴击伤害 +' + _evo.pct + '%');
+    if(_evo && _evo.pct > 0) ch.push('【战术进化】×' + _evo.stacks + '/' + _evo.cap + (_evo.active ? ' · 暴击伤害 +' + _evo.pct + '%（已生效·全队）' : '（未达 ' + _evo.cap + ' 层·暂未生效·全队+' + _evo.pct + '%）'));
+    /* P111：概率型增伤 / 专属天赋暴击率 补展示（引擎实际计分通道） */
+    const _puD = probDmgUpTalentOf(c);
+    if(_puD) ch.push('概率型增伤 期望 ' + _puD.exp + '%（' + _puD.prob + '% × ' + _puD.pct + '%·仅本人出手格）');
+    const _ccD = specTalentCritOf(c);
+    if(_ccD){
+      const _ccDP = [];
+      if(_ccD.critRate > 0) _ccDP.push('暴击率 +' + _ccD.critRate + '%');
+      if(_ccD.critDmg > 0)  _ccDP.push('暴击伤害 +' + _ccD.critDmg + '%');
+      ch.push(_ccDP.join(' / ') + '（' + (_ccD.scope === 'team' ? '全队 3 组' : '仅本组') + '·引擎已计入）');
+    }
     h += '<div style="margin-top:4px">引擎识别通道：'
       + (ch.length ? '<span style="color:#4338ca">' + esc(ch.join(' · ')) + '</span>'
                    : '<span style="color:#9ca3af">无可建模通道（纯文案 / 条件型，不计分）</span>') + '</div>';
     const ts = talentRowState(g);
-    const _eff = ts.ov
-      ? ('<b style="color:#7c3aed">' + ts.ov + '%</b>（来源：角色配置「角色天赋效果 %」覆盖值）')
-      : ('<b>' + esc(ts.autoTxt || '—') + '</b>（来源：' + ts.type + '自动解析）');
+    let _eff;
+    if(ts.ovKind === 'crit'){
+      const _oCR = (+((grp.talentCritOv)||0)), _oCD = (+((grp.talentCritDmgOv)||0));
+      _eff = '<b style="color:#7c3aed">暴击率 ' + (_oCR > 0 ? _oCR + '%（手动覆盖）' : '自动：' + esc(ts.autoTxt))
+        + ' ／ 暴伤 ' + (_oCD > 0 ? _oCD + '%（手动覆盖）' : '自动（由引擎按天赋机制折算）') + '</b>'
+        + '（来源：角色配置「角色天赋效果 %」同排的 暴击率 / 暴伤 小输入）';
+    } else if(ts.ovKind === 'total' && ts.ov){
+      _eff = '<b style="color:#7c3aed">' + ts.ov + '%</b>（来源：角色配置「角色天赋效果 %」覆盖值＝该通道总当量）';
+    } else if(ts.ov){
+      _eff = '<b style="color:#7c3aed">' + ts.ov + '%</b>（来源：角色配置「角色天赋效果 %」覆盖值）';
+    } else {
+      _eff = '<b>' + esc(ts.autoTxt || '—') + '</b>（来源：' + ts.type + '自动解析）';
+    }
     h += '<div style="margin-top:2px">当前生效值：' + _eff
       + (_on ? '' : ' <span style="color:#b45309">（开关已关 ⇒ 实际不计入）</span>') + '</div>';
-    h += '<div style="margin-top:2px;color:#6b7280">覆盖入口：角色配置 → 角色数据 →「角色天赋效果 %」—— 填 0 = 用自动值；填非 0 = 按上表「主类型」覆盖该通道'
+    h += '<div style="margin-top:2px;color:#6b7280">覆盖入口：角色配置 → 角色数据 →「角色天赋效果 %」—— 填 0 = 用自动值；填非 0 = 按上表「主类型」覆盖该通道（★P112：暴击/暴伤类天赋该行给出「暴击率 %」「暴伤 %」两个小输入，填 10 / 20 / 25 / 30 等即把该通道从自动折算值改成你所填值；层数型（升华技独立乘区、跨组共享易伤）该行单输入框 = 该通道总当量）'
     + ((+tg.skill1||0) || (+tg.skill2||0) || (+tg.ult||0)
         ? '（P108 技能位型双值：主输入=1号位/升华位，旁附「2号%」=2号位；数据确认区每格天赋输入=覆盖本格所属技能位）'
         : '') + '。</div>';
@@ -18446,12 +18552,25 @@ function renderConfirm(){
         if(!_ts.present){ _tBadge = '无专属天赋'; _tColor = 'var(--sub)'; }
         else if(!_ts.on){ _tBadge = '已关 · 暴击+10%补强'; _tColor = '#b45309'; }
         else if(_slotMain && (_ts.ov || _ts.ov2)){ _tBadge = '覆盖中 · 1号' + (_ts.ov||0) + '% / 2号' + (_ts.ov2||0) + '%（0=自动）'; _tColor = '#7c3aed'; }
+        else if(_ts.ovKind === 'crit' && ((+grp.talentCritOv||0) || (+grp.talentCritDmgOv||0))){
+          const _bCR = (+grp.talentCritOv||0), _bCD = (+grp.talentCritDmgOv||0);
+          _tBadge = '覆盖中 · ' + _ts.type + ' ' + (_bCR > 0 ? ('暴击率 ' + _bCR + '%  ') : '') + (_bCD > 0 ? ('暴伤 ' + _bCD + '%') : '');
+          _tColor = '#7c3aed';
+        }
         else if(_ts.ov){ _tBadge = '覆盖中 · ' + _ts.type + ' ' + _ts.ov + '%'; _tColor = '#7c3aed'; }
         else { _tBadge = '自动 · ' + _ts.type + ' ' + _ts.autoTxt; _tColor = 'var(--sub)'; }
         let _tInput;
-        if(_ts.isResource){
-          /* P109：资源/倍率型天赋（SP/BP/冰冷狙击/审判之力）引擎自动生效，无可覆盖 % 通道，隐藏输入框避免误导 */
-          _tInput = '<span style="font-size:10px;color:#16a34a">✓ 自动生效（资源/倍率增益，无需填写覆盖值）</span>';
+        if(_ts.ovKind === 'crit'){
+          /* P112：暴击类天赋（专属天赋暴击率/暴伤授予、阈值暴击）——恢复两通道手动覆盖入口 */
+          _tInput = '<span style="font-size:10px;color:var(--sub);white-space:nowrap">暴击率<input type="number" step="0.01" style="width:62px" value="' + (+grp.talentCritOv||0) + '"'
+            + ' oninput="state.groups[' + g + '].talentCritOv=+this.value;recalc();" onchange="renderConfirm()"'
+            + ' title="主战专属天赋授予的【暴击率 %】手动覆盖（0 = 走角色库自动值，如自动 20%；填 10 / 25 / 30 即把该通道改成该值）"></span>'
+            + ' <span style="font-size:10px;color:var(--sub);white-space:nowrap">暴伤<input type="number" step="0.01" style="width:62px" value="' + (+grp.talentCritDmgOv||0) + '"'
+            + ' oninput="state.groups[' + g + '].talentCritDmgOv=+this.value;recalc();" onchange="renderConfirm()"'
+            + ' title="主战专属天赋授予的【暴击伤害 %】手动覆盖（0 = 走角色库自动值；该天赋含暴伤条目时才有意义）"></span>';
+        } else if(_ts.ovKind === 'none'){
+          /* P109/P112：资源/倍率型（SP/BP/冰冷狙击/审判之力）无可覆盖 % 通道 —— 如实标注原因，不再声称「无需填写」 */
+          _tInput = '<span style="font-size:10px;color:#16a34a">✓ 自动生效（资源/倍率型，无 % 通道可覆盖）</span>';
         } else {
           _tInput = '<input type="number" step="0.01" value="' + (grp[row.key]||0) + '"'
             + ' oninput="state.groups[' + g + '].talent=+this.value;recalc();" onchange="renderConfirm()"'
@@ -18697,7 +18816,9 @@ function renderConfirm(){
       /* P93：冰冷狙击——升华技倍率提高 per%×释放时层数（cb.iceSnipe/cb.iceSnipePer；与 _awSkillUp 同独立乘区，合并乘） */
       const _iceSnipeUp = (sk && sk.costType==='bp' && typeof cb.iceSnipe==='number') ? (+cb.iceSnipe||0) * (+cb.iceSnipePer||0) : 0;
       /* P95：电磁支配者（美琴）——目标每层「铁砂」对该目标升华技+per%（回放期望层数×4.00%；与 _awSkillUp/_iceSnipeUp 同独立乘区） */
-      const _ironSandUp = ironSandUpOf(g, r, sk);
+      let _ironSandUp = ironSandUpOf(g, r, sk);
+    const _ironSandUpOv = (+((state.groups[g]||{}).talent)||0);   /* P112：单值总当量覆盖（0=按回放层数×每层% 自动折算） */
+    if(_ironSandUpOv > 0) _ironSandUp = _ironSandUpOv;
       const _wlUp = wonderlandMulAt(g, r, cell.who, sk);   /* P107：梦游仙境 援护技 +31%（雨缘之印=20层，仅1次） */
       const nonTraumaGains = wp + buff + equip + xbuff + tgGain.pct + wpnB.pct
         + ((sk && sk.bpAll && typeof cb.bpUsed==='number') ? cb.bpUsed * (+sk.bpDmgPer||0) : 0)
@@ -18715,7 +18836,7 @@ function renderConfirm(){
          v3.1.6：护盾破盾加成改走增伤（敌方易伤），此处只剩藏品组伤 + 血量区间 */
       const finPctD = stageFinPct(g, r);
 
-      const theoryMult = (effBase(cb, base) + (sk.extraType==='dot'?0:effExtra(cb, extraVal))) * (1 + (_awSkillUp + _iceSnipeUp + _ironSandUp + _wlUp)/100) * (1 + nonTraumaGains/100) * (1 + atkPctD/100) * (1 + finPctD/100);
+      const theoryMult = (effBase(cb, base) + (sk.extraType==='dot'||sk.extraType==='flat'?0:effExtra(cb, extraVal))) * (1 + (_awSkillUp + _iceSnipeUp + _ironSandUp + _wlUp)/100) * (1 + (nonTraumaGains + flatExtraPctOf(sk, cb))/100) * (1 + atkPctD/100) * (1 + finPctD/100) * (1 + selfDmgUpIndependentOf(g,r)/100);
 
       const effective = effectiveMult(cb, theoryMult); /* 单元手动覆盖（倍率二次编辑） */
 
@@ -18921,8 +19042,15 @@ function renderConfirm(){
           else if(_eqType==='goddess') h += ' <span class="badge b-flat">冥府女神</span>';
           else if(_eqType==='wonderland') h += ' <span class="badge b-flat">梦游仙境</span>';
           else if(_eqType==='crimson') h += ' <span class="badge b-flat">红莲</span>';
-          if(_eqType && _eqType!=='none' && typeof EQUIP_IMG!=='undefined' && EQUIP_IMG[_eqType] && EQUIP_IMG[_eqType].tiles[0]){
-            h += ' <img class="equip-badge-mini" src="' + EQUIP_IMG[_eqType].tiles[0] + '" alt="' + EQUIP_IMG[_eqType].label + '" title="' + EQUIP_IMG[_eqType].label + '套装" onerror="this.remove()">';
+          var _eqIco = '', _eqIcoLb = '';
+          if(typeof EQUIP_IMG!=='undefined' && EQUIP_IMG[_eqType] && EQUIP_IMG[_eqType].tiles && EQUIP_IMG[_eqType].tiles[0]){
+            _eqIco = EQUIP_IMG[_eqType].tiles[0]; _eqIcoLb = EQUIP_IMG[_eqType].label;
+          } else if(typeof relicIconOf === 'function'){
+            /* P116：新增 10 套（樱花庄/教会/泳池/蝴蝶/CAD/冥府女神/梦游仙境/祭典的红莲 …）无 EQUIP_IMG ⇒ 走藏品库真实图标 */
+            _eqIco = relicIconOf(_eqType) || ''; _eqIcoLb = (typeof relicSelNameOf === 'function') ? (relicSelNameOf(_eqType) || '') : '';
+          }
+          if(_eqType && _eqType!=='none' && _eqIco){
+            h += ' <img class="equip-badge-mini" src="' + _eqIco + '" alt="' + _eqIcoLb + '" title="' + _eqIcoLb + '套装" onerror="this.remove()">';
           }
           if(_eqActive){
             h += ' <span style="font-size:9px;color:' + (_fit?'#059669':'#9ca3af') + ';cursor:help" title="' + (_fit?'本技能适配藏品效果，已计入':'本技能不适配（' + (_eqType==='kuroo'?'需 SP≥4':_eqType==='kuroo_sp3'?'需 SP≤3':_eqType==='sakura'?'需 SP≤4':_eqType==='church'?'需连续2回合行动':_eqType==='pool'?'需SP≥5且非连携':_eqType==='butterfly'?'需6费升华技':_eqType==='cad'?'需上回合末战斗演算≥1层':_eqType==='goddess'?'需诗乃心跳加速≥2层':_eqType==='wonderland'?'需雨缘之印=20层（援护技）':_eqType==='crimson'?'需火翼讨伐者+真红':(_eqType==='yamato'||_eqType==='xizi')?'4件套不计分（仅2件套生效）':'需创伤技') + '），未计入（增益自动归零）') + '">' + (_fit?'✓适配':'✗不适配') + '</span>';
@@ -20860,6 +20988,49 @@ function effBase(cb, base){
 function effExtra(cb, extraVal){
   return cb && cb.extraOverride != null ? (+cb.extraOverride) : extraVal;
 }
+/* P113：条件型附加倍率（extraType==='flat'，如 界/和服夏娜·炎灵「若真红5层则+28.00%」）→ 增伤乘法池通道。
+   游戏原文为「本技能伤害 +X%」的增伤口径，且与火翼讨伐者等专属天赋增伤【同池相加】；
+   旧实现把 extraVal 当倍率加值并入 base（会额外再吃一次群体衰减 ÷3），与描述不符。
+   返回 % 值；单元格手动覆盖 extraOverride 优先（语义同为「增伤%」）。 */
+function flatExtraPctOf(sk, cb){
+  if(!sk || sk.extraType!=='flat') return 0;
+  if(cb && cb.extraOverride != null && isFinite(+cb.extraOverride)) return (+cb.extraOverride);
+  return (+sk.extra||0);
+}
+/* P113：自身增伤中【独立乘区】项的求和（如 界 和服夏娜 1觉「真红5层 → 自身造成伤害 +14%」）：
+   经 selfDmgUpEffectiveNoIndep 从增伤池剥离后，由技能本体侧单独 ×(1+X%) 计入。 */
+function selfDmgUpIndependentOf(g, r){
+  try{
+    if(typeof state==='undefined' || !state.selfBuffs || !Array.isArray(state.selfBuffs)) return 0;
+    const _sb = state.selfBuffs[r] && state.selfBuffs[r][g];
+    if(!_sb || !Array.isArray(_sb._selfDmg)) return 0;
+    let v = 0;
+    for(const p of _sb._selfDmg){ if(p && p.independent) v += (p.v||0); }
+    return v;
+  }catch(e){ return 0; }
+}
+/* P113：自身增伤【不含独立乘区项】的求和 —— 供增伤池(xbuffSelf)使用，避免与独立乘区双计。 */
+function selfDmgUpEffectiveNoIndep(sb, sk, actorId){
+  try{
+    const parts = (sb && Array.isArray(sb._selfDmg)) ? sb._selfDmg : null;
+    if(parts){
+      let v = 0;
+      for(const p of parts){
+        if(p && p.independent) continue;
+        if(p.scope==='skill2+climax'){
+          const isLink   = !!(sk && sk.kind==='连携');
+          const isClimax = !!(sk && sk.costType==='bp');
+          let isSkill2=false;
+          if(sk && actorId){ const ow=getChar(actorId); if(ow && Array.isArray(ow.skills)) isSkill2=(ow.skills.indexOf(sk)===1); }
+          if(isLink || (!isClimax && !isSkill2)) continue;
+        }
+        v += (p.v||0);
+      }
+      return v;
+    }
+    return +(sb && sb.dmgUp || 0);   /* 旧结构兜底 */
+  }catch(e){ return 0; }
+}
 
 /* ============ v3.0.8：非标准群体伤害分布（按技能名登记真实分排分布） ============
    默认模型：群体攻击每敌恒定吃 倍率 ÷ 3（与敌人数无关）；群体分担按现存敌数均摊（每敌 = 倍率 ÷ 敌人数）。
@@ -21482,6 +21653,18 @@ function groupFirstMainActT(g){
 /* 单组天赋易伤「按出手时间线坐标 T 结算」的值（含时序闸门） */
 function groupTalentVulnContribAt(g, T){
   const grp = (state.groups||[])[g]; if(!grp || !grp.mainId) return 0;
+  /* P112：单值总当量覆盖（碧水之心跨组共享易伤，填值即替换自动折算值；0=走回放层数×每层%）。
+     ★守卫（P112o）：仅当本组【确有跨组共享易伤通道】时才接管 —— 易伤型天赋（tg.vuln>0 / 觉醒易伤覆写 /
+     概率特殊易伤）或水花（碧水之心）通道任一成立。否则任何角色在①「角色天赋效果 %」的填值都会被当成
+     全场易伤：技能位/增伤型角色（如和服夏娜）填 10 会让跨组易伤恒 +10（verify_370 D1~D5 回归根因）。 */
+  const _shOvV = (+grp.talent||0);
+  if(_shOvV > 0){
+    let _hasVulnCh = false;
+    try{
+      _hasVulnCh = (groupTalentVulnContrib(g, grp) > 0) || (shuiHuaVulnContribAt(g, +T||0) > 0);
+    }catch(eOvV){ _hasVulnCh = false; }
+    if(_hasVulnCh) return Math.round(_shOvV * 100)/100;
+  }
   /* P95：泳装牧师（亚子（夏日）·561）水花——「施放技能「碧水之心」时，每层【水花】均会使敌人受到伤害提高」：
      碧水之心（主战）释放拍 T0 起 1 回合内（T < T0+N）敌方全体易伤 += 释放时层数 × per%（跨组共享）。
      水花每回合开始 +1 层（永久）、释放后清零（回放推演）；无碧水之心窗口 → 0。 */
@@ -21533,12 +21716,17 @@ function crossGroupVulnAt(T){
    · 觉醒层：teamCritDmgPctByName / teamCritRatePctByName（觉醒「全体友方 / 全队 暴击」类，按技能名索引）。
    非 team 作用域（本组 / 单一角色）仍走 computeGroupScores 的本地累加，不在此汇总、不受影响。 */
 function crossGroupCrit(){
-  let cr = 0, cd = 0;
+  let cr = 0, cd = 0, crOv = 0, cdOv = 0;   /* P112h/i：crOv/cdOv = team 作用域手动覆盖累计（按组收口，见下） */
   const seen = new Set();
   const _gs = (state.groups||[]).length;
   for(let g=0; g<_gs; g++){
     const grp = state.groups[g] || {};
+    let gHadTeam = false;   /* P112i：本组是否命中 team 型授予（只有命中才允许覆盖收口；见下方 _evoTal 补齐） */
+
     const _evoTal = (typeof evolutionTalentOf === 'function') ? evolutionTalentOf(getChar(grp.mainId)) : null;
+    /* P112l：司波达也·729「战术进化」= team 作用域窗口化暴伤，但它的天赋被排除在授予循环外 ⇒
+       必须在此补记，否则 team 覆盖收口（gHadTeam）恒 false、用户填值被吞（实测 填45→0） */
+    if(_evoTal) gHadTeam = true;
     [grp.mainId, grp.subId].forEach(id=>{
       const o = id ? getChar(id) : null;
       if(!o || !o.talents) return;
@@ -21549,10 +21737,19 @@ function crossGroupCrit(){
         /* v2.6.6.3：天赋暴击统一走 talentCritGrant()（含主战专属天赋觉醒覆写 talentCritRatePct） */
         const cg = talentCritGrant(tl, g);
         if(cg.scope !== 'team') return;
-        seen.add(k); cr += cg.critRate; cd += cg.critDmg;
+        /* P112h：覆盖生效时该通道自动折算整段跳过，避免多条授予时按条数倍记；
+           覆盖值本身另由 crOv/cdOv 按【组】收口一次（见下方） */
+        seen.add(k);
+        gHadTeam = true;   /* P112i：仅当本组确有 team 型授予时才允许覆盖收口，避免自作用域天赋被串成全队 */
+        cr += (((+grp.talentCritOv||0) > 0) ? 0 : (+cg.critRate||0));
+        cd += (((+grp.talentCritDmgOv||0) > 0) ? 0 : (+cg.critDmg||0));
       });
     });
+    if(gHadTeam){ crOv += (+grp.talentCritOv||0); cdOv += (+grp.talentCritDmgOv||0); }
   }
+  /* P112h：team 型手动覆盖收口——填值 = 该通道总当量（替换自动折算，全队 3 组共享一次） */
+  if(crOv > 0) cr = Math.round(crOv * 100) / 100;
+  if(cdOv > 0) cd = Math.round(cdOv * 100) / 100;
   for(let r=0; r<(state.rounds||[]).length; r++){
     for(let g=0; g<_gs; g++){
       const cell = state.rounds[r] && state.rounds[r][g];
@@ -21857,6 +22054,8 @@ function ironSandUpOf(g, r, sk){
   if(!grpTalentFx(g)) return 0;
   const t = ironSandTalentOf(getChar(grp.mainId));
   if(!t || !sk) return 0;
+  /* P112n：铁砂覆盖位置前移（原在 bp 闸门后 ⇒ 覆盖永久不生效）——填值 = 该通道总当量，与技能格无关 */
+  if((+grp.talent||0) > 0) return Math.round((+grp.talent) * 100)/100;
   const mPer = String(t.fx||'').match(/对该目标的升华技提升\s*([\d.]+)\s*%/);
   if(!mPer) return 0;
   if(String(sk.costType || sk.ct || '') !== 'bp') return 0;   /* 仅升华技格消费（fx 内嵌句已被条件增伤排除，无双计） */
@@ -22021,6 +22220,9 @@ function shuiHuaStacksAt(g, k){
 }
 function shuiHuaVulnContribAt(g, T){
   const cfg = shuiHuaCfgOf(g); if(!cfg) return 0;
+  /* P112g：用户手动覆盖——同上，填值 = 易伤通道总当量（层数×每层% 的结果） */
+  const _ovTotW = (+((state.groups[g]||{}).talent)||0);
+  if(_ovTotW > 0) return Math.round(_ovTotW * 100)/100;
   const ap = actionPosCached(); if(!ap || !ap.N) return 0;
   const rounds = state.rounds || [];
   for(let k=(rounds.length-1); k>=0; k--){
@@ -22170,6 +22372,18 @@ function talentGainForCell(g, r, skill){
     if(awDmgUp > 0 && _talentBaseOn) tg.dmgUp = awDmgUp;
     awDmgBonusPct = groupAwakeningTalentDmgBonusPct(g);
     awHealPct = groupAwakeningTalentHealPct(g);
+  }
+  /* P111：概率型增伤（游佐惠美·651「勇者行动时，有70%概率受到血脉祝福，提升本次伤害18%」）——
+     期望 = 概率 × 增伤（用户 2026-10-01 裁决）；「勇者行动时…本次伤害」= 仅主战本人出手格生效。 */
+  if(fxOn){
+    const _puG = probDmgUpTalentOf(mainChar);
+    if(_puG){
+      const _puCell = (state.rounds && state.rounds[r] && state.rounds[r][g]) || null;
+      if(_puCell && _puCell.who === 'main'){
+        tg.dmgUp = (+tg.dmgUp||0) + _puG.exp;
+        tg.desc = (tg.desc ? tg.desc + ' · ' : '') + '血脉祝福+'+_puG.exp+'%（'+_puG.prob+'%×'+_puG.pct+'% 期望·仅本人）';
+      }
+    }
   }
   /* ============ v3.2.2：「使用升华技后…持续N回合」型天赋增伤（释放窗口判定） ============
      白井黑子·750 / 界 白井黑子·750「大能力者」：使用升华技后，所在小组伤害提升20%持续2回合。
@@ -22333,6 +22547,8 @@ function migrateState(){
     if(!g) return;
     if(typeof g.talentFx !== 'boolean') g.talentFx = true;
     if(typeof g.talentS2 !== 'number') g.talentS2 = 0;   /* P108：2号位天赋覆盖（0=自动；技能位型主战专用） */
+    if(typeof g.talentCritOv !== 'number') g.talentCritOv = 0;   /* P112：天赋授予暴击率 % 手动覆盖（0=自动） */
+    if(typeof g.talentCritDmgOv !== 'number') g.talentCritDmgOv = 0;   /* P112：天赋授予暴伤 % 手动覆盖（0=自动） */
     if(typeof g.awakenFx !== 'boolean') g.awakenFx = false;
     /* 拆分旧单开关 → 主战 / 援护 双开关（已拆分的存档不受影响） */
     if(typeof g.mainAwakenFx !== 'boolean') g.mainAwakenFx = (g.awakenFx === true);
@@ -22644,6 +22860,19 @@ function simulateGroupTrauma(g){
          不新增伤害（extra 是额外倍率，不是每回合%）、不新增层数，仅把当前活跃真红刷新为 dotRefreshStack 层并重计持续 */
       const isDot      = sk && sk.extraType==='dot';
       const isRefresh  = sk && sk.extraType==='flat' && (sk.dotRefreshStack>0);
+      /* P113：祭典的红莲 4件套独立真红段结算 ——【施加】与【刷新】两条路径同源。
+         触发=本组装备 crimson 且 fireWingActiveAt（火翼讨伐者增益期间）且本回合施加/刷新了真红；
+         立即结算「真红」显示值 × 剩余回合数 × 300%（×敌人数；不暴击、不吃增伤/易伤）。
+         （原实现只写在 isDot 施加分支内 ⇒ 炎灵刷新走 isRefresh 分支，红莲恒 0 —— 已修复。） */
+      /* P113：红莲结算三闸门 —— 本组装备 crimson / 火翼讨伐者增益期间 / 本回合真的施加或刷新了真红；
+         刷新(isRefresh)路径（炎灵）与施加(isDot)路径共用此闸门，红莲不再因走刷新分支而恒 0。 */
+      const _crimSettle = function(_layers, _perTurn){
+        if(!(mainEquipOf(state.groups && state.groups[g])==='crimson' || subEquipOf(state.groups && state.groups[g])==='crimson')) return;
+        if(typeof fireWingActiveAt!=='function' || !fireWingActiveAt(g, r)) return;
+        if(!(_layers>0 && _perTurn>0)) return;
+        const _rem = Math.max(0, numR - 1 - r);
+        crimsonByRound[r] += (_layers * _perTurn) * _rem * 3.0 * enemies;
+      };
       if(isDot || isRefresh){
 
         if(isRefresh){
@@ -22661,6 +22890,7 @@ function simulateGroupTrauma(g){
             if(endRound > numR-1) endRound = numR-1;
             if(startRound > numR-1) endRound = startRound - 1;   /* 起跳越界 → 空区间 */
             active = {layers: stackCount, perTurn: active.perTurn, startRound: startRound, endRound: endRound, gain: 0, slow: _ef2, actorId: active.actorId, sk: active.sk};
+           _crimSettle(active.layers, active.perTurn);
           }
           /* 无活跃创伤则不产生 */
 
@@ -22720,10 +22950,7 @@ function simulateGroupTrauma(g){
           /* P107：祭典的红莲 4件套——火翼讨伐者增益期间 + 施放技能施加/刷新「真红」→ 立即结算「真红」显示值 × 剩余回合数 × 300%
              （独立伤害段：不暴击、不受其他效果影响；与创伤同源双写，理论/评分两侧均调 simulateGroupTrauma ⇒ 铁律自保持）。
              触发=本组装备 crimson 且 fireWingActiveAt 且本回合施加/刷新真红（isDot）；lump 计入 crimsonByRound（已×敌人数，未×增易伤）。 */
-          if((mainEquipOf(state.groups && state.groups[g])==='crimson' || subEquipOf(state.groups && state.groups[g])==='crimson') && fireWingActiveAt(g, r)){
-            const _rem = Math.max(0, numR - 1 - r);
-            crimsonByRound[r] += (active.layers * active.perTurn) * _rem * 3.0 * enemies;
-          }
+          _crimSettle(active.layers, active.perTurn);
 
         }
 
@@ -23194,7 +23421,7 @@ function computeGroupTheory(g){
 
     /* 自身专属（按角色组维度）：雪橇特攻「激动」+20% 等，仅当前 g 后续动作生效 */
     const _sb = (Array.isArray(state.selfBuffs)&&state.selfBuffs[r]&&state.selfBuffs[r][g])||{};
-    const xbuffSelf = selfDmgUpEffective(_sb, sk, actorInfo.actorId)+(+_sb.vuln||0)+(+_sb.defDown||0)
+    const xbuffSelf = selfDmgUpEffectiveNoIndep(_sb, sk, actorInfo.actorId)+(+_sb.vuln||0)+(+_sb.defDown||0)
       + ultUpGatedValue(r, g, sk, actorInfo, _sb);
 
     const xbuffAuto = (+_rb.dmgUp||0) + (+_rb.vuln||0) + (+_rb.defDown||0);
@@ -23228,7 +23455,9 @@ function computeGroupTheory(g){
     /* P93：冰冷狙击——升华技倍率提高 per%×释放时层数（cb.iceSnipe/cb.iceSnipePer；与 _awSkillUp 同独立乘区，合并乘） */
     const _iceSnipeUp = (sk && sk.costType==='bp' && typeof cb.iceSnipe==='number') ? (+cb.iceSnipe||0) * (+cb.iceSnipePer||0) : 0;
     /* P95：电磁支配者（美琴）——目标每层「铁砂」对该目标升华技+per%（回放期望层数×4.00%；独立乘区合并） */
-    const _ironSandUp = ironSandUpOf(g, r, sk);
+    let _ironSandUp = ironSandUpOf(g, r, sk);
+    const _ironSandUpOv = (+((state.groups[g]||{}).talent)||0);   /* P112：单值总当量覆盖（0=按回放层数×每层% 自动折算） */
+    if(_ironSandUpOv > 0) _ironSandUp = _ironSandUpOv;
     const _wlUp = wonderlandMulAt(g, r, _who, sk);   /* P107：梦游仙境 援护技 +31%（雨缘之印=20层，仅1次） */
     const gains = (+cb.weapon||0) + buffT + equipGain + xbuff + tgGain.pct + wpnB.pct + rainEdgeGainT
       + shieldBonusFor(r, g);   /* v3.1.6：护盾破盾加成 → 敌方受到伤害增加（易伤），并入本增伤区 */
@@ -23249,9 +23478,9 @@ function computeGroupTheory(g){
       sinonCSgain = Math.max(0, ((+cb.sinonCS||0) - 1)) * (+sk.sinonStack.atkStep||0);
     }
 
-    const _effSingle = effectiveMult(cb, (effBase(cb, base) + (sk.extraType==='dot'?0:effExtra(cb, extraVal))) * (1 + (_awSkillUp + _iceSnipeUp + _ironSandUp + _wlUp)/100) * (1 + (gains + sinonCSgain)/100) * (1 + atkPctT/100) * (1 + finPctT/100));
+    const _effSingle = effectiveMult(cb, (effBase(cb, base) + (sk.extraType==='dot'||sk.extraType==='flat'?0:effExtra(cb, extraVal))) * (1 + (_awSkillUp + _iceSnipeUp + _ironSandUp + _wlUp)/100) * (1 + (gains + sinonCSgain + flatExtraPctOf(sk, cb))/100) * (1 + atkPctT/100) * (1 + finPctT/100) * (1 + selfDmgUpIndependentOf(g,r)/100));
     /* v3.1.9b：打盾/每敌伤害侧同一算式（仅分摊因子不同） */
-    const _effDmgSingle = effectiveMult(cb, (effBase(cb, baseDmg) + (sk.extraType==='dot'?0:effExtra(cb, extraValDmg))) * (1 + (_awSkillUp + _iceSnipeUp + _ironSandUp + _wlUp)/100) * (1 + (gains + sinonCSgain)/100) * (1 + atkPctT/100) * (1 + finPctT/100));
+    const _effDmgSingle = effectiveMult(cb, (effBase(cb, baseDmg) + (sk.extraType==='dot'||sk.extraType==='flat'?0:effExtra(cb, extraValDmg))) * (1 + (_awSkillUp + _iceSnipeUp + _ironSandUp + _wlUp)/100) * (1 + (gains + sinonCSgain + flatExtraPctOf(sk, cb))/100) * (1 + atkPctT/100) * (1 + finPctT/100) * (1 + selfDmgUpIndependentOf(g,r)/100));
     s += _effSingle;
 
     s += base * traumaManual/100;
@@ -23307,7 +23536,9 @@ function computeGroupTheory(g){
 
   /* v2.6.6.8：心象伤害（独立额外伤害段）同口径并入倍率合计——保证「铁律 theory == totalMult」成立；
      心象库为空 / 未携带时恒 0，不影响任何既有断言。 */
-  if(typeof simulateGroupXinxiang==='function') s += simulateGroupXinxiang(g).total;
+  /* P112b：心象伤害【不再】并入倍率合计（用户裁决 2026-10-01）—— 改为独立「心象伤害」真实伤害通道；
+     铁律仍成立：computeGroupTheory 与 computeGroupScores.totalMult 同步不含心象段。 */
+
 
   /* v3.0.9：反噬伤害（独立额外伤害段，与创伤同口径）同样并入倍率合计——
      保证「铁律 computeGroupTheory(g) == computeGroupScores(g).totalMult」成立。
@@ -23391,11 +23622,27 @@ function computeGroupScores(g){
       const cg = talentCritGrant(tl, g);
       /* v2.6.6.3：天赋写「全队/全体」的暴击增益 → 归 crossGroupCrit() 汇总给全部三组，本组不重复累加 */
       if(cg.scope === 'team') return;
-      grpCritRate += cg.critRate; grpCritDmg += cg.critDmg; }); }
+      /* P112：本组/自身作用域的天赋授予暴击同样支持手动覆盖（填值 = 替换该天赋这一份的自动折算值） */
+      const _cgOvR = (+grp.talentCritOv||0), _cgOvD = (+grp.talentCritDmgOv||0);
+      /* P112f：手动覆盖生效时该通道的自动折算整段跳过（不按天赋条数重复累加），
+         统一由下方 talentOvShapeOf 接管一次 ⇒ 填值即「该通道总当量」而非「每份自动值改成填值」 */
+      grpCritRate += (_cgOvR > 0 ? 0 : (+cg.critRate||0));
+      grpCritDmg  += (_cgOvD > 0 ? 0 : (+cg.critDmg||0)); }); }
   });
   if(_zxTal && _zxCfg && _zxRatio){
     grpCritDmg  = Math.round((grpCritDmg  + (_zxCfg.cd1||0) * _zxRatio.cd) * 100)/100;
     grpCritRate = Math.round((grpCritRate + (_zxCfg.cr2||0) * _zxRatio.cr) * 100)/100;
+  }
+  /* P112：阈值暴击（zanshin 类）不走 talentCritGrant，其暴击率/暴伤在此接管手动覆盖（填值=替换自动折算值）。
+     ★P112k：scope==='team'（全队 3 组）的天赋暴击【不得在此接管】——否则与 crossGroupCrit() 的收口双计
+     （实测 泳装御坂美琴 auto=15、填 15→30、填 30→60）。team 型一律由 crossGroupCrit() 汇总一次。 */
+  const _ovCrit = (typeof talentOvShapeOf === 'function') ? talentOvShapeOf(g) : null;
+  if(_ovCrit){
+    const _ccScope = (typeof specTalentCritOf === 'function') ? specTalentCritOf(getChar(grp.mainId)) : null;
+    if(!(_ccScope && _ccScope.scope === 'team')){
+      if(_ovCrit.critRate > 0) grpCritRate = +_ovCrit.critRate;
+      if(_ovCrit.critDmg  > 0) grpCritDmg  = +_ovCrit.critDmg;
+    }
   }
 
   for(let r=0;r<state.rounds.length;r++){
@@ -23481,7 +23728,7 @@ function computeGroupScores(g){
 
     /* 自身专属（按角色组维度）：仅当前 g 的后续动作吃到（如雪橇特攻「激动」+20%） */
     const sb = (Array.isArray(state.selfBuffs)&&state.selfBuffs[r]&&state.selfBuffs[r][g])||{};
-    const xbuffSelf = selfDmgUpEffective(sb, sk, actorInfo.actorId)+(+sb.vuln||0)+(+sb.defDown||0)
+    const xbuffSelf = selfDmgUpEffectiveNoIndep(sb, sk, actorInfo.actorId)+(+sb.vuln||0)+(+sb.defDown||0)
       + ultUpGatedValue(r, g, sk, actorInfo, sb);
 
     /* 跨回合增益% = 公式自动值(按出手位置生效) + 本组自身专属 + 单元格手动覆盖 */
@@ -23514,7 +23761,9 @@ function computeGroupScores(g){
     /* P93：冰冷狙击——升华技倍率提高 per%×释放时层数（cb.iceSnipe/cb.iceSnipePer；与 _awSkillUp 同独立乘区，合并乘） */
     const _iceSnipeUp = (sk && sk.costType==='bp' && typeof cb.iceSnipe==='number') ? (+cb.iceSnipe||0) * (+cb.iceSnipePer||0) : 0;
     /* P95：电磁支配者（美琴）——目标每层「铁砂」对该目标升华技+per%（回放期望层数×4.00%；独立乘区合并） */
-    const _ironSandUp = ironSandUpOf(g, r, sk);
+    let _ironSandUp = ironSandUpOf(g, r, sk);
+    const _ironSandUpOv = (+((state.groups[g]||{}).talent)||0);   /* P112：单值总当量覆盖（0=按回放层数×每层% 自动折算） */
+    if(_ironSandUpOv > 0) _ironSandUp = _ironSandUpOv;
     const _wlUp = wonderlandMulAt(g, r, _who, sk);   /* P107：梦游仙境 援护技 +31%（雨缘之印=20层，仅1次） */
     const xbuff2  = xbuff + tgGain.pct + wpnB.pct + sinonCSgain2 + batteryGain + rainEdgeGain
       + shieldBonusFor(r, g);   /* v3.1.6：护盾破盾加成 → 敌方受到伤害增加（易伤），并入本增伤区 */
@@ -23525,11 +23774,11 @@ function computeGroupScores(g){
        数学上等价于「面板×(1+攻击力%)」，因得分 = 倍率合计×面板，放在倍率侧才能被出分吃到；
        且与增伤乘区相乘而非相加（旧实现把攻击力% 并入增伤相加，属错误口径）。
        v2.4.2 修正：最终伤害加成（藏品携带者组伤）同为独立乘区，与增伤/攻击力相乘。 */
-    const _effNoAtk = effectiveMult(cb, (effBase(cb, base) + (sk.extraType==='dot'?0:effExtra(cb, extraVal))) * (1 + (_awSkillUp + _iceSnipeUp + _ironSandUp + _wlUp)/100) * (1 + (wp + buff + equip + xbuff2)/100) * (1 + finPctS/100));
+    const _effNoAtk = effectiveMult(cb, (effBase(cb, base) + (sk.extraType==='dot'||sk.extraType==='flat'?0:effExtra(cb, extraVal))) * (1 + (_awSkillUp + _iceSnipeUp + _ironSandUp + _wlUp)/100) * (1 + (wp + buff + equip + xbuff2 + flatExtraPctOf(sk, cb))/100) * (1 + finPctS/100) * (1 + selfDmgUpIndependentOf(g,r)/100));
     /* v3.0：把「攻击力%」从倍率里记账拆出（M），供 panelEquiv 计算——攻击力% 只放大角色面板，不放大藏品 */
     const _eff = _effNoAtk * (1 + atkPctS/100);
     /* v3.1.9b：打盾/每敌伤害侧同一算式（仅分摊因子不同）—— 供 _dmgByRound 与 shieldProbeRec 使用 */
-    const _effNoAtkDmg = effectiveMult(cb, (effBase(cb, baseDmg) + (sk.extraType==='dot'?0:effExtra(cb, extraValDmg))) * (1 + (_awSkillUp + _iceSnipeUp + _ironSandUp + _wlUp)/100) * (1 + (wp + buff + equip + xbuff2)/100) * (1 + finPctS/100));
+    const _effNoAtkDmg = effectiveMult(cb, (effBase(cb, baseDmg) + (sk.extraType==='dot'||sk.extraType==='flat'?0:effExtra(cb, extraValDmg))) * (1 + (_awSkillUp + _iceSnipeUp + _ironSandUp + _wlUp)/100) * (1 + (wp + buff + equip + xbuff2 + flatExtraPctOf(sk, cb))/100) * (1 + finPctS/100) * (1 + selfDmgUpIndependentOf(g,r)/100));
     const _effDmg = _effNoAtkDmg * (1 + atkPctS/100);
     atkOnPanel += _effNoAtk * (atkPctS/100);
     xF_onPanel += _effNoAtk * xiangAtkFlatOf(g, _who);   /* P94：F 逐格 M 加权记账 */
@@ -23589,7 +23838,8 @@ function computeGroupScores(g){
        就地更新(2.6.6.3)：全队生效（_teamEvo 取自三组中激活者），本组按自身倍率分段。 */
     if(_teamEvo && r >= _teamEvo.R){
       tCritTheory += _eff;
-      tCritDmg = Math.max(tCritDmg, _teamEvo.pct);
+      const _evoOvD = (+((state.groups[g]||{}).talentCritDmgOv)||0);   /* P112：战术进化的暴伤支持手动覆盖（0=自动折算） */
+      tCritDmg = Math.max(tCritDmg, _evoOvD > 0 ? _evoOvD : (+_teamEvo.pct||0));
     }
 
     /* P107：超高校级CAD 4件套——上回合末【战斗演算】≥1层 → 本回合组暴击率+11%（窗口 [r-1]；铁律自保持：只进暴击分） */
@@ -23651,8 +23901,12 @@ function computeGroupScores(g){
      再统一 ×面板（★P103：心象段可暴击——吃该段所属组的暴击率/暴伤；仍不计终伤）。空库 / 未携带 ⇒ 恒 0，不影响既有分数。 */
   const xxSim = simulateGroupXinxiang(g);
   xxDmg = xxSim.total;
+  /* P112b：心象伤害改【真实伤害数字】口径（xxDmgValue = Σ每回合真实伤害 = xxDmg×panel/100）——
+     ✦ 不再并入倍率合计 totalMult；baseScore 走 +xxDmgValue/100（外层 ×10 ⇒ 实贡献 = 真伤/10，等价于旧倍率通道）；
+       暴击/完美暴击分走 cr·cd·xxDmgValue/100（等价旧 v2.6.6.8 倍率口径，数值不变）。 */
+  const xxDmgValue = (+xxSim.dmgTotal || 0);
 
-  const totalMult = theory + traumaDmg + backfireDmg + xxDmg;
+  const totalMult = theory + traumaDmg + backfireDmg;
 
   const critBase = theory;
   /* v3.0 攻击力口径：等效面板 = P + C/(1+a_bar)，a_bar = 攻击力% 的面板加权平均
@@ -23667,7 +23921,7 @@ function computeGroupScores(g){
   /* v2.6.6.3：「全队 / 全体」口径的暴击增益 → 由 crossGroupCrit() 汇总，三组各自叠加（对齐「全队=所有」） */
   const _xgCrit = crossGroupCrit();
 
-  return {theory, baseSum, talentDmg, traumaDmg, backfireDmg, kurooDmg, wpnDmg, totalMult, critBase, proofDmg: 0, xxDmg,
+  return {theory, baseSum, talentDmg, traumaDmg, backfireDmg, kurooDmg, wpnDmg, totalMult, critBase, proofDmg: 0, xxDmg, xxDmgValue,
     panelBase:_panelBase, relic:_relic, atkOnPanel:atkOnPanel, xFBar:_xFBar, panelEquiv:panelEquiv,
     fcTheory, fcCritDmg: fcTheory>0 ? fcWrathW/fcTheory : 0,
     wCritTheory, wCritDmg, wCritRate, tCritTheory, tCritDmg,
@@ -23712,8 +23966,8 @@ function calcScores(){
   const baseScore = per.reduce((s,p)=>{
     const _eq  = (p.panelEquiv!=null) ? p.panelEquiv : p.panel;
     const _skill = (+p.theory||0) * _eq;
-    const _other = ((+p.traumaDmg||0) + (+p.xxDmg||0)) * p.panel;
-    return s + (_skill + _other)/10000 + (p.proofDmg||0)/100;
+    const _other = (+p.traumaDmg||0) * p.panel;   /* P112b:心象段退出倍率通道（改走真实伤害 /10 通道） */
+    return s + (_skill + _other)/10000 + (p.proofDmg||0)/100 + (+p.xxDmgValue||0)/100;
   }, 0)*10;
 
   /* 暴击收益：武装暴伤/暴率只在其生效窗口内的回合成立，
@@ -23739,7 +23993,7 @@ function calcScores(){
     const cdF = (p.critDmg + (+p.fcCritDmg||0))/100;
     let g = (cr*outW*cd + crW*inW*cdW + cr*inT*cdT + crCad*inCad*cdCad + cr*inGoddess*cdG + cdF*_fcT) * ((p.panelEquiv!=null)?p.panelEquiv:p.panel)/10000;   /* P107：CAD/冥府女神 暴击窗口纳入 */
     /* P103：心象伤害段可暴击（用户裁决 A：吃该段所属组的暴击率/暴伤；与技能同口径，用真实总面板 panel） */
-    g += cr*cd*(+p.xxDmg||0)*p.panel/10000;
+    g += cr*cd*(+p.xxDmgValue||0)/100;   /* P112b:心象伤害可暴击（真实伤害口径，等价旧 cr·cd·xxDmg·panel/10000×10） */
     /* 神猫证明之铁(真实伤害)同样受暴击影响：按窗口比例拆分 proof，施加暴击增益 */
     const pd = (+p.proofDmg||0);
     if(pd>0){
@@ -23773,7 +24027,7 @@ function calcScores(){
     const cdF = (p.critDmg + (+p.fcCritDmg||0))/100;
     let g = (outW*cd + inW*cdW + inT*cdT + inCad*cdCad + inGoddess*cdG + cdF*_fcT) * ((p.panelEquiv!=null)?p.panelEquiv:p.panel)/10000;   /* P107：CAD/冥府女神 暴击窗口纳入 */
     /* P103：心象伤害段可暴击（满暴击口径） */
-    g += cd*(+p.xxDmg||0)*p.panel/10000;
+    g += cd*(+p.xxDmgValue||0)/100;
     /* 神猫证明之铁(真实伤害)同样受突破影响 */
     const pd = (+p.proofDmg||0);
     if(pd>0){
@@ -23806,9 +24060,9 @@ function renderScores(){
 
   document.getElementById('score3').textContent = fmt(s.score3);
 
-  let h='<table><thead><tr><th>角色组</th><th>理论倍率</th><th>基础值合计</th><th>天赋</th><th>创伤</th><th title="反噬：敌方行动时跳一次，反噬%×攻击力×敌人数×(1+增伤)，持续回合按敌方行动次数计（与创伤同口径）">反噬</th><th title="心象伤害：携带心象产生的独立额外伤害段（与技能本体分列，倍率口径；可暴击，吃该段所属组暴击率/暴伤）">心象</th><th title="藏品效果增益（另类潮流/伪装者）在理论倍率中的贡献；集结！呱呱太另列">藏品</th><th title="武装（主战主动+护卫被动）在理论倍率中的贡献">武装</th><th>总倍率</th><th title="神猫黑猫·证明之铁：18.12%×累积伤害 的真实伤害（扁平伤害值，不与面板相乘）；对全体敌人各自触发，已按敌人数合计总真实伤害">额外伤害</th><th>暴击基础</th><th>面板</th><th>基础得分</th></tr></thead><tbody>';
+  let h='<table><thead><tr><th>角色组</th><th>理论倍率</th><th>基础值合计</th><th>天赋</th><th>创伤</th><th title="反噬：敌方行动时跳一次，反噬%×攻击力×敌人数×(1+增伤)，持续回合按敌方行动次数计（与创伤同口径）">反噬</th><th title="心象伤害：携带心象产生的独立伤害段（真实伤害数字；不计入倍率合计；仍可暴击，吃该段所属组暴击率/暴伤）">心象伤害</th><th title="藏品效果增益（另类潮流/伪装者）在理论倍率中的贡献；集结！呱呱太另列">藏品</th><th title="武装（主战主动+护卫被动）在理论倍率中的贡献">武装</th><th>总倍率</th><th title="神猫黑猫·证明之铁：18.12%×累积伤害 的真实伤害（扁平伤害值，不与面板相乘）；对全体敌人各自触发，已按敌人数合计总真实伤害">额外伤害</th><th>暴击基础</th><th>面板</th><th>基础得分</th></tr></thead><tbody>';
 
-  s.per.forEach(p=>{
+  s.per.forEach((p,gi)=>{
 
     const _proof = (+p.proofDmg||0);
 
@@ -23824,7 +24078,7 @@ function renderScores(){
 
       <td${(+p.backfireDmg||0)>0?' style="color:#be123c;font-weight:600"':''}>${(+p.backfireDmg||0).toFixed(2)}</td>
 
-      <td${(+p.xxDmg||0)>0?' style="color:#0d9488;font-weight:600"':''}>${(+p.xxDmg||0).toFixed(2)}</td>
+      <td${(+p.xxDmgValue||0)>0?' style="color:#0d9488;font-weight:600" title="心象真实伤害（不计入倍率合计；可暴击）"':''}>${(+p.xxDmgValue||0).toFixed(0)}</td>
 
       <td>${p.kurooDmg.toFixed(2)}</td>
 
@@ -23834,9 +24088,9 @@ function renderScores(){
 
       <td${_proof>0?' style="color:#9333ea;font-weight:600"':''}>${_proof.toFixed(0)}${(+p.judgePct||0)>0?` <span style="color:#2563eb;font-size:10px">审判之力${p.judgeStacks}层 +${p.judgePct}%${(+p.awakenProofPct||0)>0?' ＋觉醒+'+p.awakenProofPct+'%':''}</span>`:''}</td>
 
-      <td>${(p.critBase + (+p.xxDmg||0)).toFixed(2)}</td>
+      <td>${p.critBase.toFixed(2)}${(function(){const _xr=(typeof xiangStatGroupSum==='function')?(+xiangStatGroupSum(gi,'critRate')||0):0,_xd=(typeof xiangStatGroupSum==='function')?(+xiangStatGroupSum(gi,'critDmg')||0):0;return (_xr>0||_xd>0)?`<span style="color:#0d9488;font-size:10px">⟨心象 暴击+${_xr}·暴伤+${_xd}⟩</span>`:'';})()}</td>
 
-      <td>${p.panel}</td>
+      <td>${p.panel}${(function(){const _xf=(typeof xiangAtkFlatGroup==='function')?(+xiangAtkFlatGroup(gi)||0):0;return _xf>0?`<span style="color:#0d9488;font-size:10px">（心象+${_xf.toFixed(0)}）</span>`:'';})()}</td>
 
       <td>${(p.totalMult*p.panel/10000*10 + _proof/10).toFixed(2)}${_proof>0?' <span style="color:#9333ea;font-size:10px">含证明之铁+'+(+(_proof/10).toFixed(0))+'</span>':''}</td></tr>`;
 
@@ -24838,6 +25092,52 @@ function xiangCarrierBadgeHTML(charId){
   }catch(e){ return ''; }
 }
 
+/* ============ P114：导出报告「角色区」藏品套装标识（与 UI ②区徽标同族） ============
+   背景：EQUIP_IMG 只覆盖画中世界/伪装者/创伤 3 套老套装的图标，P105~P107 新增的 10 套
+   （樱花庄/教会/泳池/蝴蝶/大和/西子/CAD/冥府女神/梦游仙境/祭典的红莲）无图标 ⇒ 导出角色区
+   此前「带不出」新套装（用户报：祭典的红莲在导出时没有带出到角色上）。
+   ★P115 修订（2026-10-01 用户裁决）：「不要显示文字，参考以前的，会在角色左侧显示一个装备图标」
+   ⇒ 徽标纯图标化，且一律挂到角色名【之前】（角色左侧），不再出任何文字短名：
+     老套装 3 套（画中世界/伪装者/集结呱呱太）仍取 EQUIP_IMG 真实缩略图；
+     ★P116 修订（用户追问「新增 10 套可以用藏品库里的图片数据啊？」）：新增 10 套并非没图——
+       主档早已内联藏品库真实图标 RELIC_ICONS（19 套 webp base64，源 = 藏品数据/图标/*.png，
+       经 _gen_relic_embed.py 生成 ⇒ 图片数据在、只是 P115 只认了 EQUIP_IMG 没认 RELIC_ICONS）
+       ⇒ 图标取值链 = EQUIP_IMG → RELIC_ICONS（relicIconOf）→ 现绘「装备箱」兜底；
+       RELIC_ICONS 存的是 I/II/III/IV 四件横版条图，徽标以 object-position:left 只取最左的 I 件单品；
+     alt/title 保留全称与口径说明（不列数值、不额外占行，避免报告版面噪音）。 */
+/* 新套装（无 EQUIP_IMG 缩略图）的装备位图：配色与 UI 同族，现绘一个「装备箱」图标 */
+function exportEquipIconDataUri(bg, stk){
+  const _svg = "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path d='M12 3.4 20.4 7.2 12 11 3.6 7.2Z' fill='" + stk + "'/><rect x='3.6' y='7.2' width='16.8' height='12.4' rx='2.6' fill='" + bg + "' stroke='" + stk + "' stroke-width='1.5'/></svg>";
+  return 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(_svg);
+}
+
+function exportEquipChipHTML(eqType){
+  if(!eqType || eqType === 'none') return '';
+  const _sp = ({
+    trauma:     ['呱呱太','#fef3c7','#f59e0b','集结！呱呱太：创伤状态伤害（不参与暴击，仅创伤技生效）'],
+    kuroo:      ['另类潮流','#dbeafe','#3b82f6','另类潮流（不良）：SP≥4 技能 + 藏品效果增益（参与暴击）'],
+    kuroo_sp3:  ['伪装者','#dbeafe','#3b82f6','伪装者（桐桐）：SP≤3 技能 + 藏品效果增益（参与暴击）'],
+    sakura:     ['樱花庄','#fce7f3','#ec4899','樱花庄的绘梦之时：释放 SP≤4 技能后全队增伤'],
+    church:     ['教会','#ede9fe','#8b5cf6','教会真说：连续 2 回合行动后全队增伤'],
+    pool:       ['泳池','#cffafe','#06b6d4','皇家泳池：出手前 SP≥5 且非连携技时全队增伤'],
+    butterfly:  ['蝴蝶结','#e0e7ff','#6366f1','星屑蝴蝶结：6 费升华技使敌方易伤 +42%'],
+    yamato:     ['大和抚子','#faf5ff','#a855f7','大和抚子：仅 2 件套生效，全队终伤 +3%'],
+    xizi:       ['西行寺','#fff7ed','#f97316','西行寺：仅 2 件套生效，全队终伤 +3%'],
+    cad:        ['CAD','#e0f2fe','#0ea5e9','CAD：上回合末战斗演算≥1 层 → 本组暴击率 +11%'],
+    goddess:    ['冥府女神','#fae8ff','#d946ef','冥府女神：心跳加速≥2 层 → 本组暴伤 +17%'],
+    wonderland: ['梦游仙境','#dcfce7','#22c55e','梦游仙境：爱丽丝援护技施放时「雨缘之印」=20 层 → 援护技倍率 +31%'],
+    crimson:    ['红莲','#fee2e2','#ef4444','祭典的红莲：火翼讨伐者增益期间 + 技能刷新「真红」→ 真红显示值×剩余回合×300% 独立伤害段（不暴击）']
+  })[eqType] || null;
+  if(!_sp) return '';
+  const _ico = (typeof EQUIP_IMG !== 'undefined' && EQUIP_IMG[eqType] && EQUIP_IMG[eqType].tiles && EQUIP_IMG[eqType].tiles[0])
+    ? EQUIP_IMG[eqType].tiles[0]
+    /* P116：新 10 套无 EQUIP_IMG ⇒ 回落主档藏品库真实图标 RELIC_ICONS（relicIconOf）；
+       它是 I/II/III/IV 四件横版条图 ⇒ 走 object-position:left 只显示最左的 I 件单品（与老套装同款观感） */
+    : ((typeof relicIconOf === 'function') ? (relicIconOf(eqType) || '') : '');
+  const _src = _ico || exportEquipIconDataUri(_sp[1], _sp[2]);
+  return ' <img src="' + _src + '" alt="' + esc(_sp[0]) + '套装" title="' + esc(_sp[3]) + '" style="width:14px;height:14px;border-radius:3px;vertical-align:middle;object-fit:cover;object-position:left center;border:1px solid ' + _sp[2] + '">';
+}
+
 function exportActionHTML(opts){
 
   opts = opts || {};
@@ -24875,11 +25175,7 @@ function exportActionHTML(opts){
 
     const txt = [m?esc(m.name):'(未绑主战)', s?esc(s.name):'(未绑sub)'].filter(x=>!x.startsWith('(')).join(' + ') || (GROUP_NAMES[g]);
 
-    /* 装备图标 inline 到角色名下方（小型，仅图标，不显示套装数值） */
-    const _eqMMeta = (typeof EQUIP_IMG!=='undefined') ? EQUIP_IMG[mainEquipOf(grp)] : null;
-    const _eqSMeta = (typeof EQUIP_IMG!=='undefined') ? EQUIP_IMG[subEquipOf(grp)] : null;
-    const _eqMTile = (_eqMMeta && _eqMMeta.tiles && _eqMMeta.tiles[0]) ? `<img src="${esc(_eqMMeta.tiles[0])}" style="width:14px;height:14px;border-radius:3px;vertical-align:middle;object-fit:cover;margin-right:2px" alt="">` : '';
-    const _eqSTile = (_eqSMeta && _eqSMeta.tiles && _eqSMeta.tiles[0]) ? `<img src="${esc(_eqSMeta.tiles[0])}" style="width:14px;height:14px;border-radius:3px;vertical-align:middle;object-fit:cover;margin-right:2px" alt="">` : '';
+    /* 装备图标 inline 到角色名左侧（小型，仅图标，不显示套装数值；新 10 套走 exportEquipChipHTML 的藏品库真实图） */
 
     /* v3.5.0：行动次序不再是每回合重复的列 —— 组列本身即按速度降序（_gi），
        故在角色区一次性给出该组次序徽标 #N（N = 全场出手位次，与界面 (#n) 同源）。 */
@@ -24891,13 +25187,13 @@ function exportActionHTML(opts){
       <div style="display:flex;align-items:flex-start;justify-content:center;gap:4px">
         ${m?`<div style="display:flex;flex-direction:column;align-items:center;line-height:1.15">
           ${charAvatarHTML(m,26)}
-          <div style="font-size:10px;margin-top:1px">${_eqMTile}${esc(m.name)} <span style="${_starStyle}">${_mStar}★</span></div>
+          <div style="font-size:10px;margin-top:1px">${exportEquipChipHTML(mainEquipOf(grp))}${esc(m.name)} <span style="${_starStyle}">${_mStar}★</span></div>
           <div style="display:flex;flex-wrap:wrap;justify-content:center;align-items:flex-start;gap:2px;margin-top:2px;max-width:124px">${wpnHeaderLabel(m)}${xiangCarrierBadgeHTML(m.id)}${talentAwakenBadges(g)}</div>
         </div>`:''}
         <span style="color:#9ca3af;font-size:11px;align-self:center;padding:0 2px">+</span>
         ${s?`<div style="display:flex;flex-direction:column;align-items:center;line-height:1.15">
           ${charAvatarHTML(s,26)}
-          <div style="font-size:10px;margin-top:1px">${_eqSTile}${esc(s.name)} <span style="${_starStyle}">${_sStar}★</span></div>
+          <div style="font-size:10px;margin-top:1px">${exportEquipChipHTML(subEquipOf(grp))}${esc(s.name)} <span style="${_starStyle}">${_sStar}★</span></div>
           <div style="display:flex;flex-wrap:wrap;justify-content:center;align-items:flex-start;gap:2px;margin-top:2px;max-width:124px">${wpnHeaderLabel(s)}${xiangCarrierBadgeHTML(s.id)}${subAwakenBadge(g)}</div>
         </div>`:''}
       </div>
@@ -25047,7 +25343,8 @@ function exportActionHTML(opts){
 
     const _proof = _proofCache[g];
 
-    h+=`<td style="text-align:center;font-weight:600">${sm.toFixed(2)}${_proof>0?` <span style="color:#9333ea;font-size:10px">(额外伤害:${_proof.toFixed(0)})</span>`:''}</td>`;
+    const _xx1 = xxDmgValueOf(g);
+    h+=`<td style="text-align:center;font-weight:600">${sm.toFixed(2)}${_proof>0?` <span style="color:#9333ea;font-size:10px">(额外伤害:${_proof.toFixed(0)})</span>`:''}${_xx1>0?` <span style="color:#0d9488;font-size:10px">(心象伤害:${_xx1.toFixed(0)})</span>`:''}</td>`;
 
   }
 
@@ -25133,7 +25430,8 @@ function exportActionText(){
   kuronekoComputeProofIfReady();
   for(const g of _gi){
     const _proof = kuronekoGetProofDmg(g);
-    t += `${computeGroupTheory(g).toFixed(2)}` + (_proof>0?` (额外伤害:${_proof.toFixed(0)})`:'') + (g<_gi.length-1?' | ':'');
+    const _xx2 = xxDmgValueOf(g);
+    t += `${computeGroupTheory(g).toFixed(2)}` + (_proof>0?` (额外伤害:${_proof.toFixed(0)})`:'') + (_xx2>0?` (心象伤害:${_xx2.toFixed(0)})`:'') + (g<_gi.length-1?' | ':'');
   }
 
   return t;
@@ -25548,10 +25846,7 @@ function exportReportLogHTML(){
     const m = getChar(grp.mainId), s2 = getChar(grp.subId);
     const _mStar = (typeof effStarOf === 'function') ? (effStarOf(grp, 'main') || 6) : 6;
     const _sStar = (s2 && typeof effStarOf === 'function') ? (effStarOf(grp, 'sub') || 6) : null;
-    const _eqMMeta = (typeof EQUIP_IMG !== 'undefined') ? EQUIP_IMG[mainEquipOf(grp)] : null;
-    const _eqSMeta = (typeof EQUIP_IMG !== 'undefined') ? EQUIP_IMG[subEquipOf(grp)] : null;
-    const _eqMTile = (_eqMMeta && _eqMMeta.tiles && _eqMMeta.tiles[0]) ? `<img src="${esc(_eqMMeta.tiles[0])}" style="width:14px;height:14px;border-radius:3px;vertical-align:middle;object-fit:cover;margin-right:2px" alt="">` : '';
-    const _eqSTile = (_eqSMeta && _eqSMeta.tiles && _eqSMeta.tiles[0]) ? `<img src="${esc(_eqSMeta.tiles[0])}" style="width:14px;height:14px;border-radius:3px;vertical-align:middle;object-fit:cover;margin-right:2px" alt="">` : '';
+    /* 装备图标 inline 到角色名左侧（新 10 套走 exportEquipChipHTML 的藏品库真实图） */
     h += '<div style="flex:1;min-width:0;padding:2px 3px;border-left:1px solid var(--line);text-align:center">';
     h +=   '<div style="margin-bottom:0">'
         +    '<span style="display:inline-block;background:' + _posBg[g] + ';color:#ffffff;font-size:9px;font-weight:600;padding:0 6px;border-radius:3px;letter-spacing:.3px" title="' + esc(GROUP_NAMES[g]) + '站位（共 3 组，按速度排表）">' + esc(GROUP_NAMES[g]) + '</span>'
@@ -25561,14 +25856,14 @@ function exportReportLogHTML(){
     if(m){
       h += '<div style="display:flex;flex-direction:column;align-items:center;line-height:1.15">'
         + charAvatarHTML(m, 22)
-        + '<div style="font-size:8.5px;line-height:1.1">' + _eqMTile + esc(m.name) + ' <span style="' + _starStyle + '">' + _mStar + '★</span></div>'
+        + '<div style="font-size:8.5px;line-height:1.1">' + exportEquipChipHTML(mainEquipOf(grp)) + esc(m.name) + ' <span style="' + _starStyle + '">' + _mStar + '★</span></div>'
         + '<div style="display:flex;flex-wrap:wrap;justify-content:center;align-items:flex-start;gap:2px;margin-top:2px;max-width:112px">' + wpnHeaderLabel(m) + xiangCarrierBadgeHTML(m.id) + talentAwakenBadges(g) + '</div></div>';
     }
     if(m && s2) h += '<span style="color:#9ca3af;font-size:11px;align-self:center;padding:0 2px">+</span>';
     if(s2){
       h += '<div style="display:flex;flex-direction:column;align-items:center;line-height:1.15">'
         + charAvatarHTML(s2, 22)
-        + '<div style="font-size:8.5px;line-height:1.1">' + _eqSTile + esc(s2.name) + ' <span style="' + _starStyle + '">' + _sStar + '★</span></div>'
+        + '<div style="font-size:8.5px;line-height:1.1">' + exportEquipChipHTML(subEquipOf(grp)) + esc(s2.name) + ' <span style="' + _starStyle + '">' + _sStar + '★</span></div>'
         + '<div style="display:flex;flex-wrap:wrap;justify-content:center;align-items:flex-start;gap:2px;margin-top:2px;max-width:112px">' + wpnHeaderLabel(s2) + xiangCarrierBadgeHTML(s2.id) + subAwakenBadge(g) + '</div></div>';
     }
     h +=   '</div></div>';
@@ -25662,13 +25957,15 @@ function exportReportTotalHTML(){
      故必须在重算前取走，否则紧邻的 kuronekoGetProofDmg 读到 null → 0。 */
   const _proofCache = {};
   for(const g of _gi) _proofCache[g] = kuronekoGetProofDmg(g);
-  const _vals = {}, _proofs = {};
-  let _sumAll = 0, _proofAll = 0;
+  const _vals = {}, _proofs = {}, _xxs = {};
+  let _sumAll = 0, _proofAll = 0, _xxAll = 0;
   for(const g of _gi){
     _vals[g] = +computeGroupTheory(g) || 0;
     _proofs[g] = +_proofCache[g] || 0;
+    _xxs[g] = xxDmgValueOf(g);
     _sumAll += _vals[g];
     _proofAll += _proofs[g];
+    _xxAll += _xxs[g];
   }
   /* v3.5.0 P29：与出招排表 / 各组基础面板**同栅格**——原「独立小表」（92px + N + 104px 三列几何）
      的列心与上方 flex 栅格对不齐，是报告里最后一个未对齐的 per-group 块；
@@ -25686,11 +25983,33 @@ function exportReportTotalHTML(){
   h += '<div style="display:flex"><div style="' + _LBL + '">' + esc('\u500d\u7387') + '</div>';
   for(const g of _gi){
     h += '<div style="' + _CELL + ';font-weight:600">' + _vals[g].toFixed(2)
-      + (_proofs[g] > 0 ? ' <span style="color:#4338ca;font-size:10px">(' + esc('\u989d\u5916\u4f24\u5bb3') + ':' + _proofs[g].toFixed(0) + ')</span>' : '') + '</div>';
+      + (_proofs[g] > 0 ? ' <span style="color:#4338ca;font-size:10px">(' + esc('\u989d\u5916\u4f24\u5bb3') + ':' + _proofs[g].toFixed(0) + ')</span>' : '')
+      + (_xxs[g] > 0 ? ' <span style="color:#0d9488;font-size:10px">(' + esc('\u5fc3\u8c61\u4f24\u5bb3') + ':' + _xxs[g].toFixed(0) + ')</span>' : '') + '</div>';
   }
   h += '</div>';
+  /* P113：心象伤害【独立一行】——真实伤害数字，不计入倍率合计；至少一组 >0 才输出。
+     与上方神猫「额外伤害」小字同族但各自成项：神猫是内嵌附注，心象另起一行便于核对。 */
+  if(_xxAll > 0){
+    h += '<div style="display:flex"><div style="' + _LBL + '">' + esc('\u5fc3\u8c61\u4f24\u5bb3') + '</div>';
+    for(const g of _gi){
+      h += '<div style="' + _CELL + '">' + (_xxs[g] > 0
+        ? '<span style="color:#0d9488;font-weight:600" title="\u5fc3\u8c61\u771f\u5b9e\u4f24\u5bb3\uff08\u4e0d\u8ba1\u5165\u500d\u7387\u5408\u8ba1\uff1b\u53ef\u66b4\u51fb\uff09">' + _xxs[g].toFixed(0) + '</span>'
+        : '<span style="color:#94a3b8">\u2014</span>') + '</div>';
+    }
+    h += '</div>';
+  }
   /* P58：额外伤害合计说明行撤下（用户裁决；各组数值小字与计算口径不变） */
   return h;
+}
+/** P113：取某组【心象真实伤害】（per[g].xxDmgValue，已退出倍率合计）。
+ *  与神猫证明之铁 kuronekoGetProofDmg(g) 同职：给导出层取「不进倍率的独立额外伤害」展示值。
+ *  calcScores 有缓存，重复调用便宜；任何异常一律兜 0（导出层不许抛）。 */
+function xxDmgValueOf(g){
+  try{
+    const sc = (typeof calcScores === 'function') ? calcScores() : null;
+    const p = (sc && sc.per) ? sc.per[g] : null;
+    return p ? (+p.xxDmgValue || 0) : 0;
+  }catch(e){ return 0; }
 }
 function exportDamageHTML(){
 
@@ -35191,7 +35510,7 @@ window.__build = buildDefaultCharDB;
 
 <script data-auth-gate="1">
 /* ============================================================================
-   Canan Wiki · 访问口令闸门（v3.7.1 · 服务端校验 + 每日临时口令 + 池可勾选）
+   Canan Wiki · 访问口令闸门（v3.7.2 · 服务端校验 + 每日临时口令 + 池可勾选）
    ---------------------------------------------------------------------------
    机制
      · 口令由服务端校验（Cloudflare Pages Functions：/api/auth 与 /api/verify）；
@@ -36777,6 +37096,7 @@ input:focus,select:focus,textarea:focus{outline:2px solid rgba(99,102,241,.30);o
         <button class="btn" onclick="document.getElementById('changelogModal').style.display='none'">关闭</button>
       </div>
       <div style="font-size:13px;line-height:1.8;padding:6px 2px;max-height:70vh;overflow:auto">
+<div style="margin:0 0 7px"><b>v3.7.2</b> · P110+P111：专属天赋「条件型」误标修复 + 可触发条件型建模（续 P109）——① talentRowState 分类器新增识别铁砂/残心/水花/战术进化 4 个引擎实际计分但此前误标「未建模」的专属天赋（升华技 × 铁砂层数 / 暴伤·暴击率 × 残心层数 / 碧水之心易伤 × 水花层数 / 暴伤 × 战术进化叠层）；② 新增「概率型增伤」通道（游佐惠美·651：概率×增伤期望）；③ 暴击率增益天赋按作用域计入并如实标注（有纪·801/亚丝娜·751/界 亚丝娜·751 仅本组、泳装御坂美琴 全队 3 组）。均隐藏无意义 % 覆盖框并在天赋明细补列对应通道；④ P112 恢复该行手动覆盖输入：暴击/暴伤类天赋给出「暴击率 %」「暴伤 %」两个小输入（填 10 / 20 / 25 / 30 即把该通道从自动折算值改成你所填值，0=回自动）；层数型（升华技独立乘区、跨组共享易伤）单输入框＝该通道总当量；资源·倍率型仍如实标注无 % 通道。</div>
 <div style="margin:0 0 7px"><b>v3.7.1</b> · P109：专属天赋「未建模」误标修复——拓 talentRowState 分类器识别 SP/BP 资源通道、升华技后/释放技能后增伤、矢量操控电池每层/双尾女仆叠层/情报贩子条件固定等引擎实际记分通道；资源·倍率型隐藏无意义%覆盖框。</div>
 <div style="margin:0 0 7px"><b>v3.7.0</b> · P108：和服夏娜「火翼讨伐者」建模（升华后1号+15%/2号+24%持续4回合）；技能位天赋双值覆盖输入；红莲4件火翼窗口修复</div>
 <div style="margin:0 0 7px"><b>v3.6.9</b> · P103~P107：心象段可暴击；界·和服夏娜+1觉界；樱花庄套装；藏品引擎扩至13套；选藏品弹层滚动修复</div>
