@@ -17485,6 +17485,9 @@ function talentDetailHTML(g){
       if(_ccD.critDmg > 0)  _ccDP.push('暴击伤害 +' + _ccD.critDmg + '%');
       ch.push(_ccDP.join(' / ') + '（' + (_ccD.scope === 'team' ? '全队 3 组' : '仅本组') + '·引擎已计入）');
     }
+    /* P120b：生命值条件型增伤（金桂的骑士·爱丽丝·520）——引擎 P95 段逐格折入 tg.dmgUp，补展示以免明细面板误落「无可建模通道」。 */
+    const _hdD = hpDmgUpTalentOf(c);
+    if(_hdD) ch.push('生命>' + _hdD.hp + '% → 增伤 +' + _hdD.pct + '%（满血常驻·仅本人出手格）');
     h += '<div style="margin-top:4px">引擎识别通道：'
       + (ch.length ? '<span style="color:#4338ca">' + esc(ch.join(' · ')) + '</span>'
                    : '<span style="color:#9ca3af">无可建模通道（纯文案 / 条件型，不计分）</span>') + '</div>';
@@ -37115,6 +37118,7 @@ input:focus,select:focus,textarea:focus{outline:2px solid rgba(99,102,241,.30);o
         <button class="btn" onclick="document.getElementById('changelogModal').style.display='none'">关闭</button>
       </div>
       <div style="font-size:13px;line-height:1.8;padding:6px 2px;max-height:70vh;overflow:auto">
+<div style="margin:0 0 7px"><b>v3.7.2</b> · P120：专属天赋「生命值条件型增伤」建模（续 P110/P111）——主战爱丽丝·520「金桂的骑士」「若生命值大于65%，造成的伤害提高25%」引擎 P95 段早逐格折入 tg.dmgUp（满血常驻·仅本人出手格）；本轮补齐 talentRowState 分类器分支「增伤(生命值条件)」与天赋明细面板通道清单，UI 不再误标「未建模」，并可于「角色天赋效果 %」手填覆盖。后半句「生命<35% 受伤降低20%」为生存向减伤，按设计不建模。</div>
 <div style="margin:0 0 7px"><b>v3.7.2</b> · P110+P111：专属天赋「条件型」误标修复 + 可触发条件型建模（续 P109）——① talentRowState 分类器新增识别铁砂/残心/水花/战术进化 4 个引擎实际计分但此前误标「未建模」的专属天赋（升华技 × 铁砂层数 / 暴伤·暴击率 × 残心层数 / 碧水之心易伤 × 水花层数 / 暴伤 × 战术进化叠层）；② 新增「概率型增伤」通道（游佐惠美·651：概率×增伤期望）；③ 暴击率增益天赋按作用域计入并如实标注（有纪·801/亚丝娜·751/界 亚丝娜·751 仅本组、泳装御坂美琴 全队 3 组）。均隐藏无意义 % 覆盖框并在天赋明细补列对应通道；④ P112 恢复该行手动覆盖输入：暴击/暴伤类天赋给出「暴击率 %」「暴伤 %」两个小输入（填 10 / 20 / 25 / 30 即把该通道从自动折算值改成你所填值，0=回自动）；层数型（升华技独立乘区、跨组共享易伤）单输入框＝该通道总当量；资源·倍率型仍如实标注无 % 通道。</div>
 <div style="margin:0 0 7px"><b>v3.7.1</b> · P109：专属天赋「未建模」误标修复——拓 talentRowState 分类器识别 SP/BP 资源通道、升华技后/释放技能后增伤、矢量操控电池每层/双尾女仆叠层/情报贩子条件固定等引擎实际记分通道；资源·倍率型隐藏无意义%覆盖框。</div>
 <div style="margin:0 0 7px"><b>v3.7.0</b> · P108：和服夏娜「火翼讨伐者」建模（升华后1号+15%/2号+24%持续4回合）；技能位天赋双值覆盖输入；红莲4件火翼窗口修复</div>
