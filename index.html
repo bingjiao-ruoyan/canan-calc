@@ -16,7 +16,7 @@
 
 <link rel="manifest" href="manifest.webmanifest" data-page-node-id="Ujjb7vN2J2zFun44wCBIv8">
 
-<title>Canan Wiki · 3.6.9 · Characters / Imagery / Relics / Elementium</title>
+<title>Canan Wiki · 3.7.1 · Characters / Imagery / Relics / Elementium</title>
 
 <style>
 
@@ -880,7 +880,7 @@
 
     <div data-page-node-id="U3DQMnMQczfqNwA08GXIhj">
 
-      <h1 id="title" data-page-node-id="efK7lKccgtoypss7lhPAmx">Canan Wiki <span style="font-size:12px;font-weight:700;color:#4338ca;background:#eef2ff;border-radius:6px;padding:2px 8px;vertical-align:middle" data-page-node-id="8L10itvWf3BpMcGnSmAd9b">3.6.9</span></h1>
+      <h1 id="title" data-page-node-id="efK7lKccgtoypss7lhPAmx">Canan Wiki <span style="font-size:12px;font-weight:700;color:#4338ca;background:#eef2ff;border-radius:6px;padding:2px 8px;vertical-align:middle" data-page-node-id="8L10itvWf3BpMcGnSmAd9b">3.7.1</span></h1>
 
     </div>
 
@@ -1938,7 +1938,7 @@ const ROLE_GROUPS_DEFAULT = [
 
 
 /* 当前程序版本：页眉徽标、模式标题、导出页脚戳统一读取此常量 */
-const APP_VER = '3.6.9';
+const APP_VER = '3.7.1';
 
 
 /* v2.3.8：localStorage 键按 APP_VER 分版本隔离（同 2.3.7 规则）。
@@ -12815,7 +12815,10 @@ function parseTalentGain(mainChar){
   const res = {vuln:0, dmgUp:0, skill1:0, skill2:0, ult:0, cond:'', desc:'', vulnPostAct:false, vulnOnAct:false, vulnOnHit:false, vulnOnAct1R:false, vulnPostAct1R:false, vulnBoost:0,
                /* v3.2.2：「使用升华技后…持续N回合」型增伤（白井黑子·750「大能力者」）——
                   释放窗口型，由 talentGainForCell 按最近一次升华技的回合判定有效期 */
-               dmgUpAfterUlt:null, dmgUpAfterSkill:null};
+               dmgUpAfterUlt:null, dmgUpAfterSkill:null,
+               /* P108（2026-10-01）：升华技后技能位窗口（和服夏娜「火翼讨伐者」1号+15%/2号+24%持续4回合）——
+                  slotAfterUlt=窗口型标记；slotDur=持续回合数（原文未给则默认4）。 */
+               slotAfterUlt:false, slotDur:0};
   if(!mainChar) return res;
   const t = (mainChar.talents||[]).find(x=>!['元气','热血','生机'].includes(x.n));
   if(!t || !t.fx) return res;
@@ -12934,19 +12937,28 @@ function parseTalentGain(mainChar){
       parts.push('释放后增伤+'+m[1]+'%');
     } else if(condOK(m.index)){ res.dmgUp = +m[1]; parts.push('增伤+'+res.dmgUp+'%'); }
   }
-  /* 升华技后 技能位增伤：一号位/二号位/升华技 伤害提高 X% （如和服夏娜）。事件触发型（击败/触发等）不识别 */
+  /* P108（2026-10-01）：升华技后 技能位增伤：一号位/二号位/升华技 伤害提高 X% （和服夏娜「火翼讨伐者」1号+15%/2号+24%）。
+     「释放/使用升华技后」前缀不再是拦截条件——那是释放时机（窗口前提），由消费端按最近一次升华技回合判定；
+     其余事件触发型（击败/触发等）仍不识别。 */
+  const _slotWinOK = (idx) => /(?:释放|使用)升华技(?:能)?后/.test(fx.slice(0, idx));
   m = fx.match(/一号位[^。；;]{0,20}?伤害(?:提高|提升|增加)\s*[+＋]?\s*([\d.]+)\s*%/);
-  if(m && !hasEventCond(m.index)) res.skill1 = +m[1];
+  if(m && (!hasEventCond(m.index) || _slotWinOK(m.index))) res.skill1 = +m[1];
   m = fx.match(/二号位[^。；;]{0,20}?伤害(?:提高|提升|增加)\s*[+＋]?\s*([\d.]+)\s*%/);
-  if(m && !hasEventCond(m.index)) res.skill2 = +m[1];
+  if(m && (!hasEventCond(m.index) || _slotWinOK(m.index))) res.skill2 = +m[1];
   m = fx.match(/升华技(?:造成的)?伤害(?:提高|提升|增加)\s*[+＋]?\s*([\d.]+)\s*%/);
-  if(m && !hasEventCond(m.index)) res.ult = +m[1];
+  if(m && (!hasEventCond(m.index) || _slotWinOK(m.index))) res.ult = +m[1];
+  /* P108 修正：窗口触发检测应扫描整段 fx（"释放升华技后" 在 一号位 之前）→ 不能只测 slice(0,0) */
+  if((res.skill1||res.skill2||res.ult) && /(?:释放|使用)\s*升华技(?:能)?\s*后/.test(fx)){
+    res.slotAfterUlt = true;
+    const _sd = (fx.match(/持续\s*(\d+)\s*回合/) || [])[1];
+    res.slotDur = _sd ? +_sd : 4;
+  }
   if(res.skill1||res.skill2||res.ult){
     const s = [];
     if(res.skill1) s.push('1号+'+res.skill1+'%');
     if(res.skill2) s.push('2号+'+res.skill2+'%');
     if(res.ult) s.push('升华+'+res.ult+'%');
-    parts.push('升华后 '+s.join('/'));
+    parts.push('升华后 '+s.join('/')+(res.slotAfterUlt ? '（'+res.slotDur+'回合窗口）' : ''));
   }
   /* 有触发条件的增益：仅记录描述，不强制代入 */
   if(!res.vuln && !res.dmgUp && !res.skill1 && !res.skill2 && !res.ult){
@@ -17245,6 +17257,7 @@ function talentRowState(g){
   r.present = true; r.name = tl.n;
   const tg = parseTalentGain(c);
   const sg = parseSpecialGain(c);
+  const tb = parseTalentSpBp(tl);
   const _awV = (typeof groupAwakeningTalentVulnPct === 'function') ? (groupAwakeningTalentVulnPct(g)||0) : 0;
   const _awD = (typeof groupAwakeningTalentDmgUpPct === 'function') ? (groupAwakeningTalentDmgUpPct(g)||0) : 0;
   /* 主类型判定顺序与引擎覆盖口径一致：易伤 > 概率型易伤 > 增伤 > 升华后技能位 */
@@ -17269,12 +17282,52 @@ function talentRowState(g){
   } else if((+tg.skill1||0) || (+tg.skill2||0) || (+tg.ult||0)){
     r.type = '升华后技能位';
     r.auto = (+tg.skill1||0) || (+tg.skill2||0) || (+tg.ult||0);
-    r.autoTxt = '1号' + (+tg.skill1||0) + '% / 2号' + (+tg.skill2||0) + '% / 升华' + (+tg.ult||0) + '%';
+    r.autoTxt = '1号' + (+tg.skill1||0) + '% / 2号' + (+tg.skill2||0) + '% / 升华' + (+tg.ult||0) + '%' + (tg.slotAfterUlt ? '（升华后' + (+tg.slotDur||4) + '回合）' : '');
+  } else if(tg.dmgUpAfterUlt){
+    /* P109：升华技后增伤窗口型（白井黑子·750 / 界 白井黑子·750「大能力者」+20% 2回合）——引擎已折入 tg.dmgUp，%覆盖可用 */
+    r.type = '升华技后增伤';
+    r.auto = (+tg.dmgUpAfterUlt.pct||0);
+    r.autoTxt = '升华技后 +' + r.auto + '%（' + (+tg.dmgUpAfterUlt.dur||2) + '回合窗口）';
+  } else if(tg.dmgUpAfterSkill){
+    /* P109：释放某技能后增伤窗口型（黑猫·307 / 界 黑猫·307「夜魔女王」+15%）——引擎已折入 tg.dmgUp */
+    r.type = '释放技能后增伤';
+    r.auto = (+tg.dmgUpAfterSkill.pct||0);
+    r.autoTxt = '释放后 +' + r.auto + '%' + (tg.dmgUpAfterSkill.names ? ('（' + tg.dmgUpAfterSkill.names.join('/') + '）') : '');
+  } else if(/矢量操控/.test(tl.n||'')){
+    /* P109：电池电量每层增伤（一方通行·矢量操控）——batteryTalentStacksInfo 折入 tg.dmgUp */
+    r.type = '增伤(电池每层)';
+    r.auto = 0;
+    r.autoTxt = '每层+3%（觉醒3.6%·上限5层·随电量）';
+  } else if(/双尾女仆/.test(tl.n||'')){
+    /* P109：1号位/连携叠层增伤（女仆白井黑子·双尾女仆）——maidTwinTailStacksInfo 折入 tg.dmgUp */
+    r.type = '增伤(叠层)';
+    r.auto = 0;
+    r.autoTxt = '每层+15%（觉醒20%·上限4层·仅2号位技能）';
+  } else if(/情报贩子/.test(tl.n||'')){
+    /* P109：场上减益→本组固定+20%增伤（折原临也·情报贩子）——infoBrokerTalentInfo 折入 tg.dmgUp */
+    r.type = '增伤(条件固定)';
+    r.auto = 0;
+    r.autoTxt = '固定+20%（本组·场上存在减益）';
+  } else if(tb.spPerRound || tb.bpPerRound || tb.spNextAction || tb.bpOnKill || tb.bpOnAct || tb.iceSnipe || tb.judge){
+    /* P109：SP/BP 资源与倍率通道（桐人/凑智花/蝴蝶黑雪姬/朝田诗乃/神猫黑猫）——引擎消费、不可 %覆盖 */
+    r.type = '资源·倍率';
+    const _rc = [];
+    if(tb.spPerRound) _rc.push('每回合+'+tb.spPerRound+'SP');
+    if(tb.bpPerRound) _rc.push('每回合+'+tb.bpPerRound+'BP');
+    if(tb.spNextAction) _rc.push('下次行动'+tb.spNextAction+'SP');
+    if(tb.bpOnKill) _rc.push('击杀+'+tb.bpOnKill+'BP');
+    if(tb.bpOnAct) _rc.push('每次行动+'+tb.bpOnAct+'BP');
+    if(tb.iceSnipe) _rc.push('冰冷狙击 每层+'+tb.iceSnipe.per+'%(上限'+tb.iceSnipe.max+')');
+    if(tb.judge) _rc.push('审判之力 每层+'+tb.judge.pctPerStack+'%(上限'+tb.judge.max+')');
+    r.auto = 0;
+    r.autoTxt = _rc.join(' · ');
+    r.isResource = true;
   } else {
     r.type = '未建模';
     r.autoTxt = '无（纯文案 / 条件型，不计分）';
   }
   r.ov = (grp.talent != null && (+grp.talent) !== 0) ? (+grp.talent) : 0;
+  r.ov2 = (+grp.talentS2||0);   /* P108：2号位覆盖（0=自动） */
   return r;
 }
 
@@ -17305,7 +17358,7 @@ function talentDetailHTML(g){
     if((+tg.dmgUp||0) > 0) ch.push('增伤 +' + tg.dmgUp + '%');
     if(tg.dmgUpAfterUlt) ch.push('升华技后增伤 +' + tg.dmgUpAfterUlt.pct + '%（' + tg.dmgUpAfterUlt.dur + '回合）');
     if(tg.dmgUpAfterSkill) ch.push('释放「' + (tg.dmgUpAfterSkill.names||[]).join('/') + '」后增伤 +' + tg.dmgUpAfterSkill.pct + '%');
-    if((+tg.skill1||0) || (+tg.skill2||0) || (+tg.ult||0)) ch.push('升华后技能位 1号' + (+tg.skill1||0) + '% / 2号' + (+tg.skill2||0) + '% / 升华' + (+tg.ult||0) + '%');
+    if((+tg.skill1||0) || (+tg.skill2||0) || (+tg.ult||0)) ch.push('升华后技能位 1号' + (+tg.skill1||0) + '% / 2号' + (+tg.skill2||0) + '% / 升华' + (+tg.ult||0) + '%' + (tg.slotAfterUlt ? '（升华后' + (+tg.slotDur||4) + '回合窗口）' : ''));
     if(sg && (+sg.vuln||0) > 0){
       /* ★v3.5.2 P46b：概率因子 prob 是小数 ⇒ 显示须 ×100；期望值含觉醒覆写时与「当前生效值」行同源。 */
       const _spV = (typeof groupAwakeningTalentSpecialVulnPct === 'function') ? (groupAwakeningTalentSpecialVulnPct(g)||0) : 0;
@@ -17319,8 +17372,14 @@ function talentDetailHTML(g){
       if(tb.bpPerRound) ch.push('每回合 +' + tb.bpPerRound + 'BP');
       if(tb.spNextAction) ch.push('下次行动 ' + tb.spNextAction + 'SP');
       if(tb.bpOnKill) ch.push('击杀 +' + tb.bpOnKill + 'BP');
+      if(tb.bpOnAct) ch.push('每次行动 +' + tb.bpOnAct + 'BP');
+      if(tb.iceSnipe) ch.push('冰冷狙击 每回合+1层(上限'+tb.iceSnipe.max+') 每层升华技倍率+'+tb.iceSnipe.per+'%');
       if(tb.judge) ch.push('「' + tb.judge.name + '」上限' + tb.judge.max + '层 · 每层 +' + tb.judge.pctPerStack + '%');
     }
+    /* P109：矢量操控 / 双尾女仆 / 情报贩子 为特殊增伤通道，引擎已在 talentGainForCell 折入 tg.dmgUp，补展示以免误判「无可建模通道」 */
+    if(/矢量操控/.test((tl&&tl.n)||'')) ch.push('矢量操控 每层电池电量+3%(觉醒3.6%·上限5层)增伤');
+    if(/双尾女仆/.test((tl&&tl.n)||'')) ch.push('双尾女仆 每层+15%(觉醒20%·上限4层·仅2号位技能)增伤');
+    if(/情报贩子/.test((tl&&tl.n)||'')) ch.push('情报贩子 固定+20%增伤(本组·场上存在减益)');
     const _evo = (typeof evolutionStacksInfo === 'function' && (state.rounds||[]).length)
       ? evolutionStacksInfo(g, (state.rounds||[]).length - 1) : null;
     if(_evo && _evo.pct > 0) ch.push('【战术进化】×' + _evo.stacks + '/' + _evo.cap + ' · 暴击伤害 +' + _evo.pct + '%');
@@ -17333,7 +17392,10 @@ function talentDetailHTML(g){
       : ('<b>' + esc(ts.autoTxt || '—') + '</b>（来源：' + ts.type + '自动解析）');
     h += '<div style="margin-top:2px">当前生效值：' + _eff
       + (_on ? '' : ' <span style="color:#b45309">（开关已关 ⇒ 实际不计入）</span>') + '</div>';
-    h += '<div style="margin-top:2px;color:#6b7280">覆盖入口：角色配置 → 角色数据 →「角色天赋效果 %」—— 填 0 = 用自动值；填非 0 = 按上表「主类型」覆盖该通道。</div>';
+    h += '<div style="margin-top:2px;color:#6b7280">覆盖入口：角色配置 → 角色数据 →「角色天赋效果 %」—— 填 0 = 用自动值；填非 0 = 按上表「主类型」覆盖该通道'
+    + ((+tg.skill1||0) || (+tg.skill2||0) || (+tg.ult||0)
+        ? '（P108 技能位型双值：主输入=1号位/升华位，旁附「2号%」=2号位；数据确认区每格天赋输入=覆盖本格所属技能位）'
+        : '') + '。</div>';
     const gens = (c.talents||[]).filter(x=>['元气','热血','生机'].includes(x.n));
     if(gens.length) h += '<div style="margin-top:4px;color:#6b7280">通用天赋（自动生效、不可关）：' + gens.map(x=>esc(x.n)).join(' / ') + '</div>';
   }
@@ -18321,7 +18383,7 @@ function renderConfirm(){
 
     {label:'角色最终面板', key:'panel', tip:'可填游戏内看到的最终攻击力（含装备），系统自动换算（减装备加成 +1470/槽、去觉醒加攻）写回内部面板；填值 = 自定义覆盖，清空或点「↺ 自动」= 回到 v3.0 自动推算（角色面板 =（LV60攻击力 + 380）×（1 + 25% + 60%）×（1 + 基础攻击力%），取自「数值统计」atk60 列；★形态档位选「6★·70级」时改取 LV70 三列）。灰底 = 自动推算、白底 = 自定义。主战与 SUB 各自独立携带套装，散件/套装统一 +1470。与「血量增益面板 → 最终攻击力」同源双向联动。'},
 
-    {label:'角色天赋效果 %', key:'talent', tip:'角色专属天赋的生效百分比（天赋名与全文见「战斗配置 → 全局增益 → 查看天赋效果」）。填 0 = 不覆盖，引擎按角色库自动解析值计算；填非 0 = 覆盖，按该天赋原本的主类型覆盖对应通道：易伤型→易伤%、增伤型→增伤%、升华后技能位型→一号位/二号位/升华技。易伤型【跨组共享】（全场三组加总，任一组施加即全场生效），增伤与技能位型仅作用于本组。天赋是否计入由「战斗配置 → 全局增益」里该组的「天赋特殊效果」勾选控制：取消勾选则该组天赋整体不生效、改为本组主战+援护 暴击率 +10% 补强。该格右侧小字实时显示当前状态与自动值。'},
+    {label:'角色天赋效果 %', key:'talent', tip:'角色专属天赋的生效百分比（天赋名与全文见「战斗配置 → 全局增益 → 查看天赋效果」）。填 0 = 不覆盖，引擎按角色库自动解析值计算；填非 0 = 覆盖，按该天赋原本的主类型覆盖对应通道：易伤型→易伤%、增伤型→增伤%、升华后技能位型→一号位/二号位/升华技（P108 双值：主输入=1号位/升华位，旁附「2号%」小输入=2号位；0=各自走自动）。易伤型【跨组共享】（全场三组加总，任一组施加即全场生效），增伤与技能位型仅作用于本组。天赋是否计入由「战斗配置 → 全局增益」里该组的「天赋特殊效果」勾选控制：取消勾选则该组天赋整体不生效、改为本组主战+援护 暴击率 +10% 补强。该格右侧小字实时显示当前状态与自动值。'},
 
     {label:'主战藏品', key:'mainEquip', type:'eqsel', tip:'主战独立选择是否携带套装：不良（≥4 SP 招，装备效果增益·参与暴击）；桐桐（≤3 SP 招，装备效果增益·参与暴击）；创伤（创伤伤害·不参与暴击）；樱花庄（≤4 SP 招【释放后】全队伤害+7.7%、持续1回合）。单套生效=满额一半（不良14%/桐桐11%/创伤13.5%/樱花庄7.7%），连携双套(主战+SUB同台)才达满额。主战自身技能吃主战套装；选后下面② 藏品列该主战技能自动填默认值，可二次修改。攻击力 +1470（散件/套装统一）。藏品携带者：主战散件→本组+6%伤害、套装→本组+3%伤害（与援护各自计入、同组叠加）'},
 
@@ -18375,17 +18437,32 @@ function renderConfirm(){
       }else if(row.key==='talent'){
 
         /* v3.5.2 P46：天赋行加「状态 + 自动值」内联提示 —— 原来只有一个 0，用户既不知道 0 是何义、
-           也不知道当前自动解析值是多少。★纯展示：输入框 oninput / onchange 口径与旧版一字不差。 */
+           也不知道当前自动解析值是多少。★纯展示：输入框 oninput / onchange 口径与旧版一字不差。
+           P108（2026-10-01）：技能位型天赋（和服夏娜「火翼讨伐者」1号+15%/2号+24% 双百分比）——
+           主输入=1号位/升华位覆盖；技能位型主战在主输入旁并排「2号%」小输入（grp.talentS2，0=自动）。 */
         const _ts = talentRowState(g);
+        const _slotMain = _ts.present && _ts.on && _ts.type === '升华后技能位';
         let _tBadge, _tColor;
         if(!_ts.present){ _tBadge = '无专属天赋'; _tColor = 'var(--sub)'; }
         else if(!_ts.on){ _tBadge = '已关 · 暴击+10%补强'; _tColor = '#b45309'; }
+        else if(_slotMain && (_ts.ov || _ts.ov2)){ _tBadge = '覆盖中 · 1号' + (_ts.ov||0) + '% / 2号' + (_ts.ov2||0) + '%（0=自动）'; _tColor = '#7c3aed'; }
         else if(_ts.ov){ _tBadge = '覆盖中 · ' + _ts.type + ' ' + _ts.ov + '%'; _tColor = '#7c3aed'; }
         else { _tBadge = '自动 · ' + _ts.type + ' ' + _ts.autoTxt; _tColor = 'var(--sub)'; }
-        h += '<td><input type="number" step="0.01" value="' + (grp[row.key]||0) + '"'
-          + ' oninput="state.groups[' + g + '].talent=+this.value;recalc();" onchange="renderConfirm()"'
-          + ' title="' + esc(row.tip) + '">'
-          + ' <span style="font-size:10px;color:' + _tColor + '">' + esc(_tBadge) + '</span></td>';
+        let _tInput;
+        if(_ts.isResource){
+          /* P109：资源/倍率型天赋（SP/BP/冰冷狙击/审判之力）引擎自动生效，无可覆盖 % 通道，隐藏输入框避免误导 */
+          _tInput = '<span style="font-size:10px;color:#16a34a">✓ 自动生效（资源/倍率增益，无需填写覆盖值）</span>';
+        } else {
+          _tInput = '<input type="number" step="0.01" value="' + (grp[row.key]||0) + '"'
+            + ' oninput="state.groups[' + g + '].talent=+this.value;recalc();" onchange="renderConfirm()"'
+            + ' title="' + esc(row.tip) + '">'
+            + (_slotMain
+                ? ' <span style="font-size:10px;color:var(--sub);white-space:nowrap">2号<input type="number" step="0.01" style="width:56px" value="' + (_ts.ov2||0) + '"'
+                  + ' oninput="state.groups[' + g + '].talentS2=+this.value;recalc();" onchange="renderConfirm()"'
+                  + ' title="2号位技能天赋%覆盖（0=走角色库自动值）"></span>'
+                : '');
+        }
+        h += '<td>' + _tInput + ' <span style="font-size:10px;color:' + _tColor + '">' + esc(_tBadge) + '</span></td>';
 
       }else{
 
@@ -18776,7 +18853,7 @@ function renderConfirm(){
         const _tgVulnOv  = cb.talentVulnOverride != null;
         /* 易伤输入框：默认=全场共享总和（所有主战组天赋贡献合计，如亚丝娜25%+他组10%=35%），任何组填写实时反映到全部组 */
         const _vulnInput = '<div style="margin-top:2px;display:flex;gap:4px;align-items:center;justify-content:center;flex-wrap:nowrap"><span style="color:#7c3aed;font-size:10px">易伤</span><input type="number" class="narrow" step="0.1" value="' + (_tgVulnOv?_tgVulnCur:'') + '" placeholder="' + _tgVulnAuto.toFixed(1) + '" style="width:54px;font-size:10px;text-align:center' + (_tgVulnOv?';background:#fef9c3;border-color:#eab308':'') + '" title="天赋易伤：默认=全场共享（所有主战角色天赋贡献合计，如亚丝娜25%+他组10%=35%，所有组同值同显示；本组填的天赋会自动计入全场）。手动修改仅影响本格；改回默认：清空输入框+↺" oninput="setTalentVuln(' + r + ',' + g + ',this.value)" onchange="renderConfirm()">' + (_tgVulnOv?'<button type="button" title="恢复默认" onclick="resetTalentVuln(' + r + ',' + g + ')" style="border:none;background:transparent;color:#92400e;cursor:pointer;font-size:10px;padding:0">↺</button>':'') + '</div>';
-        h += '<td class="cg-g' + g + '" style="text-align:center"><input type="number" class="narrow" step="0.01" value="' + (cb.talent != null ? cb.talent : (+grp.talent||0)) + '" title="天赋%（非0即生效；默认继承①录入的整组天赋，编辑后此单元格独立。恢复默认：输入框留空或改回①的值后该单元格独立保存；若需整组改动请回出招排表）' + (_tgDesc?('；专属天赋自动带入：'+esc(_tgDesc)):'') + (_tgVulnAuto?('；易伤生效（全场共享）：'+_tgVulnAuto.toFixed(1)+'%'):'') + '" oninput="setConfirmLive(' + r + ',' + g + ',\'talent\',+this.value)" onchange="renderConfirm()">' + (_tgDesc?'<div style="color:#7c3aed;font-size:10px;line-height:1.3;white-space:nowrap;cursor:help" title="主战专属天赋（自动带入倍率计算）">天赋:'+esc(_tgDesc)+'</div>':'') + _vulnInput + '</td>';
+        h += '<td class="cg-g' + g + '" style="text-align:center"><input type="number" class="narrow" step="0.01" value="' + (cb.talent != null ? cb.talent : (+grp.talent||0)) + '" title="天赋%（非0即生效；默认继承①录入的整组天赋，编辑后此单元格独立。技能位型角色（P108）：此格覆盖「本格所属技能位」的值——1号技格→1号位、2号技格→2号位、升华技格→升华位。恢复默认：输入框留空或改回①的值后该单元格独立保存；若需整组改动请回出招排表）' + (_tgDesc?('；专属天赋自动带入：'+esc(_tgDesc)):'') + (_tgVulnAuto?('；易伤生效（全场共享）：'+_tgVulnAuto.toFixed(1)+'%'):'') + '" oninput="setConfirmLive(' + r + ',' + g + ',\'talent\',+this.value)" onchange="renderConfirm()">' + (_tgDesc?'<div style="color:#7c3aed;font-size:10px;line-height:1.3;white-space:nowrap;cursor:help" title="主战专属天赋（自动带入倍率计算）">天赋:'+esc(_tgDesc)+'</div>':'') + _vulnInput + '</td>';
 
         /* 装备 —— 主战 / SUB 各自独立套装；自身技能吃自身套装；连携技(SUB 释放)双吃双方套装 */
 
@@ -21834,6 +21911,13 @@ function fireWingActiveAt(g, r){
       const _lu = (typeof lastUltRoundOf==='function') ? lastUltRoundOf(g, r) : -1;   /* 仅认主战升华（夏娜通常主战） */
       if(_lu >= 0 && (r - _lu) < (+_tg.dmgUpAfterUlt.dur || 2)) return true;
     }
+    /* P108：火翼讨伐者=升华后技能位窗口型（slotAfterUlt）——窗口=释放后 slotDur（默认4）回合、不含释放回合
+       （与 talentGainForCell 技能位窗口同口径）；红莲 4 件「火翼增益期间」按此判定
+       （此前只认 dmgUpAfterUlt 通道 ⇒ 夏娜（含界）装备红莲 4 件恒不触发，属 P107 遗留缺口，本轮补齐）。 */
+    else if(_tg && _tg.slotAfterUlt){
+      const _lu2 = (typeof lastUltRoundOf==='function') ? lastUltRoundOf(g, r) : -1;
+      if(_lu2 >= 0 && (r - _lu2) >= 1 && (r - _lu2) <= (+_tg.slotDur||4)) return true;  /* P108 修正：与 talentGainForCell 技能位窗口口径对齐（<= slotDur，含第 slotDur 回合；火翼讨伐者「持续4回合」= r1~r4） */
+    }
   }
   return false;
 }
@@ -22132,7 +22216,7 @@ function talentGainForCell(g, r, skill){
      易伤才跨组共享（vuln型）；增伤/技能型是小组专属，见 groupTalentVulnContrib。 */
   const _ovVal = (cb.talent != null && (+cb.talent)!==0) ? (+cb.talent)
                : (grp.talent != null && (+grp.talent)!==0) ? (+grp.talent) : null;
-  if(_ovVal != null && fxOn){
+  if((_ovVal != null || (+grp.talentS2||0) > 0) && fxOn){  /* P108：2号位独立覆盖（grp.talentS2）单独填写也生效 */
     if((+tg.vuln||0) > 0){
       tg.vuln = _ovVal;
       tg.desc = tg.desc ? (/(^|[ ·])易伤\+[\d.]+%/.test(tg.desc) ? tg.desc.replace(/易伤\+[\d.]+%/, '易伤+'+_ovVal.toFixed(1)+'%') : tg.desc+' · 易伤+'+_ovVal.toFixed(1)+'%') : '易伤+'+_ovVal.toFixed(1)+'%';
@@ -22140,8 +22224,25 @@ function talentGainForCell(g, r, skill){
       tg.dmgUp = _ovVal;
       tg.desc = tg.desc ? (/(^|[ ·])增伤\+[\d.]+%/.test(tg.desc) ? tg.desc.replace(/增伤\+[\d.]+%/, '增伤+'+_ovVal.toFixed(1)+'%') : tg.desc+' · 增伤+'+_ovVal.toFixed(1)+'%') : '增伤+'+_ovVal.toFixed(1)+'%';
     } else if((+tg.skill1||0) || (+tg.skill2||0) || (+tg.ult||0)){
-      tg.skill1 = tg.skill2 = tg.ult = _ovVal;
-      tg.desc = '升华后 1号+'+_ovVal.toFixed(1)+'%/2号+'+_ovVal.toFixed(1)+'%/升华+'+_ovVal.toFixed(1)+'%';
+      /* P108（2026-10-01）：技能位型天赋【双值覆盖】语义——
+         ①「角色天赋效果 %」主输入 = 1号位/升华技位覆盖；①旁「2号%」(grp.talentS2) = 2号位覆盖（0=各自走自动）；
+         数据确认区每格天赋输入(cb.talent) = 覆盖【本格所属技能位】的值（1号技格→1号位、2号技格→2号位、升华技格→升华位）。
+         仅覆写已有自动值的位（自动为0的位不凭空加持，如夏娜升华位恒0）。 */
+      const _ovCell = (cb.talent != null && (+cb.talent)!==0) ? (+cb.talent) : null;
+      const _ovGrp1 = (grp.talent != null && (+grp.talent)!==0) ? (+grp.talent) : null;
+      const _ovG2   = (+grp.talentS2||0);
+      const _skIdxOv = skill ? (mainChar.skills||[]).findIndex(s=>s.id===skill.id) : -1;
+      if(_skIdxOv === 1){
+        if(_ovCell != null) tg.skill2 = _ovCell;
+        else if(_ovG2 > 0) tg.skill2 = _ovG2;
+      } else {
+        const _v1 = (_ovCell != null) ? _ovCell : _ovGrp1;
+        if(_v1 != null){
+          if((+tg.skill1||0) > 0) tg.skill1 = _v1;
+          if((+tg.ult||0) > 0) tg.ult = _v1;
+        }
+      }
+      tg.desc = '升华后 1号+'+(+tg.skill1||0).toFixed(1)+'%/2号+'+(+tg.skill2||0).toFixed(1)+'%/升华+'+(+tg.ult||0).toFixed(1)+'%';
     }
   }
   /* 易伤生效值：① 本格手动覆盖 cb.talentVulnOverride（仅本格）→ ② 跨组共享全场总和
@@ -22186,7 +22287,7 @@ function talentGainForCell(g, r, skill){
         ultReleasedR = rr;
       }
     }
-    if(ultReleasedR>=0 && (r - ultReleasedR) >= 1 && (r - ultReleasedR) <= 4){ /* 释放后4回合（不含释放回合）：第3回合释放→第4~7回合生效 */
+    if(ultReleasedR>=0 && (r - ultReleasedR) >= 1 && (r - ultReleasedR) <= (+tg.slotDur||4)){ /* P108：释放后 slotDur（默认4）回合（不含释放回合）：第3回合释放→第4~7回合生效 */
       skillActive = true;
       if(skillIdx===0) pct += (+tg.skill1||0);
       else if(skillIdx===1) pct += (+tg.skill2||0);
@@ -22231,6 +22332,7 @@ function migrateState(){
   state.groups.forEach(g=>{
     if(!g) return;
     if(typeof g.talentFx !== 'boolean') g.talentFx = true;
+    if(typeof g.talentS2 !== 'number') g.talentS2 = 0;   /* P108：2号位天赋覆盖（0=自动；技能位型主战专用） */
     if(typeof g.awakenFx !== 'boolean') g.awakenFx = false;
     /* 拆分旧单开关 → 主战 / 援护 双开关（已拆分的存档不受影响） */
     if(typeof g.mainAwakenFx !== 'boolean') g.mainAwakenFx = (g.awakenFx === true);
@@ -35089,7 +35191,7 @@ window.__build = buildDefaultCharDB;
 
 <script data-auth-gate="1">
 /* ============================================================================
-   Canan Wiki · 访问口令闸门（v3.6.9 · 服务端校验 + 每日临时口令 + 池可勾选）
+   Canan Wiki · 访问口令闸门（v3.7.1 · 服务端校验 + 每日临时口令 + 池可勾选）
    ---------------------------------------------------------------------------
    机制
      · 口令由服务端校验（Cloudflare Pages Functions：/api/auth 与 /api/verify）；
@@ -36675,6 +36777,8 @@ input:focus,select:focus,textarea:focus{outline:2px solid rgba(99,102,241,.30);o
         <button class="btn" onclick="document.getElementById('changelogModal').style.display='none'">关闭</button>
       </div>
       <div style="font-size:13px;line-height:1.8;padding:6px 2px;max-height:70vh;overflow:auto">
+<div style="margin:0 0 7px"><b>v3.7.1</b> · P109：专属天赋「未建模」误标修复——拓 talentRowState 分类器识别 SP/BP 资源通道、升华技后/释放技能后增伤、矢量操控电池每层/双尾女仆叠层/情报贩子条件固定等引擎实际记分通道；资源·倍率型隐藏无意义%覆盖框。</div>
+<div style="margin:0 0 7px"><b>v3.7.0</b> · P108：和服夏娜「火翼讨伐者」建模（升华后1号+15%/2号+24%持续4回合）；技能位天赋双值覆盖输入；红莲4件火翼窗口修复</div>
 <div style="margin:0 0 7px"><b>v3.6.9</b> · P103~P107：心象段可暴击；界·和服夏娜+1觉界；樱花庄套装；藏品引擎扩至13套；选藏品弹层滚动修复</div>
         <div style="margin:0 0 7px"><b>v3.6.8</b> · 心象攻击计入面板；暴击/爆伤按面板最终值；心象核对板块（单次伤害）</div>
         <div style="margin:0 0 7px"><b>v3.6.7</b> · 天赋窗口化（亚丝娜·闪光 / 食蜂·精神压制）；心象攻击口径改游戏值；六天赋建模</div>
