@@ -895,7 +895,6 @@
       <button class="btn" onclick="saveCfg()" data-page-node-id="cCZ9elFASd05097asOGgft">保存配置</button>
 
       <button class="btn danger" onclick="resetAll()" data-page-node-id="OkbsuyOPXHN6p8PhIKSPWc">重置</button>
-      <button class="btn" data-i18n-skip onclick="document.getElementById('changelogModal').style.display='flex'">更新日志</button>
           </div>
 
   </div>
@@ -5443,7 +5442,9 @@ const EMBED_XIANGXIANG = [
                 type: 'xiangUp',
                 value: 155,
                 scope: 'squad',
-                cond: 'always'
+                withSkill: '拆迁流',
+                cond: 'hpLow',
+                hp: 75
               }
             ]
           },
@@ -5473,7 +5474,9 @@ const EMBED_XIANGXIANG = [
                 type: 'xiangUp',
                 value: 155,
                 scope: 'squad',
-                cond: 'always'
+                withSkill: '拆迁流',
+                cond: 'hpLow',
+                hp: 75
               }
             ]
           },
@@ -5505,7 +5508,8 @@ const EMBED_XIANGXIANG = [
                 scope: 'squad',
                 cond: 'afterSkill',
                 withSkill: '全力一击',
-                rounds: 2,
+
+                delay: 1,                rounds: 2,
                 frontRow: true
               }
             ]
@@ -5613,6 +5617,7 @@ const EMBED_XIANGXIANG = [
                 scope: 'squad',
                 cond: 'afterSkill',
                 withSkill: '炎灵',
+                delay: 1,
                 rounds: 1
               }
             ]
@@ -5645,6 +5650,7 @@ const EMBED_XIANGXIANG = [
                 scope: 'squad',
                 cond: 'afterSkill',
                 withSkill: '炎灵',
+                delay: 1,
                 rounds: 1
               }
             ]
@@ -5737,7 +5743,9 @@ const EMBED_XIANGXIANG = [
                 type: 'xiangUp',
                 value: 33,
                 scope: 'squad',
-                cond: 'always'
+                withSkill: '幻月',
+                cond: 'hpLow',
+                hp: 75
               }
             ]
           },
@@ -5774,7 +5782,8 @@ const EMBED_XIANGXIANG = [
                 scope: 'squad',
                 cond: 'afterSkill',
                 withSkill: '电击',
-                rounds: 2
+
+                delay: 1,                rounds: 2
               }
             ]
           },
@@ -5862,7 +5871,8 @@ const EMBED_XIANGXIANG = [
                 scope: 'squad',
                 cond: 'afterSkill',
                 withSkill: '踏射',
-                rounds: 1
+
+                delay: 1,                rounds: 1
               }
             ]
           },
@@ -5950,7 +5960,8 @@ const EMBED_XIANGXIANG = [
                 value: 8,
                 scope: 'squad',
                 cond: 'afterSkill',
-                rounds: 1
+
+                delay: 1,                rounds: 1
               }
             ]
           },
@@ -6370,7 +6381,8 @@ const EMBED_XIANGXIANG = [
                 scope: 'squad',
                 cond: 'afterSkill',
                 sp: '>5',
-                rounds: 1
+
+                delay: 1,                rounds: 1
               }
             ]
           },
@@ -6650,7 +6662,8 @@ const EMBED_XIANGXIANG = [
                 scope: 'squad',
                 cond: 'afterSkill',
                 withSkill: '冰晶突刺',
-                rounds: 2,
+
+                delay: 1,                rounds: 2,
                 row: 'mid'
               }
             ]
@@ -6958,7 +6971,8 @@ const EMBED_XIANGXIANG = [
                 scope: 'squad',
                 cond: 'afterSkill',
                 withSkill: '风之治愈',
-                rounds: 1
+
+                delay: 1,                rounds: 1
               }
             ]
           },
@@ -7062,7 +7076,8 @@ const EMBED_XIANGXIANG = [
                 base: 'mainAtk',
                 cond: 'afterSkill',
                 withSkill: '天光炎斩',
-                rounds: 1
+
+                delay: 1,                rounds: 1
               }
             ]
           },
@@ -7147,7 +7162,8 @@ const EMBED_XIANGXIANG = [
                 scope: 'squad',
                 cond: 'afterSkill',
                 withSkill: '四重痛楚',
-                rounds: 2,
+
+                delay: 1,                rounds: 2,
                 row: 'front'
               }
             ]
@@ -7180,7 +7196,8 @@ const EMBED_XIANGXIANG = [
                 scope: 'squad',
                 cond: 'afterSkill',
                 withSkill: '四重痛楚',
-                rounds: 2,
+
+                delay: 1,                rounds: 2,
                 row: 'front'
               }
             ]
@@ -7212,7 +7229,8 @@ const EMBED_XIANGXIANG = [
                 value: 8,
                 scope: 'squad',
                 cond: 'afterSkill',
-                rounds: 1
+
+                delay: 1,                rounds: 1
               }
             ]
           },
@@ -7388,7 +7406,8 @@ const EMBED_XIANGXIANG = [
                 scope: 'squad',
                 cond: 'afterSkill',
                 withSkill: '克修达',
-                rounds: 2
+
+                delay: 1,                rounds: 2
               }
             ]
           },
@@ -7512,7 +7531,8 @@ const EMBED_XIANGXIANG = [
             scope: 'squad',
             cond: 'afterSkill',
             withSkill: '克修达',
-            rounds: 2
+
+            delay: 1,            rounds: 2
           }
         ]
       },
@@ -7544,7 +7564,8 @@ const EMBED_XIANGXIANG = [
                 scope: 'squad',
                 cond: 'afterSkill',
                 withSkill: '克修达',
-                rounds: 2
+
+                delay: 1,                rounds: 2
               }
             ]
           },
@@ -7803,7 +7824,8 @@ const EMBED_XIANGXIANG = [
                 scope: 'all',
                 cond: 'afterSkill',
                 withSkill: '非连携技能',
-                rounds: 1
+
+                delay: 1,                rounds: 1
               }
             ]
           },
@@ -8726,7 +8748,8 @@ const EMBED_XIANGXIANG = [
                 scope: 'squad',
                 cond: 'afterSkill',
                 sp: '>5',
-                rounds: 1
+
+                delay: 1,                rounds: 1
               }
             ]
           },
@@ -8780,7 +8803,8 @@ const EMBED_XIANGXIANG = [
                 scope: 'squad',
                 cond: 'afterSkill',
                 withSkill: '幻闪流星',
-                rounds: 2,
+
+                delay: 1,                rounds: 2,
                 row: 'back'
               }
             ]
@@ -8823,7 +8847,8 @@ const EMBED_XIANGXIANG = [
                 scope: 'squad',
                 cond: 'afterSkill',
                 withSkill: '贯穿之剑',
-                rounds: 2,
+
+                delay: 1,                rounds: 2,
                 row: 'front'
               }
             ]
@@ -8983,7 +9008,8 @@ const EMBED_XIANGXIANG = [
                 scope: 'squad',
                 cond: 'afterSkill',
                 withSkill: '扫射',
-                rounds: 1
+
+                delay: 1,                rounds: 1
               }
             ]
           },
@@ -9033,7 +9059,8 @@ const EMBED_XIANGXIANG = [
             scope: 'all',
             cond: 'afterSkill',
             withSkill: '哔哔噜哔噜哔噜哔哔噜哔♪',
-            rounds: 2
+
+            delay: 1,            rounds: 2
           }
         ]
       },
@@ -9070,7 +9097,8 @@ const EMBED_XIANGXIANG = [
                 scope: 'all',
                 cond: 'afterSkill',
                 withSkill: '哔哔噜哔噜哔噜哔哔噜哔♪',
-                rounds: 2
+
+                delay: 1,                rounds: 2
               }
             ]
           },
@@ -9124,7 +9152,8 @@ const EMBED_XIANGXIANG = [
             scope: 'squad',
             cond: 'afterSkill',
             sp: '<=5',
-            rounds: 1
+
+            delay: 1,            rounds: 1
           },
           {
             type: 'xiangUp',
@@ -9132,7 +9161,8 @@ const EMBED_XIANGXIANG = [
             scope: 'squad',
             cond: 'afterSkill',
             sp: '>5',
-            rounds: 2
+
+            delay: 1,            rounds: 2
           }
         ]
       },
@@ -9174,7 +9204,8 @@ const EMBED_XIANGXIANG = [
                 scope: 'squad',
                 cond: 'afterSkill',
                 sp: '<=5',
-                rounds: 1
+
+                delay: 1,                rounds: 1
               },
               {
                 type: 'xiangUp',
@@ -9182,7 +9213,8 @@ const EMBED_XIANGXIANG = [
                 scope: 'squad',
                 cond: 'afterSkill',
                 sp: '>5',
-                rounds: 2
+
+                delay: 1,                rounds: 2
               }
             ]
           },
@@ -9240,7 +9272,8 @@ const EMBED_XIANGXIANG = [
                 scope: 'squad',
                 cond: 'afterSkill',
                 withSkill: '音速冲击',
-                rounds: 2
+
+                delay: 1,                rounds: 2
               }
             ]
           },
@@ -9457,7 +9490,8 @@ const EMBED_XIANGXIANG = [
                 scope: 'all',
                 cond: 'afterSkill',
                 withSkill: '非连携技能',
-                rounds: 1
+
+                delay: 1,                rounds: 1
               }
             ]
           },
@@ -9505,7 +9539,8 @@ const EMBED_XIANGXIANG = [
                 scope: 'squad',
                 cond: 'afterSkill',
                 withSkill: '十字审判',
-                rounds: 1
+
+                delay: 1,                rounds: 1
               }
             ]
           },
@@ -9959,7 +9994,8 @@ const EMBED_XIANGXIANG = [
                 scope: 'squad',
                 cond: 'afterSkill',
                 withSkill: '引雷',
-                rounds: 2
+
+                delay: 1,                rounds: 2
               }
             ]
           },
@@ -10032,7 +10068,8 @@ const EMBED_XIANGXIANG = [
                 scope: 'squad',
                 cond: 'afterSkill',
                 withSkill: '防卫解析系统',
-                rounds: 2,
+
+                delay: 1,                rounds: 2,
                 row: 'front'
               }
             ]
@@ -10087,7 +10124,8 @@ const EMBED_XIANGXIANG = [
                 scope: 'all',
                 cond: 'afterSkill',
                 withSkill: '技能',
-                rounds: 1
+
+                delay: 1,                rounds: 1
               }
             ]
           },
@@ -10230,8 +10268,9 @@ const EMBED_XIANGXIANG = [
                 type: 'xiangUp',
                 value: 89,
                 scope: 'squad',
-                withSkill: '鸣响吧',
-                cond: 'always'
+                withSkill: '鸣响吧，大海！',
+                cond: 'allyHpLow',
+                hp: 30
               }
             ]
           },
@@ -10991,7 +11030,8 @@ const EMBED_XIANGXIANG = [
             scope: 'squad',
             cond: 'afterGuardOrLink',
             sp: '<=2',
-            rounds: 1
+
+            delay: 1,            rounds: 1
           },
           {
             type: 'xiangUp',
@@ -10999,7 +11039,8 @@ const EMBED_XIANGXIANG = [
             scope: 'squad',
             cond: 'afterGuardOrLink',
             sp: '>2',
-            rounds: 2
+
+            delay: 1,            rounds: 2
           }
         ]
       },
@@ -11144,7 +11185,8 @@ const EMBED_XIANGXIANG = [
                 scope: 'squad',
                 cond: 'afterSkill',
                 withSkill: '缎带封印',
-                rounds: 2,
+
+                delay: 1,                rounds: 2,
                 frontRow: true
               }
             ]
@@ -11327,6 +11369,36 @@ function xiangStatAtkPct(g, who){
   const st = xiangStatOfCarrier(g, who);
   return st ? (+st.atkPct || 0) : 0;
 }
+/* ★P122c（2026-10-01 用户终裁）——心象【伤害】基数 ≠ 心象【攻击力加成】（后者走 xiangAtkFlatOf，是另一条通道）。
+   心象伤害统一取【施放者本人（携带者）的基础攻击力】：主战携带并释放 ⇒ 主战角色基础攻击力；
+   援护（sup）携带并释放 ⇒ 援护角色基础攻击力。★必须区分携带者，【不得】取小队两槽之和。
+   「不计算藏品数据的攻击力」= 数值统计「攻击力(LVxx)」裸值（形态档位由 panelColsOf 决定），
+   = 与 P94「心象加攻击力」严格同词同口径 ⇒ 不含攻击力% 放大、不含藏品加成，
+   ≠ groupPanelAtk（小组放大后的最终面板，旧 v2.6.6.10 口径）。
+   ★P122d：基数改取统计表【觉醒面板】列（本槽觉醒开着）/【100天赋】列（没开觉醒），档 70 ⇒ awk70 / t100_70。
+   ★P123c：修正「跳过回合仍跳心象数字」——心象被动「提升 X% 心象伤害」只作增益，门槛 = 本回合【小队】放了攻击技能；
+      ★主战行动也算小队行动（SUP 携带的被动同样生效），只有全员跳过（who:'none'）时心象段才恒 0（π4-守护者「战斗开始 +72%」为例）。
+   废弃口径留档：P122b「小组两槽之和」、P122「本单槽口径曾被改走小组和」、P102「受方本组主战单槽」、P100「整队面板」。
+   任何异常一律兜 0（心象段不许抛）。 */
+function xiangCarrierBaseAtk(g, who){
+  const grp = state.groups && state.groups[g];
+  if(!grp) return 0;
+  const cid = (who === 'sub') ? grp.subId : grp.mainId;
+  if(!cid) return 0;
+  try{
+    const col = (typeof panelColsOf === 'function') ? panelColsOf(grp, who) : { atk:'atk60', t100:'t100_60', awk:'awk60' };
+    /* ★P122d（2026-10-01 用户裁决）：心象【伤害】基数改用统计表两列 ——
+       本槽觉醒开关开着 ⇒ 取【觉醒面板】列（awk60 / awk70）；没开觉醒 ⇒ 取【100天赋】列（t100_60 / t100_70）。
+       档位随 panelColsOf 自动切换（档 70 ⇒ t100_70 / awk70）。仍不含藏品、不含攻击力% 放大。
+       ★这是【伤害】通道；「心象加攻击力」通道（xiangAtkFlatOf）仍读 atk 裸值，两条通道取不同列，别混。 */
+    const _aw = (typeof grpAwakenFx === 'function' && typeof grpSubAwakenFx === 'function')
+      ? ((who === 'sub') ? grpSubAwakenFx(g) : grpAwakenFx(g)) : false;
+    const _awv = _aw ? statVal(cid, col.awk) : '';
+    const _k = (_awv !== '' && _awv != null) ? col.awk : col.t100;
+    const _r = +statVal(cid, _k);
+    return _r || 0;
+  }catch(e){ return 0; }
+}
 /* ============ P94（2026-09-29 用户裁决）：心象攻击力改为 flat 增量 ============
    游戏实测：面板「心象加了攻击力」= 数值统计「攻击力(LVxx)」裸值 × 心象 atkPct%
    （例：LV攻击 1820 × 4.89% = 89；不是 面板总和 × 4.89% = 182，差 2.05 倍）。
@@ -11497,6 +11569,14 @@ function xiangRowOK(gg, r, e){
   if(e.row)      return xiangTargetsRow(gg, r, e.row);
   return true;
 }
+/* ★P126（2026-10-01 用户裁定）：afterSkill / afterGuardOrLink 的【延迟生效】口径 ——
+   部分心象被动原文是「使用某技能后，下回合起 +X% 持续 N 回合」（施放当回合不吃该增益），
+   靠 effect.delay 表达：delay = 1 ⇒ 自「施放回合 + 1」起算，窗口取 (r-k-delay)∈[0, dur)。
+   返回 -1 = 技能尚未施放过（条件不成立）。delay 缺省 0 ⇒ 完全等同旧口径（施放当回合即生效）。 */
+function xiangDelayGap(e, r, k){
+  if(k < 0) return -1;
+  return r - k - Math.max(0, Math.round(+e.delay || 0));
+}
 /* 单个 effect 在第 r 回合对该组的取值（% 心象伤害）；0 = 条件不成立 / 非伤害段 */
 function xiangEffValAt(e, gg, cid, r){
   const val  = +e.value || 0;
@@ -11507,12 +11587,20 @@ function xiangEffValAt(e, gg, cid, r){
   if(cond === 'oddRound')    return (r % 2 === 0) ? val : 0;
   if(cond === 'battleStart') return (r < Math.max(1, dur)) ? val : 0;
   if(cond === 'afterSkill'){
-    /* 旧口径（2.6.6.10）保持：withSkill 指定「使用某技能后」；未指定时按 anySkill 才无条件成立 */
+    /* 旧口径（2.6.6.10）保持：withSkill 指定「使用某技能后」；未指定时按 anySkill 才无条件成立
+       ★P126（2026-10-01 用户裁定）：支持 delay ——「使用后不是当回合生效，而是下一个回合才生效」
+       （界/和服夏娜·炎灵 86% 队伍心象增伤：施放当回合不吃，自下一回合起算 rounds 回合）。 */
     if(!xiangRowOK(gg, r, e)) return 0;
     const names = [e.withSkill].filter(Boolean);
     if(!names.length) return e.anySkill ? val : 0;
-    const k = xiangLastUseRound(gg, r, names);
-    return (k >= 0 && (r - k) < Math.max(1, dur)) ? val : 0;
+    /* ★P126c（2026-10-01 自收）：取「最近施放回合」的游标必须停在 r-delay 处 ——
+       否则每回合都施放同一触发技能时 k 恒等于 r，gap = r-k-delay = -1 恒成立 ⇒
+       这类「使用后持续 N 回合」的效果【永久失效】（赫萝 α1 / 真白 ε6 这类每回合触发的最明显）。
+       delay=0 时 r-0 = r ⇒ 完全等同旧口径。 */
+    const dly = Math.max(0, Math.round(+e.delay || 0));
+    const k = xiangLastUseRound(gg, r - dly, names);
+    const gap = xiangDelayGap(e, r, k);
+    return (gap >= 0 && gap < Math.max(1, dur)) ? val : 0;
   }
   if(cond === 'afterGuardOrLink'){
     if(!xiangRowOK(gg, r, e)) return 0;
@@ -11523,8 +11611,10 @@ function xiangEffValAt(e, gg, cid, r){
     if(e.sp && String(e.sp).charAt(0) !== '>') return 0;
     const pool = xiangGuardOrLinkNames(cid).concat([e.withSkill].filter(Boolean));
     if(!pool.length) return 0;
-    const k = xiangLastUseRound(gg, r, pool);
-    return (k >= 0 && (r - k) < Math.max(1, dur)) ? val : 0;
+    const dlyG = Math.max(0, Math.round(+e.delay || 0));   /* 游标含义见 afterSkill 支 P126c 注释 */
+    const k = xiangLastUseRound(gg, r - dlyG, pool);
+    const gap = xiangDelayGap(e, r, k);
+    return (gap >= 0 && gap < Math.max(1, dur)) ? val : 0;
   }
   if(cond === 'dotTarget'){
     const nm = xiangUsedSkillName(gg, r);
@@ -11568,11 +11658,12 @@ function xiangContribsOf(gg){
     if(!x) return;
     const def = xiangForCarrier(x, (getChar(cid) || {}).label || '');
     if(!def) return;
-    /* v2.6.6.10 口径定稿（用户裁决）：基数改为「携带小组的攻击力」，且【不计算藏品加成属性】。
-       grp.panel = 小组内部总面板（已扣除装备每槽 +1470 的藏品加成）⇒ 直接取它；
+    /* ★P122c（2026-10-01 用户终裁）：基数 = 【施放者本人（携带者）基础攻击力】——
+       本 forEach 的 who 就是该次心象的携带槽位（main / sub），主战携带并释放 ⇒ 主战角色裸值，
+       援护携带并释放 ⇒ 援护角色裸值；【不再】取小队两槽之和（P122b 作废旧口径）。
+       ★不计攻击力% 放大与藏品加成（与 P94「心象加攻击力」同词同口径）；
        折算成「倍率」时的分母仍用含藏品的最终面板 _effPanel（见 simulateGroupXinxiang）。 */
-    const atk     = (typeof groupPanelAtk === 'function') ? groupPanelAtk(gg) : (+grp.panel || 0);
-    const mainAtk = atk;
+    const atk     = xiangCarrierBaseAtk(gg, who);
     const skills  = Array.isArray(def.skills) ? def.skills : [];
     const byName  = {};
     skills.forEach(s=>{
@@ -11581,13 +11672,17 @@ function xiangContribsOf(gg){
       if(s.alias) byName[s.alias] = s;
     });
     /* ① 技能型：释放该技能的那一回合，对命中目标产生 X% 心象伤害 */
+    /* ★P123c：技能型心象（①）的取值函数抽成本作用域常量 —— 只在本段（① 技能型）使用；
+       被动型（③）的门槛另走 squadActedAt（小队行动），两者判定口径【故意不同源】：
+       ① 要求技能名命中本心象绑定技能，③ 只要本回合小队有人放了攻击技能。 */
+    const skillPctAt = (r)=>{
+      const nm = xiangUsedSkillName(gg, r);
+      const sk = nm ? byName[nm] : null;
+      return (sk && (+sk.xdmg > 0)) ? +sk.xdmg : 0;
+    };
     if(Object.keys(byName).length){
       out.push({ srcG:gg, who, charId:cid, xx:x, kind:'skill', atk, scope:'squad',
-        pctAt:(r)=>{
-          const nm = xiangUsedSkillName(gg, r);
-          const s = nm ? byName[nm] : null;
-          return (s && (+s.xdmg > 0)) ? +s.xdmg : 0;
-        } });
+        pctAt: skillPctAt });
     }
     /* ② 技能附带增益型：使用该技能后 rounds 回合内「提升 X% 角色基础攻击力的心象伤害」 */
     skills.forEach(s=>{
@@ -11595,12 +11690,21 @@ function xiangContribsOf(gg){
       const names = [s.name, s.alias].filter(Boolean);
       const dur = Math.max(1, Math.round(+s.up.rounds || 1));
       out.push({ srcG:gg, who, charId:cid, xx:x, kind:'skillUp', scope: s.up.scope || 'squad',
-        atk: (s.up.base === 'mainAtk' ? mainAtk : atk),
+        atk: atk,
         pctAt:(r)=>{
           const k = xiangLastUseRound(gg, r, names);
           return (k >= 0 && (r - k) < dur) ? +s.up.value : 0;
         } });
     });
+    /* ★P123c（2026-10-01 用户裁决）：被动「提升 X% 角色基础攻击力的心象伤害」的门槛 =
+       【本回合小队有角色释放了攻击技能】—— SUP（援护）携带的被动，主战行动同样算小队行动
+       （用户原话：「SUP的被动，主战行动也算小队行动啊」）；P123 初版把门槛写成
+       「本槽释放了本心象绑定技能」⇒ 主战行动的回合被误杀（用户判「修复的不对」），现作废。
+       ⇒ 门槛只把【全员跳过（who:'none'）】判 0，其余（main 行动 / sup 行动 / 任意攻击技能）一律放行。 */
+    const squadActedAt = (r)=>{
+      const nm = xiangUsedSkillName(gg, r);
+      return nm ? 1 : 0;
+    };
     /* ③ 被动增益型 —— v2.7.0：条件求值统一走 xiangEffValAt（含虚拟模型 / 排位泛化）
        ★ 旧内联白名单已删除：新增条件（hpLow / hpHigh / allyHpLow / allyHpHigh /
          targetBuff / targetNoBuff / stack）只有在这里统一求值才会生效。
@@ -11609,8 +11713,19 @@ function xiangContribsOf(gg){
     pe.forEach(e=>{
       if(!e || e.type !== 'xiangUp' || !(+e.value > 0)) return;
       out.push({ srcG:gg, who, charId:cid, xx:x, kind:'passiveUp', scope: e.scope || 'squad',
-        atk: (e.base === 'mainAtk' ? mainAtk : atk),
-        pctAt: (r)=>xiangEffValAt(e, gg, cid, r) });
+        atk: atk,
+        pctAt: (r)=>{
+          const v = xiangEffValAt(e, gg, cid, r);
+          if(!(v > 0)) return 0;
+          /* ★P123c（2026-10-01 用户裁决）：被动「提升 X% 角色基础攻击力的心象伤害」是【增益】
+             【不是】独立伤害源 —— 门槛 = 本回合【小队】真实释放了攻击技能（squadActedAt）。
+             ★关键：门槛【不】看是 main 还是 sup 在行动（主战行动也算小队行动，用户裁决）
+             【也】不要求该技能是本心象绑定的技能（π4 绑定「一方通行·学园都市的顶点」为例，
+             主战释放自己的技能时援护被动同样该生效）；唯一拦掉的是【全员跳过】（who:'none'），
+             即旧实现只按 cond 求值（battleStart / always 等）无条件出伤的那一类：
+             π4-守护者「战斗开始 +72%」在跳过回合照样跳数字，用户判为 bug，P123c 收口。 */
+          return (typeof squadActedAt === 'function' && squadActedAt(r) > 0) ? v : 0;
+        } });
     });
     /* ③b 被动「效果型」（v2.7.0 新增）：护盾 / 治疗 / 治疗加成 —— 按真实数值**记录并展示**，
        但**不进伤害总分**（用户裁决：「护盾或治疗类先按真实情况记录数值」）。
@@ -11620,7 +11735,10 @@ function xiangContribsOf(gg){
   return out;
 }
 
-/* P102（2026-09-30 用户裁决）：跨组「我方全体」类心象的基数 = 受方本组【主战角色】基础攻击力（单槽）。
+/* ★P122c（2026-10-01）：★本口径退役 —— 心象伤害基数统一按【施放者本人基础攻击力】xiangCarrierBaseAtk(g, who)
+   （xiangContribsOf 的 c.atk 按携带槽位写入）⇒ 下面这个「受方本组主战单槽」、以及 P122b「小组两槽之和」、
+   P100「整队面板」三口径都不再参与任何计算，仅留档供旧档核对。
+   P102（2026-09-30 用户裁决）：跨组「我方全体」类心象的基数 = 受方本组【主战角色】基础攻击力（单槽）。
    游戏原文区分两种措辞：心象技能「角色基础攻击」= 所在【整个小队】（主战+援护，不含藏品）；
                         跨组增益「其主战角色基础攻击力」= 受方本组【主战角色】单槽。
    scope 'squad'（携带组自身）仍走携带组整队面板（c.atk，v2.6.6.10 口径不变）。
@@ -11638,12 +11756,20 @@ function xiangCrossBaseAtk(g){
 /* 心象伤害（倍率口径，per-enemy）：按携带者组逐回合推演。
    v2.6.6.10 口径定稿：基数 = 携带小组的攻击力【不计算藏品加成】= grp.panel；
    P102（2026-09-30）：跨组「我方全体」类改按受方【主战角色】基础攻击力（xiangCrossBaseAtk）。
+   ★P122c（2026-10-01 用户终裁）：★基数 = 【施放者本人（携带者）基础攻击力】xiangCarrierBaseAtk(g, who) ——
+   主战携带并释放 ⇒ 主战角色「攻击力(LVxx)」裸值；援护携带并释放 ⇒ 援护角色裸值；★区分携带者、不取小队两槽之和
+   （P122b 小组两槽之和 / P102 受方主战单槽 / P100 整队面板 三口径全部退役，xiangCrossBaseAtk 仅留档）。
+   与 P94「心象加攻击力」同词同口径（不含藏品、不含攻击力% 放大）——注意那是一条独立通道（xiangAtkFlatOf），
+   别把两者当成同一个数。
    折算：X% × 基数 / _effPanel（_effPanel 含藏品，是「倍率」的 100% 基准）。
    最后 ×敌人数（对命中目标各结算一次）× (1 + 心象易伤%)。
    返回 { byRound:[每回合倍率], total:合计倍率, parts:[...], dmgByRound/dmgTotal:[本次施放伤害] }；未携带 / 空库 / 开关关闭恒 0。 */
 function simulateGroupXinxiang(g){
   const nR = (state.rounds || []).length;
-  const out = { byRound: new Array(nR).fill(0), total: 0, parts: [], dmgByRound: new Array(nR).fill(0), dmgTotal: 0 };
+  const out = { byRound: new Array(nR).fill(0), total: 0, parts: [], dmgByRound: new Array(nR).fill(0), dmgTotal: 0,
+    /* ★P125（2026-10-01）：逐回合【贡献明细】—— UI 核对表据此把「这一格为什么是这个数」摊开给用户看。
+       纯附加字段，不参与任何计算（铁律：展示与计算分离，改展示不得动口径）。 */
+    roundParts: [] };
   if(!nR) return out;
   /* v2.6.6.10：全局「✦ 心象伤害效果」开关（默认开启）—— 只关效果、不关心象：
      仍可装配 / 出招格下拉选择 / 出招排表勾选释放，仅其心象伤害不计入总分。 */
@@ -11651,8 +11777,8 @@ function simulateGroupXinxiang(g){
   const grp = state.groups[g] || {};
   /* _effPanel = 小组最终攻击力（groupPanelAtk + 藏品/装备加成）；「倍率」以它为 100% 基准 ⇒ 作折算分母。
      v3.0.1：基数与分母同源（此前分母用 groupPanelAtk 口径、分子直读 grp.panel ⇒ 自动分支下分子恒 0）。 */
-  const ownAtk = ((typeof groupPanelAtk === 'function') ? groupPanelAtk(g) : (+grp.panel || 0));   /* 受方本组【整队】攻击力（不含藏品口径） */
-  const crossBase = ((typeof xiangCrossBaseAtk === 'function') ? xiangCrossBaseAtk(g) : ownAtk);  /* P102：跨组「其主战角色」基数 = 受方主战单槽 */
+  const ownAtk = ((typeof groupPanelAtk === 'function') ? groupPanelAtk(g) : (+grp.panel || 0));   /* P122d：仅作折算分母口径；心象伤害基数 = 施放者本人基础攻击力（c.atk = xiangCarrierBaseAtk）
+     —— 取统计表【觉醒面板】/【100天赋】列（开觉醒 / 未开觉醒），不含藏品与攻击力% 放大。 */
   const panel  = ownAtk + (typeof groupEquipPanel === 'function' ? groupEquipPanel(grp) : 0);
   if(!(panel > 0)) return out;
 
@@ -11675,11 +11801,13 @@ function simulateGroupXinxiang(g){
       contribs.forEach(c=>{
         const p = c.pctAt(r) || 0;
         if(!(p > 0)) return;
-        /* P102（2026-09-30 用户裁决，细化 P100）：游戏原文区分两种措辞 ——
-           ①「角色基础攻击」= 所在【整个小队】（主战+援护，不含藏品）⇒ scope 'squad' 走 c.atk；
-           ②「其主战角色基础攻击力」= 受方本组【主战角色】单槽 ⇒ scope 'all' 走 crossBase。
+        /* ★P122c（2026-10-01 用户终裁）：心象伤害基数按【施放者本人】取 —— c.atk 由 xiangContribsOf
+           按携带槽位（main / sub）写入，主战携带并释放 ⇒ 主战角色裸基础攻击力，sup 携带并释放 ⇒ sup 裸值；
+           【不】取小队两槽之和；跨组「我方全体」类同样按施放者本人。
            「仅限心象部分」：本区分只影响心象段，技能本体伤害口径不动。 */
-        add += p * ((c.scope === 'all') ? crossBase : c.atk) / panel;
+        add += p * c.atk / panel;
+        if(!out.roundParts[r]) out.roundParts[r] = [];
+        out.roundParts[r].push({ who: c.who, kind: c.kind, nm: (c.kind === 'skill' ? (xiangUsedSkillName(c.srcG, r) || c.who + '技能') : ((c.xx && c.xx.name) ? c.xx.name + '·被动' : '心象·被动')), pct: p, atk: c.atk });
       });
       if(add <= 0) continue;
       const _vf = 1 + xiangVulnBonusPct(r)/100;
@@ -11697,7 +11825,7 @@ function simulateGroupXinxiang(g){
   }
   [['main', grp.mainId], ['sub', grp.subId]].forEach(([who, cid])=>{
     const x = xiangById(getCharXiang(cid));
-    if(x) out.parts.push({ who, charId:cid, xx:x, atk: ((typeof groupPanelAtk === 'function') ? groupPanelAtk(g) : (+grp.panel || 0)) });
+    if(x) out.parts.push({ who, charId:cid, xx:x, atk: xiangCarrierBaseAtk(g, who) });
   });
   return out;
 }
@@ -11712,7 +11840,7 @@ function confirmXiangBoardHTML(){
   const sims = [0,1,2].map(gg=>{ try{ return simulateGroupXinxiang(gg); }catch(e){ return { byRound:[], total:0, parts:[] }; } });
   let h = '<div class="confirm-region" style="margin-top:12px">';
   h += '<div class="confirm-region-title">心象数据核对'
-    + '<span style="font-size:11px;font-weight:400;color:var(--sub)">口径：心象伤害 = 原始倍率% × 基数 ÷ 100 × 敌人数 ×（1+心象易伤%）；「角色基础攻击」类基数=所在小队（主战+援护，不含藏品），「其主战角色基础攻击力」类跨组基数=受方本组主战角色（P102）；单次=本次施放对全部命中目标造成的伤害；★可暴击（吃该段所属组的暴击率/暴伤，P103）、不计入终伤</span>'
+    + '<span style="font-size:11px;font-weight:400;color:var(--sub)">口径：心象伤害 = 原始倍率% × 基数 ÷ 100 × 敌人数 ×（1+心象易伤%）；★P122d：基数 = 该次施放的「携带者本人」基础攻击力（主战携带并释放=主战角色同名列数值，援护携带并释放=援护角色同名列数值；★取统计表【觉醒面板(LVxx)】列 —— 该槽觉醒开关开着时；没开觉醒则取【100天赋(LVxx)】列，档位 70 自动切 70 级列；不含藏品与攻击力% 放大；不取小队两槽之和），不含藏品加成与攻击力% 放大（与心象「加攻击力」同口径）；单次=本次施放对全部命中目标造成的伤害；★可暴击（吃该段所属组的暴击率/暴伤，P103）、不计入终伤</span>'
     + (!_on ? '<span style="font-size:11px;color:#b45309;font-weight:400">（「✦ 心象伤害效果」未开启：心象伤害不计入总分）</span>' : '')
     + '</div>';
   h += '<div class="tbl-wrap"><table class="skill confirm-input-table"><thead>';
@@ -11747,12 +11875,20 @@ function confirmXiangBoardHTML(){
         if(s.up && +(s.up.value) > 0) t += ' +' + (+s.up.value) + '%' + (s.up.scope === 'all' ? '<span title="我方全体：各受益组按其本组面板折算（P100）" style="color:#7c3aed">〔全体〕</span>' : '');
         return t;
       }).filter(Boolean).join(' / ');
+      /* ★P125：把「这一槽心象伤害用的是哪个基数、哪一列」显式摊开 ——
+         P122d 起基数按携带槽独立（main / sup 各算各的裸值），且觉醒开关决定取【觉醒面板】列 /【100天赋】列；
+         不给出来用户只能看到总伤害、无从核对（2026-10-01 反馈「35.5% 出伤 8980 / 145.5% 出伤 23401 对不上倍率」）。 */
+      const _cwho = (tag === '主战') ? 'main' : 'sub';
+      const _cbt = (+xiangCarrierBaseAtk(g, _cwho)) || 0;
+      const _caw = (_cwho === 'main') ? grpAwakenFx(g) : grpSubAwakenFx(g);
+      const _ccol = _caw ? '觉醒面板' : '100天赋';
+      const _cbTxt = '<div style="font-size:10px;color:#7c3aed">心象基数 '+fmt(_cbt)+'（'+_ccol+'·不含藏品）</div>';
       const pas = (def && def.passive && def.passive.text) ? '<div style="font-size:10px;color:var(--sub)">'+esc(def.passive.text)+'</div>' : '';
       cell += '<div style="font-size:11px;line-height:1.5"><b>'+tag+'</b> '+esc(x.name)+((+x.lvl>0)?(' Lv'+x.lvl):'')
         + (x.est?'<span title="推算值" style="color:#b45309">·est</span>':'')
         + (skTxt ? ('<br><span style="color:var(--sub)">'+skTxt+'</span>') : '')
         + (x.stat ? ('<br>'+xiangStatChipsHTML(x)) : '')
-        + pas + '</div>';
+        + _cbTxt + pas + '</div>';
     });
     h += '<td colspan="2" class="cg-g'+g+'" style="text-align:left;font-size:11px">'+(cell||'<span style="color:var(--sub)">—</span>')+'</td>';
   }
@@ -11764,7 +11900,9 @@ function confirmXiangBoardHTML(){
     for(let g=0; g<3; g++){
       const v = +(sims[g].dmgByRound[r]||0);
       rowSum += v;
-      h += '<td colspan="2" class="cg-g'+g+'" style="text-align:center;font-size:12px'+(v>0?';font-weight:700;color:var(--brand)':'')+'">'+(v>0?fmt(v):'—')+'</td>';
+      const _rp = (sims[g].roundParts && sims[g].roundParts[r]) || [];
+      const _rpTxt = _rp.length ? ('本回合心象构成：'+_rp.map(t=>(t.nm||'')+' ×'+fmt(t.pct)+'% ×基数'+fmt(t.atk)).join('；')) : '本回合无有效心象贡献';
+      h += '<td colspan="2" class="cg-g'+g+'" title="'+esc(_rpTxt)+'" style="text-align:center;font-size:12px'+(v>0?';font-weight:700;color:var(--brand)':'')+'>'+(v>0?fmt(v):'—')+'</td>';
     }
     h += '<td style="text-align:center;font-weight:700">'+(rowSum>0?fmt(rowSum):'—')+'</td></tr>';
   }
@@ -13580,7 +13718,10 @@ function talentCritGrant(tl, g){
   const awVal = groupAwakeningTalentCritRatePct(g);
   /* P112：user manual override（talentCritOv / talentCritDmgOv）——与觉醒覆写同源、按原 scope 分派，
      故 team 型只进 crossGroupCrit()、本组/自身型只进本组累加，不会双计。 */
-  const _ovR = (+grp.talentCritOv||0), _ovD = (+grp.talentCritDmgOv||0);
+  /* P121：只消费本天赋实际拥有的通道（该通道无 ⇒ 旧档残留覆盖值不再生效） */
+  const _chan = (typeof talentCritChanOf === 'function') ? talentCritChanOf(mainChar) : { rate:true, dmg:true };
+  const _ovR = (_chan.rate && (+grp.talentCritOv||0) > 0) ? (+grp.talentCritOv||0) : 0;
+  const _ovD = (_chan.dmg && (+grp.talentCritDmgOv||0) > 0) ? (+grp.talentCritDmgOv||0) : 0;
   if(_ovR > 0 || _ovD > 0 || awVal > 0){
     return { critRate: (_ovR > 0) ? _ovR : (awVal > 0 ? awVal : (+base.critRate||0)),
              critDmg:  (_ovD > 0) ? _ovD : (+base.critDmg||0),
@@ -17275,6 +17416,21 @@ function specTalentCritOf(c){
   if(!g || (!((+g.critRate||0) > 0) && !((+g.critDmg||0) > 0))) return null;
   return { critRate:+g.critRate||0, critDmg:+g.critDmg||0, scope:g.scope||'self' };
 }
+/* P121：天赋【实际拥有】的暴击通道（暴击率 / 暴伤）——决定「角色天赋效果 %」行只渲染天赋真正对应的那个覆盖输入，引擎侧也只消费对应覆盖值，杜绝「暴击率天赋给出暴伤输入框」（死输入）与「填了暴伤却给暴击天赋加暴伤」。
+   与引擎消费点一一对应：· 残心（有纪（天使）·481）——层数型，暴伤/暴击率均按残心层数逐回合自动折算，引擎不消费覆盖值 ⇒ 无覆盖入口；
+   · 战术进化（司波达也·729）——只产暴伤（evolutionStacksInfo 折入 + talentCritDmgOv 消费）⇒ 暴击率无覆盖入口；
+   · 其余专属天赋按 parseSkillCritGrant 解析结果给出对应通道。 */
+function talentCritChanOf(c){
+  if(!c) return { rate:false, dmg:false };
+  const t = (c.talents||[]).find(x=>!['元气','热血','生机'].includes(x.n));
+  if(!t) return { rate:false, dmg:false };
+  /* P121b：残心 = 层数型双通道（≥5枚 暴伤+10% / ≥10枚 暴击率+5%），引擎按层数自动折算并支持
+     两个覆盖值分别替换对应通道（verify_p112 D9~D11 锁该行为）⇒ 双通道均保留，不缺供。 */
+  if(typeof zanshinTalentOf === 'function' && zanshinTalentOf(c)) return { rate:true, dmg:true };
+  if(typeof evolutionTalentOf === 'function' && evolutionTalentOf(c)) return { rate:false, dmg:true };
+  const _sc = (typeof parseSkillCritGrant === 'function') ? (parseSkillCritGrant(t, 0)||{}) : {};
+  return { rate:(+_sc.critRate||0) > 0, dmg:(+_sc.critDmg||0) > 0 };
+}
 /* P112（2026-10-01）：天赋「用户手动覆盖」读取器（0 = 不覆盖，走引擎自动折算）。
    与 talentRowState 的 type 一一对应：· crit 型（专属天赋暴击率/暴伤授予、阈值暴击）→ critRate/critDmg 两通道；
    · total 型（增伤/易伤单值总当量：升华技独立乘区、跨组共享易伤等）→ total；· none 型（资源/倍率，无可覆盖 % 通道）→ 全 0。
@@ -17285,7 +17441,8 @@ function talentOvShapeOf(g){
 }
 function talentRowState(g){
   const grp = (state.groups && state.groups[g]) || {};
-  const r = { present:false, name:'', type:'', auto:0, autoTxt:'', ov:0, ovKind:'total', on:true };
+  const r = { present:false, name:'', type:'', auto:0, autoTxt:'', ov:0, ovKind:'total', on:true,
+              ovCritRate:true, ovCritDmg:true };   /* P121：两暴击覆盖通道默认可覆盖，分支内按天赋实际通道关掉 */
   r.on = (typeof grpTalentFx === 'function') ? grpTalentFx(g) : true;
   const c = getChar(grp.mainId);
   if(!c) return r;
@@ -17382,9 +17539,16 @@ function talentRowState(g){
     /* P110：残心（有纪（天使）·481）—— zanshinCritRatio 折入暴伤/暴击率，引擎按出招回放折算「残心层数」，无可覆盖 % 通道 */
     r.type = '暴击增益(残心层数)';
     r.auto = 0;
-    r.autoTxt = '暴伤/暴击率 × 残心层数（随出招回放·常驻近似）';
+    /* P121：层数型 ⇒ 暴伤/暴击率均按残心层数逐回合自动折算，引擎不消费覆盖值 ⇒ 不给手动输入；
+       自动值直接列阈值，避免只看到「暴击增益」却不明示其中含暴伤条目。 */
+    const _zc = (typeof zanshinCfgOf === 'function') ? (zanshinCfgOf(g) || null) : null;
+    r.autoTxt = _zc
+      ? ('≥' + _zc.th1 + '枚 暴伤+' + _zc.cd1 + '% · ≥' + _zc.th2 + '枚 暴击率+' + _zc.cr2 + '%（随出招回放·常驻近似）')
+      : '暴伤/暴击率 × 残心层数（随出招回放·常驻近似）';
     r.isResource = true;
-    r.ovKind = 'crit';   /* P112：双通道可手动覆盖（暴击率 / 暴伤） */
+    r.ovKind = 'crit';
+    r.ovCritRate = true;    /* P121b：残心 暴击率/暴伤 双通道均可手动覆盖（层数型均按覆盖值替换自动折算） */
+    r.ovCritDmg = true;
   } else if(shuiHuaCfgOf(g)){
     /* P110：水花（亚子（夏日）·561）—— shuiHuaVulnContribAt 折入碧水之心易伤，引擎按出招回放折算「水花层数 × 每层%」，无可覆盖 % 通道 */
     r.type = '易伤(水花层数)';
@@ -17398,6 +17562,7 @@ function talentRowState(g){
     r.autoTxt = '暴击伤害 × 叠层（上限N层·随出招回放）';
     r.isResource = true;
     r.ovKind = 'crit';   /* P112：暴伤通道可手动覆盖（talentCritDmgOv） */
+    r.ovCritRate = false;   /* P121：战术进化只产暴伤 ⇒ 只给「暴伤」输入，不显示暴击率 */
   } else if(specTalentCritOf(c)){
     /* P111：专属天赋暴击率授予（有纪·801 / 亚丝娜·751 / 界 亚丝娜·751 / 泳装御坂美琴）——
        引擎已计入（本组 grpCritRate / 全队 crossGroupCrit），无可覆盖 % 通道；按作用域如实标注。 */
@@ -17410,6 +17575,8 @@ function talentRowState(g){
     r.autoTxt = _ccP.join(' / ') + '（' + (_cc.scope === 'team' ? '全队 3 组' : '仅本组') + '·引擎已计入）';
     r.isResource = true;
     r.ovKind = 'crit';   /* P112：恢复手动覆盖入口（talentCritOv / talentCritDmgOv，0=走自动值） */
+    r.ovCritRate = (_cc.critRate > 0);   /* P121：天赋文本只写暴击率 ⇒ 只给「暴击率」输入 */
+    r.ovCritDmg  = (_cc.critDmg > 0);    /* P121：天赋含暴伤条目才给「暴伤」输入 */
   } else {
     r.type = '未建模';
     r.autoTxt = '无（纯文案 / 条件型，不计分）';
@@ -17494,10 +17661,16 @@ function talentDetailHTML(g){
     const ts = talentRowState(g);
     let _eff;
     if(ts.ovKind === 'crit'){
-      const _oCR = (+((grp.talentCritOv)||0)), _oCD = (+((grp.talentCritDmgOv)||0));
-      _eff = '<b style="color:#7c3aed">暴击率 ' + (_oCR > 0 ? _oCR + '%（手动覆盖）' : '自动：' + esc(ts.autoTxt))
-        + ' ／ 暴伤 ' + (_oCD > 0 ? _oCD + '%（手动覆盖）' : '自动（由引擎按天赋机制折算）') + '</b>'
-        + '（来源：角色配置「角色天赋效果 %」同排的 暴击率 / 暴伤 小输入）';
+      const _oCR = (ts.ovCritRate !== false) ? (+((grp.talentCritOv)||0)) : 0;
+      const _oCD = (ts.ovCritDmg !== false) ? (+((grp.talentCritDmgOv)||0)) : 0;
+      const _effP = [];
+      if(_oCR > 0) _effP.push('暴击率 ' + _oCR + '%（手动覆盖）');
+      else if(ts.ovCritRate !== false) _effP.push('暴击率 自动：' + esc(ts.autoTxt));
+      if(_oCD > 0) _effP.push('暴伤 ' + _oCD + '%（手动覆盖）');
+      else if(ts.ovCritDmg !== false) _effP.push('暴伤 自动（由引擎按天赋机制折算）');
+      _eff = '<b style="color:#7c3aed">' + _effP.join(' ／ ') + '</b>'
+        + (_effP.length ? '（来源：角色配置「角色天赋效果 %」同排的 暴击率 / 暴伤 小输入）'
+                        : '（该天赋无手动覆盖入口，暴击/暴伤由引擎自动折算）');
     } else if(ts.ovKind === 'total' && ts.ov){
       _eff = '<b style="color:#7c3aed">' + ts.ov + '%</b>（来源：角色配置「角色天赋效果 %」覆盖值＝该通道总当量）';
     } else if(ts.ov){
@@ -18561,8 +18734,8 @@ function renderConfirm(){
         if(!_ts.present){ _tBadge = '无专属天赋'; _tColor = 'var(--sub)'; }
         else if(!_ts.on){ _tBadge = '已关 · 暴击+10%补强'; _tColor = '#b45309'; }
         else if(_slotMain && (_ts.ov || _ts.ov2)){ _tBadge = '覆盖中 · 1号' + (_ts.ov||0) + '% / 2号' + (_ts.ov2||0) + '%（0=自动）'; _tColor = '#7c3aed'; }
-        else if(_ts.ovKind === 'crit' && ((+grp.talentCritOv||0) || (+grp.talentCritDmgOv||0))){
-          const _bCR = (+grp.talentCritOv||0), _bCD = (+grp.talentCritDmgOv||0);
+        else if(_ts.ovKind === 'crit' && (((_ts.ovCritRate !== false && (+grp.talentCritOv||0) > 0)) || ((_ts.ovCritDmg !== false && (+grp.talentCritDmgOv||0) > 0)))){
+          const _bCR = (_ts.ovCritRate !== false) ? (+grp.talentCritOv||0) : 0, _bCD = (_ts.ovCritDmg !== false) ? (+grp.talentCritDmgOv||0) : 0;
           _tBadge = '覆盖中 · ' + _ts.type + ' ' + (_bCR > 0 ? ('暴击率 ' + _bCR + '%  ') : '') + (_bCD > 0 ? ('暴伤 ' + _bCD + '%') : '');
           _tColor = '#7c3aed';
         }
@@ -18570,13 +18743,21 @@ function renderConfirm(){
         else { _tBadge = '自动 · ' + _ts.type + ' ' + _ts.autoTxt; _tColor = 'var(--sub)'; }
         let _tInput;
         if(_ts.ovKind === 'crit'){
-          /* P112：暴击类天赋（专属天赋暴击率/暴伤授予、阈值暴击）——恢复两通道手动覆盖入口 */
-          _tInput = '<span style="font-size:10px;color:var(--sub);white-space:nowrap">暴击率<input type="number" step="0.01" style="width:62px" value="' + (+grp.talentCritOv||0) + '"'
-            + ' oninput="state.groups[' + g + '].talentCritOv=+this.value;recalc();" onchange="renderConfirm()"'
-            + ' title="主战专属天赋授予的【暴击率 %】手动覆盖（0 = 走角色库自动值，如自动 20%；填 10 / 25 / 30 即把该通道改成该值）"></span>'
-            + ' <span style="font-size:10px;color:var(--sub);white-space:nowrap">暴伤<input type="number" step="0.01" style="width:62px" value="' + (+grp.talentCritDmgOv||0) + '"'
-            + ' oninput="state.groups[' + g + '].talentCritDmgOv=+this.value;recalc();" onchange="renderConfirm()"'
-            + ' title="主战专属天赋授予的【暴击伤害 %】手动覆盖（0 = 走角色库自动值；该天赋含暴伤条目时才有意义）"></span>';
+          /* P112：暴击类天赋（专属天赋暴击率/暴伤授予、阈值暴击）——恢复手动覆盖入口；
+             P121：只渲染该天赋真正对应的通道（残心=层数型无输入；战术进化只给暴伤；暴击率天赋不给暴伤输入）。 */
+          const _inCR = (_ts.ovCritRate !== false)
+            ? '<span style="font-size:10px;color:var(--sub);white-space:nowrap">暴击率<input type="number" step="0.01" style="width:62px" value="' + (+grp.talentCritOv||0) + '"'
+                + ' oninput="state.groups[' + g + '].talentCritOv=+this.value;recalc();" onchange="renderConfirm()"'
+                + ' title="主战专属天赋授予的【暴击率 %】手动覆盖（0 = 走角色库自动值，如自动 20%；填 10 / 25 / 30 即把该通道改成该值）"></span>'
+            : '';
+          const _inCD = (_ts.ovCritDmg !== false)
+            ? ' <span style="font-size:10px;color:var(--sub);white-space:nowrap">暴伤<input type="number" step="0.01" style="width:62px" value="' + (+grp.talentCritDmgOv||0) + '"'
+                + ' oninput="state.groups[' + g + '].talentCritDmgOv=+this.value;recalc();" onchange="renderConfirm()"'
+                + ' title="主战专属天赋授予的【暴击伤害 %】手动覆盖（0 = 走角色库自动值；该天赋含暴伤条目时才有意义）"></span>'
+            : '';
+          _tInput = (_inCR || _inCD) ? (_inCR + _inCD)
+            : '<span style="font-size:10px;color:#16a34a">✓ 自动生效（层数/叠层型：暴击暴伤由引擎按出招回放自动折算，无手动覆盖入口）</span>';
+
         } else if(_ts.ovKind === 'none'){
           /* P109/P112：资源/倍率型（SP/BP/冰冷狙击/审判之力）无可覆盖 % 通道 —— 如实标注原因，不再声称「无需填写」 */
           _tInput = '<span style="font-size:10px;color:#16a34a">✓ 自动生效（资源/倍率型，无 % 通道可覆盖）</span>';
@@ -21736,6 +21917,7 @@ function crossGroupCrit(){
     /* P112l：司波达也·729「战术进化」= team 作用域窗口化暴伤，但它的天赋被排除在授予循环外 ⇒
        必须在此补记，否则 team 覆盖收口（gHadTeam）恒 false、用户填值被吞（实测 填45→0） */
     if(_evoTal) gHadTeam = true;
+    const _chanG = (typeof talentCritChanOf === 'function') ? talentCritChanOf(getChar(grp.mainId)) : { rate:true, dmg:true };
     [grp.mainId, grp.subId].forEach(id=>{
       const o = id ? getChar(id) : null;
       if(!o || !o.talents) return;
@@ -21750,11 +21932,11 @@ function crossGroupCrit(){
            覆盖值本身另由 crOv/cdOv 按【组】收口一次（见下方） */
         seen.add(k);
         gHadTeam = true;   /* P112i：仅当本组确有 team 型授予时才允许覆盖收口，避免自作用域天赋被串成全队 */
-        cr += (((+grp.talentCritOv||0) > 0) ? 0 : (+cg.critRate||0));
-        cd += (((+grp.talentCritDmgOv||0) > 0) ? 0 : (+cg.critDmg||0));
+        cr += (((_chanG.rate && (+grp.talentCritOv||0) > 0) ? 0 : (+cg.critRate||0)));
+        cd += (((_chanG.dmg && (+grp.talentCritDmgOv||0) > 0) ? 0 : (+cg.critDmg||0)));
       });
     });
-    if(gHadTeam){ crOv += (+grp.talentCritOv||0); cdOv += (+grp.talentCritDmgOv||0); }
+    if(gHadTeam){ if(_chanG.rate) crOv += (+grp.talentCritOv||0); if(_chanG.dmg) cdOv += (+grp.talentCritDmgOv||0); }
   }
   /* P112h：team 型手动覆盖收口——填值 = 该通道总当量（替换自动折算，全队 3 组共享一次） */
   if(crOv > 0) cr = Math.round(crOv * 100) / 100;
@@ -23660,9 +23842,11 @@ function computeGroupScores(g){
   const _ovCrit = (typeof talentOvShapeOf === 'function') ? talentOvShapeOf(g) : null;
   if(_ovCrit){
     const _ccScope = (typeof specTalentCritOf === 'function') ? specTalentCritOf(getChar(grp.mainId)) : null;
+    /* P121：只接管本天赋真正拥有的暴击通道（该通道不存在 ⇒ 旧档残留覆盖值不再泄漏生效） */
+    const _chanOv = (typeof talentCritChanOf === 'function') ? talentCritChanOf(getChar(grp.mainId)) : { rate:true, dmg:true };
     if(!(_ccScope && _ccScope.scope === 'team')){
-      if(_ovCrit.critRate > 0) grpCritRate = +_ovCrit.critRate;
-      if(_ovCrit.critDmg  > 0) grpCritDmg  = +_ovCrit.critDmg;
+      if(_chanOv.rate && _ovCrit.critRate > 0) grpCritRate = +_ovCrit.critRate;
+      if(_chanOv.dmg  && _ovCrit.critDmg  > 0) grpCritDmg  = +_ovCrit.critDmg;
     }
   }
 
@@ -37109,32 +37293,6 @@ input:focus,select:focus,textarea:focus{outline:2px solid rgba(99,102,241,.30);o
 </style>
 
 <!-- v3.5.0 P35: 角色库详情骨架已移入 #pageDB 右侧列（.md-pane），不再保留浮层遮罩。 -->
-  <!-- 更新日志（极简 · 大版本合并 / 小版本最小化，P97 补回 P34 删除的入口） -->
-  <div id="changelogModal" class="modal-overlay" style="display:none" data-i18n-skip
-       onclick="if(event.target===this)this.style.display='none'">
-    <div class="modal-box" style="max-width:680px">
-      <div class="modal-head">
-        <span class="mt">更新日志</span>
-        <button class="btn" onclick="document.getElementById('changelogModal').style.display='none'">关闭</button>
-      </div>
-      <div style="font-size:13px;line-height:1.8;padding:6px 2px;max-height:70vh;overflow:auto">
-<div style="margin:0 0 7px"><b>v3.7.2</b> · P120：专属天赋「生命值条件型增伤」建模（续 P110/P111）——主战爱丽丝·520「金桂的骑士」「若生命值大于65%，造成的伤害提高25%」引擎 P95 段早逐格折入 tg.dmgUp（满血常驻·仅本人出手格）；本轮补齐 talentRowState 分类器分支「增伤(生命值条件)」与天赋明细面板通道清单，UI 不再误标「未建模」，并可于「角色天赋效果 %」手填覆盖。后半句「生命<35% 受伤降低20%」为生存向减伤，按设计不建模。</div>
-<div style="margin:0 0 7px"><b>v3.7.2</b> · P110+P111：专属天赋「条件型」误标修复 + 可触发条件型建模（续 P109）——① talentRowState 分类器新增识别铁砂/残心/水花/战术进化 4 个引擎实际计分但此前误标「未建模」的专属天赋（升华技 × 铁砂层数 / 暴伤·暴击率 × 残心层数 / 碧水之心易伤 × 水花层数 / 暴伤 × 战术进化叠层）；② 新增「概率型增伤」通道（游佐惠美·651：概率×增伤期望）；③ 暴击率增益天赋按作用域计入并如实标注（有纪·801/亚丝娜·751/界 亚丝娜·751 仅本组、泳装御坂美琴 全队 3 组）。均隐藏无意义 % 覆盖框并在天赋明细补列对应通道；④ P112 恢复该行手动覆盖输入：暴击/暴伤类天赋给出「暴击率 %」「暴伤 %」两个小输入（填 10 / 20 / 25 / 30 即把该通道从自动折算值改成你所填值，0=回自动）；层数型（升华技独立乘区、跨组共享易伤）单输入框＝该通道总当量；资源·倍率型仍如实标注无 % 通道。</div>
-<div style="margin:0 0 7px"><b>v3.7.1</b> · P109：专属天赋「未建模」误标修复——拓 talentRowState 分类器识别 SP/BP 资源通道、升华技后/释放技能后增伤、矢量操控电池每层/双尾女仆叠层/情报贩子条件固定等引擎实际记分通道；资源·倍率型隐藏无意义%覆盖框。</div>
-<div style="margin:0 0 7px"><b>v3.7.0</b> · P108：和服夏娜「火翼讨伐者」建模（升华后1号+15%/2号+24%持续4回合）；技能位天赋双值覆盖输入；红莲4件火翼窗口修复</div>
-<div style="margin:0 0 7px"><b>v3.6.9</b> · P103~P107：心象段可暴击；界·和服夏娜+1觉界；樱花庄套装；藏品引擎扩至13套；选藏品弹层滚动修复</div>
-        <div style="margin:0 0 7px"><b>v3.6.8</b> · 心象攻击计入面板；暴击/爆伤按面板最终值；心象核对板块（单次伤害）</div>
-        <div style="margin:0 0 7px"><b>v3.6.7</b> · 天赋窗口化（亚丝娜·闪光 / 食蜂·精神压制）；心象攻击口径改游戏值；六天赋建模</div>
-        <div style="margin:0 0 7px"><b>v3.6.6</b> · 诗乃冰冷狙击全建模；夏日亚子头像；机器人技能名对齐</div>
-        <div style="margin:0 0 7px"><b>v3.6.0–3.6.4</b> · 暴击/护盾口径、天赋易伤通道、出招快照</div>
-        <div style="margin:0 0 7px"><b>v3.5.x</b> · 界面重做（白底靛蓝）、导出报告压缩、双语补全</div>
-        <div style="margin:0 0 7px"><b>v3.4.0</b> · 英文界面；去水印</div>
-        <div style="margin:0 0 7px"><b>v3.3.x</b> · 面板 60 级口径；觉醒加攻独立乘区</div>
-        <div style="margin:0 0 7px"><b>v3.0–3.2</b> · 心象/源质/藏品库；群体技口径；木桩四假设</div>
-        <div style="margin:0 0 7px"><b>v2.x</b> · 初代框架：形态档位、夯拉排名、乘区重构</div>
-      </div>
-    </div>
-  </div>
 </body>
 
 </html>
