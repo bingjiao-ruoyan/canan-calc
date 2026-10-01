@@ -19191,7 +19191,7 @@ function renderConfirm(){
           : (_eqType==='butterfly') ? (_fit ? (+_ownRaw.bf||0) : 0)   /* P106：蝴蝶=触发值展示（敌易伤+42%，释放当拍不吃，本格直伤不经此通道） */
           : (_fit ? charEquipGain(_eqType, _ownRaw.ku, _ownRaw.tr, sk) : 0);   /* P105：樱花庄=「释放后全队增伤」不吃本格直伤，此处仅展示单套触发值（满额/2） */
         const eqBg = _eqType==='trauma' ? 'background:#fef3c7;border-color:#f59e0b' : (_eqType==='kuroo'||_eqType==='kuroo_sp3') ? 'background:#dbeafe;border-color:#3b82f6' : _eqType==='sakura' ? 'background:#fce7f3;border-color:#ec4899' : _eqType==='church' ? 'background:#ede9fe;border-color:#8b5cf6' : _eqType==='pool' ? 'background:#cffafe;border-color:#06b6d4' : _eqType==='butterfly' ? 'background:#e0e7ff;border-color:#6366f1' : _eqType==='yamato' ? 'background:#faf5ff;border-color:#a855f7' : _eqType==='xizi' ? 'background:#fff7ed;border-color:#f97316' : _eqType==='cad' ? 'background:#e0f2fe;border-color:#0ea5e9' : _eqType==='goddess' ? 'background:#fae8ff;border-color:#d946ef' : _eqType==='wonderland' ? 'background:#dcfce7;border-color:#22c55e' : _eqType==='crimson' ? 'background:#fee2e2;border-color:#ef4444' : '';
-        const eqTip = _eqType==='trauma' ? '集结！呱呱太（俗称创伤套）：创伤状态伤害（不参与暴击，仅创伤技生效；满额 27%，单套生效 13.5%）' : _eqType==='kuroo' ? '另类潮流（俗称不良）：SP≥4 招 + 藏品效果增益（参与暴击，仅 SP≥4 技能生效；满额 28%，单套生效 14%，连携双套 28%）' : _eqType==='kuroo_sp3' ? '伪装者（俗称桐桐）：SP≤3 招 + 藏品效果增益（参与暴击，仅 SP≤3 技能生效；满额 22%，单套生效 11%，连携双套 22%）' : _eqType==='sakura' ? '樱花庄的绘梦之时：SP≤4 招【释放后】全队伤害+7.7%、持续1回合（释放当拍不吃，其后我方行动含释放者下回合生效；输入框=单套触发值，双持连携=两次触发 15.4%）' : _eqType==='church' ? '教会的灵装：携带组连续2回合都行动后，下一回合伤害+16%（跳过≠行动；输入框=本格实际吃到值）' : _eqType==='pool' ? '泳池开放日：出手前 SP≥5 时，除连携技外的技能伤害+16%（SP=全队共享技能点，取出手前快照）' : _eqType==='butterfly' ? '与蝴蝶永恒的誓言：6费升华技命中后敌方受伤+42%、持续1回合（释放当拍不吃，其后我方行动受益；输入框=触发值展示）' : _eqType==='yamato' ? '大和风韵：4件套（升华技后敌方<30%增伤19%）木桩默认不成立不计分——仅2件套+3%终伤生效' : _eqType==='xizi' ? '西子酱的干架武装：4件套（重伤效果%+30%）不参与出伤计分——仅2件套+3%终伤生效' : _eqType==='cad' ? '超高校级CAD套装：所在组行动结束时存在【战斗演算】→ 下一回合组暴击率+11%（仅暴击分，铁律安全；效果固定，输入框=0）' : _eqType==='goddess' ? '冥府女神：诗乃「心跳加速」≥2层时，自身暴击伤害+17%（仅暴击分，铁律安全）' : _eqType==='wonderland' ? '梦游仙境：每回合额外+1层「雨缘之印」；爱丽丝援护技施放时「雨缘之印」=20层→援护技倍率+31%（仅1次）' : _eqType==='crimson' ? '祭典的红莲：火翼讨伐者增益期间+施放技能刷新「真红」→立即结算「真红」显示值×剩余回合×300%独立伤害段（不暴击、不受其他效果影响）' : '请在①选择本角色藏品';
+        const eqTip = _eqType==='trauma' ? '集结！呱呱太（俗称创伤套）：创伤状态伤害（不参与暴击，仅创伤技生效；满额 27%，单套生效 13.5%）' : _eqType==='kuroo' ? '另类潮流（俗称不良）：SP≥4 招 + 藏品效果增益（参与暴击，仅 SP≥4 技能生效；满额 28%，单套生效 14%，连携双套 28%）' : _eqType==='kuroo_sp3' ? '伪装者（俗称桐桐）：SP≤3 招 + 藏品效果增益（参与暴击，仅 SP≤3 技能生效；满额 22%，单套生效 11%，连携双套 22%）' : _eqType==='sakura' ? '樱花庄的绘梦之时：SP≤4 招【释放后】全队伤害+7.7%、持续1回合（释放当拍不吃，其后我方行动含释放者下回合生效；输入框=单套触发值，双持连携=两次触发 15.4%）' : _eqType==='church' ? '教会的灵装：携带组连续2回合都行动后，下一回合伤害+16%（跳过≠行动；输入框=本格实际吃到值）' : _eqType==='pool' ? '泳池开放日：出手前 SP≥5 时，除连携技外的技能伤害+16%（SP=全队共享技能点，取出手前快照）' : _eqType==='butterfly' ? '与蝴蝶永恒的誓言：6费升华技命中后敌方受伤+42%、持续1回合（释放当拍不吃，其后我方行动受益；输入框=触发值展示）' : _eqType==='yamato' ? '大和风韵：4件套（升华技后敌方<30%增伤19%）木桩默认不成立不计分——仅2件套+3%终伤生效' : _eqType==='xizi' ? '西子酱的干架武装：4件套（重伤效果%+30%）不参与出伤计分——仅2件套+3%终伤生效' : _eqType==='cad' ? '超高校级CAD套装：所在组行动结束时存在【战斗演算】→ 下一回合组暴击率+11%（仅暴击分，铁律安全；效果固定，输入框=0）' : _eqType==='goddess' ? '冥府女神：诗乃「心跳加速」≥2层时，自身暴击伤害+17%（仅暴击分，铁律安全）' : _eqType==='wonderland' ? '梦游仙境：每回合额外+1层「雨缘之印」；爱丽丝援护技施放时「雨缘之印」=20层→援护技倍率+31%（仅1次）' : _eqType==='crimson' ? '祭典的红莲：火翼讨伐者增益期间+施放技能刷新「真红」→立即结算「真红」显示值×剩余回合×300%独立伤害段（不暴击、不受其他效果影响；P127：SUP 携带且同组有和服夏娜同样生效，本组主战+SUP 双持两套时一并结算 ×2）' : '请在①选择本角色藏品';
         const isLinkage = sk && sk.kind==='连携';
 
         h += '<td class="cg-g' + g + '" style="text-align:center;font-size:11px">';
@@ -23070,11 +23070,18 @@ function simulateGroupTrauma(g){
       /* P113：红莲结算三闸门 —— 本组装备 crimson / 火翼讨伐者增益期间 / 本回合真的施加或刷新了真红；
          刷新(isRefresh)路径（炎灵）与施加(isDot)路径共用此闸门，红莲不再因走刷新分支而恒 0。 */
       const _crimSettle = function(_layers, _perTurn){
-        if(!(mainEquipOf(state.groups && state.groups[g])==='crimson' || subEquipOf(state.groups && state.groups[g])==='crimson')) return;
+        /* ★P127（2026-10-01 用户裁决）：「祭典的红莲」4件套结算份数 = 本组【持有 crimson 的槽位数】
+           —— 主战 1 份 / SUP 1 份 / 主战+SUP 双持 2 份（两套可一起生效，与和服夏娜同组即可，不要求主战携带）。
+           与 2 件套 equipBearerGroupDmg（main + sub 各 +3% ⇒ 双持 +6%）口径对称；
+           ★单持时 _sets=1 ⇒ 逐字等同旧口径，既有数值零漂移；火翼讨伐者/真红施加刷新闸门不变。 */
+        const _grpCrim = state.groups && state.groups[g];
+        const _sets = ((typeof mainEquipOf==='function' && mainEquipOf(_grpCrim)==='crimson') ? 1 : 0)
+                    + ((typeof subEquipOf==='function' && subEquipOf(_grpCrim)==='crimson') ? 1 : 0);
+        if(!_sets) return;
         if(typeof fireWingActiveAt!=='function' || !fireWingActiveAt(g, r)) return;
         if(!(_layers>0 && _perTurn>0)) return;
         const _rem = Math.max(0, numR - 1 - r);
-        crimsonByRound[r] += (_layers * _perTurn) * _rem * 3.0 * enemies;
+        crimsonByRound[r] += (_layers * _perTurn) * _rem * 3.0 * enemies * _sets;
       };
       if(isDot || isRefresh){
 
