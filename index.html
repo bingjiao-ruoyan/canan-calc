@@ -17351,6 +17351,12 @@ function talentRowState(g){
     r.type = '增伤(条件固定)';
     r.auto = 0;
     r.autoTxt = '固定+20%（本组·场上存在减益）';
+  } else if(hpDmgUpTalentOf(c)){
+    /* P120：金桂的骑士（爱丽丝·520）——「若生命值大于65%，造成的伤害提高25%」，引擎在 talentGainForCell 逐格折入 tg.dmgUp（仅本组主战本人的出手格·满血常驻）⇒ 可手动 % 覆盖 */
+    const _hu = hpDmgUpTalentOf(c);
+    r.type = '增伤(生命值条件)';
+    r.auto = _hu.pct;
+    r.autoTxt = '+' + _hu.pct + '%（生命>' + _hu.hp + '% 满血常驻·仅本人出手格）';
   } else if(tb.spPerRound || tb.bpPerRound || tb.spNextAction || tb.bpOnKill || tb.bpOnAct || tb.iceSnipe || tb.judge){
     /* P109：SP/BP 资源与倍率通道（桐人/凑智花/蝴蝶黑雪姬/朝田诗乃/神猫黑猫）——引擎消费、不可 %覆盖 */
     r.type = '资源·倍率';
@@ -22039,6 +22045,18 @@ function infoBrokerTalentInfo(g, r){
 /* —— 通用：主战专属天赋（第一条非通用天赋） —— */
 function p95SpecTalentOf(c){
   return (c && Array.isArray(c.talents)) ? (c.talents.find(x=>x && !['元气','热血','生机'].includes(x.n)) || null) : null;
+}
+/* P120（2026-10-01）：专属天赋「生命值大于N% → 造成的伤害提高X%」（金桂的骑士·爱丽丝·520）——
+   引擎侧已由 talentGainForCell 的 P95 段逐格折入 tg.dmgUp（计算器不模拟自身生命，木桩按满血口径恒成立；
+   仅【本组主战本人】的出手格生效，原文「造成的伤害」= 自身）。此处供 talentRowState 分类器识别通道，
+   避免 UI 误标「未建模」。后半句「若生命值小于35%，受到的伤害降低20%」为受伤减伤（生存向）→ 不建模。 */
+function hpDmgUpTalentOf(c){
+  if(!c) return null;
+  const t = (c.talents||[]).find(x=>!['元气','热血','生机'].includes(x.n));
+  if(!t || !t.fx) return null;
+  const m = String(t.fx).match(/生命值大于\s*([\d.]+)\s*%[^。；;]{0,30}?(?:造成的伤害)?(?:提高|提升|增加)\s*([\d.]+)\s*%/);
+  if(!m) return null;
+  return { hp:+m[1], pct:+m[2] };
 }
 
 /* —— ① 电磁支配者（死库水御坂美琴·798）：目标每层「铁砂」→ 对该目标升华技提升 per% ——
