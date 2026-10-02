@@ -16,7 +16,7 @@
 
 <link rel="manifest" href="manifest.webmanifest" data-page-node-id="Ujjb7vN2J2zFun44wCBIv8">
 
-<title>Canan Wiki · 3.7.3 · Characters / Imagery / Relics / Elementium</title>
+<title>Canan Wiki · 3.7.4 · Characters / Imagery / Relics / Elementium</title>
 
 <style>
 
@@ -880,7 +880,7 @@
 
     <div data-page-node-id="U3DQMnMQczfqNwA08GXIhj">
 
-      <h1 id="title" data-page-node-id="efK7lKccgtoypss7lhPAmx">Canan Wiki <span style="font-size:12px;font-weight:700;color:#4338ca;background:#eef2ff;border-radius:6px;padding:2px 8px;vertical-align:middle" data-page-node-id="8L10itvWf3BpMcGnSmAd9b">3.7.3</span></h1>
+      <h1 id="title" data-page-node-id="efK7lKccgtoypss7lhPAmx">Canan Wiki <span style="font-size:12px;font-weight:700;color:#4338ca;background:#eef2ff;border-radius:6px;padding:2px 8px;vertical-align:middle" data-page-node-id="8L10itvWf3BpMcGnSmAd9b">3.7.4</span></h1>
 
     </div>
 
@@ -1937,7 +1937,7 @@ const ROLE_GROUPS_DEFAULT = [
 
 
 /* 当前程序版本：页眉徽标、模式标题、导出页脚戳统一读取此常量 */
-const APP_VER = '3.7.3';
+const APP_VER = '3.7.4';
 
 
 /* v2.3.8：localStorage 键按 APP_VER 分版本隔离（同 2.3.7 规则）。
@@ -11798,6 +11798,9 @@ function simulateGroupXinxiang(g){
     const enemies = Math.max(1, state.enemies || 1);
     for(let r=0; r<nR; r++){
       let add = 0;
+      /* ★P129d-2：额外乘区（加攻%/终伤/独立增伤）与心象易伤必须在明细 push 之前算好 —— roundParts 逐条明细（含 seg 字段）写在 contribs.forEach 回调里，const 若声明在 continue 之后则回调先于声明执行 ⇒ TDZ ReferenceError 直接崩渲染。 */
+      const _vf = 1 + xiangVulnBonusPct(r)/100;
+      const _segM = (typeof extraSegDmgMult==='function') ? extraSegDmgMult(g, r, (typeof getConfirm==='function' ? getConfirm(r,g) : null), null) : 1;
       contribs.forEach(c=>{
         const p = c.pctAt(r) || 0;
         if(!(p > 0)) return;
@@ -11807,16 +11810,16 @@ function simulateGroupXinxiang(g){
            「仅限心象部分」：本区分只影响心象段，技能本体伤害口径不动。 */
         add += p * c.atk / panel;
         if(!out.roundParts[r]) out.roundParts[r] = [];
-        out.roundParts[r].push({ who: c.who, kind: c.kind, nm: (c.kind === 'skill' ? (xiangUsedSkillName(c.srcG, r) || c.who + '技能') : ((c.xx && c.xx.name) ? c.xx.name + '·被动' : '心象·被动')), pct: p, atk: c.atk });
+        out.roundParts[r].push({ who: c.who, kind: c.kind, nm: (c.kind === 'skill' ? (xiangUsedSkillName(c.srcG, r) || c.who + '技能') : ((c.xx && c.xx.name) ? c.xx.name + '·被动' : '心象·被动')), pct: p, atk: c.atk, seg: _segM });
       });
       if(add <= 0) continue;
-      const _vf = 1 + xiangVulnBonusPct(r)/100;
       const v = add * enemies * _vf;
-      out.byRound[r] = v;
-      out.total += v;
+      out.byRound[r] = v * _segM;
+      /* ★P129d-2：total 与 byRound 同源（同乘 seg）—— 否则「逐回合之和 ≠ 合计」，且评分链路 xxDmg = xxSim.total 会漏掉额外乘区，与「心象全补」终裁冲突。 */
+      out.total += v * _segM;
       /* P101b：本次施放造成的伤害（与倍率同源，含敌人数）= 原始倍率% × 基数 ÷ 100 × 敌人数 ×(1+心象易伤%)
          用户口径（2026-09-30）：「单次」= 这次施放造成的伤害（含全部命中目标），而非「单个敌人」。 */
-      const _dmg = add * enemies * _vf / 100 * panel;
+      const _dmg = add * enemies * _vf / 100 * panel * _segM;
       out.dmgByRound[r] = _dmg;
       out.dmgTotal += _dmg;
     }
@@ -13198,7 +13201,7 @@ function parseAwakening(aw, skills, maxStage){
   /* 觉醒「状态类/条件类」伤害提升自动建模：扫描 1~5 阶文案，按技能名索引。
      开启觉醒开关=默认获得相应增益状态（条件类按默认生效处理）。 */
   const _status = (function(){
-    const out = {skillUp:{}, proofUp:{}, vuln:{}, teamVuln:{}, dmgUp:{}, defDown:{}, critRateSkill:{}, critDmgSkill:{}, teamDmgUp:{}, teamCritDmg:{}, critRateBase:0, trauma:{}, bleed:{}, backfire:{}, weak:{}, teamCritRate:{}, regen:{}, awakenHeal:{}, willStart:0, skillUpConditional:{}, ultAtkUp:null, selfDmgBefore:{}, selfDmgUpOnRedBlot:null};
+    const out = {skillUp:{}, proofUp:{}, vuln:{}, teamVuln:{}, dmgUp:{}, defDown:{}, critRateSkill:{}, critDmgSkill:{}, teamDmgUp:{}, teamCritDmg:{}, critRateBase:0, trauma:{}, bleed:{}, backfire:{}, weak:{}, teamCritRate:{}, regen:{}, awakenHeal:{}, willStart:0, skillUpConditional:{}, ultAtkUp:null, selfDmgBefore:{}, selfDmgUpOnRedBlot:null, buffDurExtend:0};
     if(!Array.isArray(aw.stages)) return out;
     const RE = {
       teamDmgUp:    /全队(?:造成)?伤害提升\s*(-?\d+(?:\.\d+)?)\s*%/,
@@ -13248,7 +13251,10 @@ function parseAwakening(aw, skills, maxStage){
       /* P103（2026-09-30）：界 和服夏娜 1觉「炎灵：敌方「真红」叠加至5层时，立即使自身造成伤害增加14.00%，持续至战斗结束，不可驱散（不叠加）」
          —— 一次性 latch 型自身增伤；触发层数追踪在消费端（computeRoundBuffs 预扫 simulateGroupTrauma 的 stackSnapByRound 快照）。
          注：文案含「造成伤害增加」，已被 RE.skillUp 的 (?<!造成) 守卫排除，不会误入 skillUp 通道。 */
-      redBlotDmgUp: /「?真红」?叠加至\s*(\d+(?:\.\d+)?)\s*层[^。；;]*?自身造成伤害增加\s*(\d+(?:\.\d+)?)\s*%/
+      redBlotDmgUp: /「?真红」?叠加至\s*(\d+(?:\.\d+)?)\s*层[^。；;]*?自身造成伤害增加\s*(\d+(?:\.\d+)?)\s*%/,
+      /* ★P132（2026-10-02 用户报障）：觉醒「◯◯：增益持续时间延长至N回合」（和服夏娜 5 阶·炽红双翼 4→5）。
+         延长的是「升华后窗口」本体，无技能名主体 ⇒ 按最大值取。 */
+      buffDurExtend: /增益持续时间延长至\s*(\d+(?:\.\d+)?)\s*回合/
     };
     for(const st of aw.stages){
       if(!_stageOk(st && st.s)) continue;   /* v2.4.10：超出所选觉醒档位的阶不扫描 */
@@ -13269,6 +13275,12 @@ function parseAwakening(aw, skills, maxStage){
         if((m=p.match(RE.redBlotDmgUp))){
           const _rbPct=(+m[2]||0), _rbStk=(+m[1]||5);
           if(_rbPct>0 && (!out.selfDmgUpOnRedBlot || _rbPct>(+out.selfDmgUpOnRedBlot.pct||0))) out.selfDmgUpOnRedBlot={stacks:_rbStk, pct:_rbPct};
+          continue;
+        }
+        /* ★P132：觉醒「增益持续时间延长至N回合」⇒ 登记 out.buffDurExtend（供 postUltSlotDur 顶长升华后窗口） */
+        if((m=p.match(RE.buffDurExtend))){
+          const _bd=(+m[1]||0);
+          if(_bd>0 && _bd>(+out.buffDurExtend||0)) out.buffDurExtend=_bd;
           continue;
         }
         if((m=p.match(RE.teamDmgUp)) && skillName){ out.teamDmgUp[skillName]=(+m[1]||0); continue; }
@@ -13555,6 +13567,9 @@ function parseAwakening(aw, skills, maxStage){
     selfDmgBeforeByName: (Object.keys(_status.selfDmgBefore||{}).length) ? _status.selfDmgBefore : null,
     /* P103：界 和服夏娜 1觉 latch 型自身增伤（真红5层触发；消费端 computeRoundBuffs 预扫） */
     selfDmgUpOnRedBlot: _status.selfDmgUpOnRedBlot || null,
+    /* ★P132：觉醒「增益持续时间延长至N回合」（和服夏娜 5 阶·炽红双翼 4→5）⇒ postUltSlotDur 顶长「升华后窗口」
+       ★血泪：parseAwakening 的 return 是【逐字段重组】的对象字面量，out 上多出的键必须在此显式带出，否则静默丢弃。 */
+    buffDurExtend:    (+_status.buffDurExtend||0),
     /* 基础增伤效果提升至 X%：覆写该技能基础增伤值。 */
     dmgUpPctByName:   (Object.keys(_status.dmgUp||{}).length)   ? _status.dmgUp   : null,
     /* 基础降攻效果提升至 X%：覆写该技能基础降攻值。 */
@@ -17482,7 +17497,7 @@ function talentRowState(g){
   } else if((+tg.skill1||0) || (+tg.skill2||0) || (+tg.ult||0)){
     r.type = '升华后技能位';
     r.auto = (+tg.skill1||0) || (+tg.skill2||0) || (+tg.ult||0);
-    r.autoTxt = '1号' + (+tg.skill1||0) + '% / 2号' + (+tg.skill2||0) + '% / 升华' + (+tg.ult||0) + '%' + (tg.slotAfterUlt ? '（升华后' + (+tg.slotDur||4) + '回合）' : '');
+    r.autoTxt = '1号' + (+tg.skill1||0) + '% / 2号' + (+tg.skill2||0) + '% / 升华' + (+tg.ult||0) + '%' + (tg.slotAfterUlt ? '（升华后' + postUltSlotDur(tg, g, 'main') + '回合）' : '');
   } else if(tg.dmgUpAfterUlt){
     /* P109：升华技后增伤窗口型（白井黑子·750 / 界 白井黑子·750「大能力者」+20% 2回合）——引擎已折入 tg.dmgUp，%覆盖可用 */
     r.type = '升华技后增伤';
@@ -17613,7 +17628,7 @@ function talentDetailHTML(g){
     if((+tg.dmgUp||0) > 0) ch.push('增伤 +' + tg.dmgUp + '%');
     if(tg.dmgUpAfterUlt) ch.push('升华技后增伤 +' + tg.dmgUpAfterUlt.pct + '%（' + tg.dmgUpAfterUlt.dur + '回合）');
     if(tg.dmgUpAfterSkill) ch.push('释放「' + (tg.dmgUpAfterSkill.names||[]).join('/') + '」后增伤 +' + tg.dmgUpAfterSkill.pct + '%');
-    if((+tg.skill1||0) || (+tg.skill2||0) || (+tg.ult||0)) ch.push('升华后技能位 1号' + (+tg.skill1||0) + '% / 2号' + (+tg.skill2||0) + '% / 升华' + (+tg.ult||0) + '%' + (tg.slotAfterUlt ? '（升华后' + (+tg.slotDur||4) + '回合窗口）' : ''));
+    if((+tg.skill1||0) || (+tg.skill2||0) || (+tg.ult||0)) ch.push('升华后技能位 1号' + (+tg.skill1||0) + '% / 2号' + (+tg.skill2||0) + '% / 升华' + (+tg.ult||0) + '%' + (tg.slotAfterUlt ? '（升华后' + postUltSlotDur(tg, g, 'main') + '回合窗口）' : ''));
     if(sg && (+sg.vuln||0) > 0){
       /* ★v3.5.2 P46b：概率因子 prob 是小数 ⇒ 显示须 ×100；期望值含觉醒覆写时与「当前生效值」行同源。 */
       const _spV = (typeof groupAwakeningTalentSpecialVulnPct === 'function') ? (groupAwakeningTalentSpecialVulnPct(g)||0) : 0;
@@ -18893,6 +18908,7 @@ function renderConfirm(){
   const tSimPct = [0,1,2].map(gg=>{ try{ return simulateGroupTrauma(gg).pctByRound; }catch(e){ return new Array(state.rounds.length).fill(0); } });
 
   const tSimLayers = [0,1,2].map(gg=>{ try{ return simulateGroupTrauma(gg).layersByRound; }catch(e){ return new Array(state.rounds.length).fill(0); } });
+  const tSimCrim = [0,1,2].map(gg=>{ try{ const _ts = simulateGroupTrauma(gg); return { v: _ts.crimsonByRound || [], parts: _ts.crimsonPartsByRound || [] }; }catch(e){ return { v: new Array(state.rounds.length).fill(0), parts: [] }; } });
 
   for(let r=0; r<state.rounds.length; r++){
 
@@ -19098,6 +19114,17 @@ function renderConfirm(){
         const _traumaChip = (((+_tDisp)>0 || (+_tl)>0))
           ? '<div style="color:#b91c1c;font-size:10px;line-height:1.3;white-space:nowrap;margin-top:2px"><span title="跨回合创伤：每回合 '+ (+_tDisp).toFixed(2) + '% × 敌人数 ' + (state.enemies||1) + ' = ' + (+(_tDisp*(state.enemies||1))).toFixed(2) + '%（已计入评分）" style="cursor:help">创伤 '+ (_tl||0) + '层 '+ (+_tDisp).toFixed(2) + '%×' + (state.enemies||1) + '敌</span><button type="button" title="恢复默认（按技能创伤自动计算）" onclick="resetOv(' + r + ',' + g + ',\'trauma\')" style="margin-left:2px;border:none;background:transparent;color:'+(_tOv!=null?'#92400e':'#cbd5e1')+';cursor:pointer;font-size:10px;padding:0">↺</button><input type="number" class="narrow" step="0.1" value="' + (_tOv!=null?(_tOv):(+_tp).toFixed(2)) + '" style="width:52px;font-size:10px;padding:0px 2px;margin-left:2px" title="改我：手动设定本回合的每回合创伤%（未×敌人数）；留空或点↺恢复公式" oninput="setTraumaOv(' + r + ',' + g + ',this.value)" onchange="renderConfirm()"></div>'
           : '';
+        /* P128（2026-10-02 用户需求）：「祭典的红莲」4件套【出伤】常显 chip ——
+           红莲段此前只进 crimsonByRound（theory / scores 两侧都已计入），倍率明细区看不到，
+           用户报「看不出藏品的出伤效果」。此处纯展示（与 simulateGroupTrauma 同源），不改任何计算。
+           口径：天赋「火翼讨伐者」增益期间施放技能结束「真红」→ 真红显示值 × 剩余回合数 × 300% × 敌人数 × 本组持有份数。 */
+        const _cv = (tSimCrim[g] && tSimCrim[g].v && tSimCrim[g].v[r]) || 0;
+        const _cp = (tSimCrim[g] && tSimCrim[g].parts && tSimCrim[g].parts[r]) || [];
+        let _crimChip = '';
+        if(_cv > 0){
+          const _cseg = _cp.map(function(o){ return (+o.layers||0) + '层×' + (+o.perTurn||0).toFixed(2) + '%×剩' + (+o.rem||0) + '回合×300%×' + (+o.enemies||1) + '敌' + (((+o.sets||1) > 1) ? ('×' + (+o.sets) + '份') : ''); }).join(' + ');
+          _crimChip = '<div style="color:#ef4444;font-size:10px;line-height:1.3;white-space:nowrap;margin-top:2px"><span title="祭典的红莲（4件套）：天赋「火翼讨伐者」增益期间施放技能结束「真红」→ 立即结算 真红显示值 × 剩余回合数 × 300% × 敌人数 × 本组持有份数（★P129b 起吃增伤/易伤/暴击）—— 已计入总倍率" style="cursor:help">红莲 ' + (+_cv).toFixed(2) + '%</span><span style="color:#9ca3af"> · 本回合结算 ' + esc(_cseg) + '</span></div>';
+        }
         /* 轻量诊断：暴露最近 cell 的 cb/模拟值到 window.__dbgCb（r,g,tp,tl,tOv,tDisp），便于 F12 console 检查 r=6/r=7 渲染时的实际值 */
         if(typeof window!=='undefined'){
           window.__dbgCb = window.__dbgCb || [];
@@ -19132,7 +19159,7 @@ function renderConfirm(){
         const _buffInputStyle = (_tDisp != null && _tDisp!==0) || (typeof cb.xbuffOverride==='number' && cb.xbuffOverride!==0)
           ? ' style="border-color:#f59e0b;background:#fffbeb"'
           : '';
-        h += '<td class="cg-g' + g + '"><input type="number" class="narrow" step="0.1" value="' + buff + '"' + _buffInputStyle + ' title="技能buff%' + (cb._autoBuffDesc?('（自动识别：'+esc(cb._autoBuffDesc)+'）'):'') + (_tDisp>0?('（本回合创伤：'+ (+_tDisp).toFixed(2) + '% × 敌人数 ' + (state.enemies||1) + ' = ' + (+(_tDisp*(state.enemies||1))).toFixed(2) + '% 已计入评分）'):'') + '" oninput="setConfirmLive(' + r + ',' + g + ',\'buff\',+this.value)" onchange="renderConfirm()">' + _skFxChip + _traumaChip + _xbDesc + '</td>';
+        h += '<td class="cg-g' + g + '"><input type="number" class="narrow" step="0.1" value="' + buff + '"' + _buffInputStyle + ' title="技能buff%' + (cb._autoBuffDesc?('（自动识别：'+esc(cb._autoBuffDesc)+'）'):'') + (_tDisp>0?('（本回合创伤：'+ (+_tDisp).toFixed(2) + '% × 敌人数 ' + (state.enemies||1) + ' = ' + (+(_tDisp*(state.enemies||1))).toFixed(2) + '% 已计入评分）'):'') + '" oninput="setConfirmLive(' + r + ',' + g + ',\'buff\',+this.value)" onchange="renderConfirm()">' + _skFxChip + _traumaChip + _crimChip + _xbDesc + '</td>';
 
         /* 天赋% —— 默认继承①录入 grp.talent（cb.talent 为空时）；编辑后写入 cb.talent，此单元格独立、不影响同行其他单元格 */
         /* 下方显示主战专属天赋自动识别（常驻易伤/增伤/升华后技能位增伤） */
@@ -19272,7 +19299,12 @@ function renderConfirm(){
       h += '</td>';
     });
 
-    h += '<td style="font-weight:700;color:var(--red)">' + (rowTheory[0]+rowTheory[1]+rowTheory[2]).toFixed(2) + '</td></tr>';
+    /* ★P131：合计格 = 本回合三格角色技能倍率合计（该合计【本就不含】红莲，红莲走 traumaDmg 通道）；
+       红莲另挂一条「＋红莲(本回合 X)」小字做口径提示 —— 不能从合计里减红莲（减了会变负数）。 */
+    const _crimR = crimMultAt(0, r) + crimMultAt(1, r) + crimMultAt(2, r);   /* ★P131b：按【本回合】取，不用全场合计 */
+    h += '<td style="font-weight:700;color:var(--red)">' + (rowTheory[0]+rowTheory[1]+rowTheory[2]).toFixed(2)
+      + (_crimR>0 ? ' <span style="font-size:10px;color:#9333ea;font-weight:600" title="祭典红莲（藏品·独立额外段）：本回合 +' + _crimR.toFixed(2) + ' 倍率，全场合计见下方「祭典红莲」行；已计入「总倍率」">＋红莲(本回合) ' + _crimR.toFixed(2) + '</span>' : '')
+      + '</td></tr>';
 
   }
 
@@ -19288,6 +19320,18 @@ function renderConfirm(){
 
   h += '<td class="gh" style="font-weight:700">' + theoryRow[0].toFixed(2) + '</td><td class="gh" style="font-weight:700">' + theoryRow[1].toFixed(2) + '</td><td class="gh" style="font-weight:700">' + theoryRow[2].toFixed(2) + '</td><td class="gh" style="font-weight:700">' + (theoryRow[0]+theoryRow[1]+theoryRow[2]).toFixed(2) + '</td></tr>';
 
+  /* ★P131：祭典红莲【独立一行】—— 藏品自带额外段，与角色技能倍率分列，方便一眼核对藏品出伤。
+     口径：与「总倍率 / 评分」同源（crimsonByRound 之和，吃增伤 / 易伤 / 独立增伤），不计入上方「倍率合计」（合计仍含红莲，总倍率零漂移）。 */
+  const _crimRow = [0,1,2].map(gg => { try { return crimMultOf(gg); }catch(e){ return 0; } });
+  const _crimAll = _crimRow[0] + _crimRow[1] + _crimRow[2];
+  h += '<tr><td class="gh">祭典红莲</td>';
+  for(let g=0; g<3; g++){
+    h += '<td colspan="7" class="gh" style="text-align:left;font-size:12px">' + (_crimRow[g]>0
+      ? '<span style="color:#9333ea;font-weight:700">' + _crimRow[g].toFixed(2) + '</span> <span style="color:#64748b">（藏品·独立额外段；已计入「总倍率」/「评分」，但不计入上方「角色技能倍率」）</span>'
+      : '<span style="color:#94a3b8">—</span>') + '</td>';
+  }
+  h += '<td class="gh" colspan="4" style="font-weight:700;color:#9333ea">' + (_crimAll>0 ? _crimAll.toFixed(2) : '<span style="color:#94a3b8">—</span>') + '</td></tr>';
+
   /* 评分汇总 */
 
   const sc = calcScores();
@@ -19298,7 +19342,7 @@ function renderConfirm(){
 
     const p = sc.per[g];
 
-    h += '<td colspan="7" class="gh" style="text-align:left;font-size:12px">理论(含增益) <b>' + p.theory.toFixed(2) + '</b> ｜ 天赋 <b>' + p.talentDmg.toFixed(2) + '</b> ｜ 藏品 <b>' + p.kurooDmg.toFixed(2) + '</b> ｜ 创伤 <b>' + p.traumaDmg.toFixed(2) + '</b>' + ((+p.wpnDmg||0)>0 ? ' ｜ <span style="color:#6d28d9">武装 <b>' + (+p.wpnDmg).toFixed(2) + '</b></span>' : '') + ' ｜ 总倍率 <b>' + p.totalMult.toFixed(2) + '</b> ｜ 暴击基础 <b>' + (p.critBase + (+p.xxDmg||0)).toFixed(2) + '</b></td>';
+    h += '<td colspan="7" class="gh" style="text-align:left;font-size:12px">技能(含增益) <b>' + p.theory.toFixed(2) + '</b> ｜ 祭典红莲 <b>' + (crimMultOf(g)).toFixed(2) + '</b> ｜ 天赋 <b>' + p.talentDmg.toFixed(2) + '</b> ｜ 藏品 <b>' + p.kurooDmg.toFixed(2) + '</b> ｜ 创伤 <b>' + p.traumaDmg.toFixed(2) + '</b>' + ((+p.wpnDmg||0)>0 ? ' ｜ <span style="color:#6d28d9">武装 <b>' + (+p.wpnDmg).toFixed(2) + '</b></span>' : '') + ' ｜ 总倍率 <b>' + p.totalMult.toFixed(2) + '</b> ｜ 暴击基础 <b>' + (p.critBase + (+p.xxDmg||0)).toFixed(2) + '</b></td>';
 
   }
 
@@ -22301,6 +22345,20 @@ function wonderlandMulAt(g, r, who, sk){
   return 0;
 }
 
+/* ★P132（2026-10-02）：「升华后窗口」回合数 —— 天赋 slotDur（解析值，缺省 4）与觉醒
+   「增益持续时间延长至N回合」（和服夏娜 5 阶·炽红双翼 ⇒ 5 回合）取大者。
+   ★talentGainForCell 的技能位增伤窗口与 fireWingActiveAt 的火翼讨伐者（祭典红莲闸门）属【同一口径】
+   （P108 注释已写明同源），必须同值，否则出现「增伤已生效但红莲不触发」的黑白不一致。 */
+function postUltSlotDur(tg, g, who){
+  let _d = (tg && (+tg.slotDur||0)>0) ? (+tg.slotDur||0) : 4;
+  try{
+    const _aw = (typeof grpAwakeningOf==='function') ? grpAwakeningOf(g, (who==='sub' ? 'sub' : 'main')) : null;
+    const _ext = _aw ? (+_aw.buffDurExtend||0) : 0;
+    if(_ext > _d) _d = _ext;
+  }catch(e){}
+  return _d;
+}
+
 /* P107：祭典的红莲 4件套 辅助——判定「火翼讨伐者」增益窗口是否生效（和服夏娜主战专属天赋：升华技后增伤 N 回合）。 */
 function fireWingActiveAt(g, r){
   const grp = state.groups[g] || {};
@@ -22318,7 +22376,7 @@ function fireWingActiveAt(g, r){
        （此前只认 dmgUpAfterUlt 通道 ⇒ 夏娜（含界）装备红莲 4 件恒不触发，属 P107 遗留缺口，本轮补齐）。 */
     else if(_tg && _tg.slotAfterUlt){
       const _lu2 = (typeof lastUltRoundOf==='function') ? lastUltRoundOf(g, r) : -1;
-      if(_lu2 >= 0 && (r - _lu2) >= 1 && (r - _lu2) <= (+_tg.slotDur||4)) return true;  /* P108 修正：与 talentGainForCell 技能位窗口口径对齐（<= slotDur，含第 slotDur 回合；火翼讨伐者「持续4回合」= r1~r4） */
+      if(_lu2 >= 0 && (r - _lu2) >= 1 && (r - _lu2) <= postUltSlotDur(_tg, g, (id===grp.mainId?'main':'sub'))) return true;  /* P108 起窗口=slotDur（默认4，<= slotDur 含第 slotDur 回合）；★P132 可被觉醒5阶（炽红双翼·增益持续延长至5回合）顶到 5 */
     }
   }
   return false;
@@ -22704,7 +22762,7 @@ function talentGainForCell(g, r, skill){
         ultReleasedR = rr;
       }
     }
-    if(ultReleasedR>=0 && (r - ultReleasedR) >= 1 && (r - ultReleasedR) <= (+tg.slotDur||4)){ /* P108：释放后 slotDur（默认4）回合（不含释放回合）：第3回合释放→第4~7回合生效 */
+    if(ultReleasedR>=0 && (r - ultReleasedR) >= 1 && (r - ultReleasedR) <= postUltSlotDur(tg, g, 'main')){ /* P108：释放后 slotDur（默认4）回合（不含释放回合）：第3回合释放→第4~7回合生效；★P132 觉醒5阶（炽红双翼·增益持续延长至5回合）可把窗口顶到 5 */
       skillActive = true;
       if(skillIdx===0) pct += (+tg.skill1||0);
       else if(skillIdx===1) pct += (+tg.skill2||0);
@@ -22720,7 +22778,7 @@ function talentGainForCell(g, r, skill){
         tg.desc = tg.desc.replace('升华后 ', '升华后·已触发 ');
       } else {
         tg.desc = tg.desc.replace('升华后 ', '升华后·未触发 ');
-        tg.desc += '（需 BP 升华技+4 回合窗口）';
+        tg.desc += '（需 BP 升华技+' + postUltSlotDur(tg, g, 'main') + ' 回合窗口）';
       }
     }
   }
@@ -23025,6 +23083,23 @@ function computeGroupBuffSum(g){
    结算时机：创伤需敌方行动才跳 tick。若施加者速度 < 敌方速度，则本回合敌方先动、创伤尚未生效，首次 tick 顺延至 r+1（startRound=r+1）；否则当回合即结算（startRound=r）。末回合慢速施加 → startRound 越界 → 整段创伤无法结算。
    例：夏娜 8%/层 dotTurns=3 maxStack=5
      释放 1 次（r0）→ 1×8%×3=24；释放 2 次（r1）→ 2×8%×3=48；释放 3 次（r2）→ 3×8%×3=72；最高 5×8%×3=120/回合。 */
+/* ★P129d（2026-10-02 用户裁决）：额外伤害段统一补【加攻% / 终伤 / 独立增伤】三条乘区，
+   与普通伤害通道 atkPctD（自身攻击力% + 武装 + 觉醒终焉 + 团队 atkUp）/ finPctD / selfDmgUpIndependentOf 严格同口径。
+   适用范围（四条「倍率 × 面板」折算段）：祭典红莲 crimsonByRound / 创伤 traumaByRound / 反噬 byRound / 心象 dmgByRound。
+   ★此前四条一律漏掉整条「攻击力%」通道（2026-10-02 实测：团队 atkUp+16% 时红莲 crimM/crimV 响应 Δ=0），
+   而同场景普通技能显示倍率 763.70 → 870.53（+14%）⇒ 口径不对称，用户裁决统一对齐普通伤害段。
+   ★加攻% 只放大【角色面板】（与评分 atkOnPanel 拆分口径一致），不放大藏品/装备面板。 */
+function extraSegDmgMult(g, r, cb, sk){
+  let a = 0;
+  try{ if(cb && typeof atkBuffEffective==='function') a += (+atkBuffEffective(cb, (typeof groupPanelAtk==='function' ? groupPanelAtk(g) : 0)).pct || 0); }catch(e){}
+  try{ a += (+((typeof teamBuffAt==='function') ? teamBuffAt(r,g).atkUp : 0) || 0); }catch(e){}
+  try{ if(typeof calcWeaponBuffsFor==='function'){ const _wbS = calcWeaponBuffsFor(r,g); a += (+_wbS.atkUp || 0); } }catch(e){}
+  try{ if(typeof groupAwakeningUltAtkUpPct==='function' && sk) a += (+groupAwakeningUltAtkUpPct(g, r) || 0); }catch(e){}
+  let m = 1 + a/100;
+  try{ if(typeof stageFinPct==='function') m *= (1 + (+stageFinPct(g,r) || 0)/100); }catch(e){}
+  try{ if(typeof selfDmgUpIndependentOf==='function') m *= (1 + (+selfDmgUpIndependentOf(g,r) || 0)/100); }catch(e){}
+  return m;
+}
 function simulateGroupTrauma(g){
 
   const enemies = state.enemies||1;
@@ -23035,7 +23110,8 @@ function simulateGroupTrauma(g){
 
   const pctByRound  = new Array(numR).fill(0);     /* 展示用：每回合创伤%（未 ×敌人数/增益）= layers × perTurn */
 
-  const crimsonByRound = new Array(numR).fill(0);  /* P107：祭典的红莲独立真红段（×敌人数，未×增伤/易伤；不暴击） */
+  const crimsonByRound = new Array(numR).fill(0);  /* P129b：祭典的红莲独立真红段（×敌人数，已×增伤/易伤；★P129b 吃暴击——在 critGain/burstGain 按 cr·cd 期望计，本段自身不含） */
+  const crimsonPartsByRound = new Array(numR).fill(0).map(function(){ return []; });  /* P128：展示用逐回合红莲构成明细（层数 / 每层% / 剩余回合 / 敌人数 / 份数） */
   const layersByRound = new Array(numR).fill(0);   /* 展示用：当前活跃层数 */
 
   const gainByRound  = new Array(numR).fill(0);    /* 供手动覆盖 diff 同口径：每回合快照增益% */
@@ -23065,7 +23141,7 @@ function simulateGroupTrauma(g){
       const isRefresh  = sk && sk.extraType==='flat' && (sk.dotRefreshStack>0);
       /* P113：祭典的红莲 4件套独立真红段结算 ——【施加】与【刷新】两条路径同源。
          触发=本组装备 crimson 且 fireWingActiveAt（火翼讨伐者增益期间）且本回合施加/刷新了真红；
-         立即结算「真红」显示值 × 剩余回合数 × 300%（×敌人数；不暴击、不吃增伤/易伤）。
+         立即结算「真红」显示值 × 剩余回合数 × 300%（×敌人数；不暴击；★P129 起吃增伤/易伤）。
          （原实现只写在 isDot 施加分支内 ⇒ 炎灵刷新走 isRefresh 分支，红莲恒 0 —— 已修复。） */
       /* P113：红莲结算三闸门 —— 本组装备 crimson / 火翼讨伐者增益期间 / 本回合真的施加或刷新了真红；
          刷新(isRefresh)路径（炎灵）与施加(isDot)路径共用此闸门，红莲不再因走刷新分支而恒 0。 */
@@ -23080,8 +23156,29 @@ function simulateGroupTrauma(g){
         if(!_sets) return;
         if(typeof fireWingActiveAt!=='function' || !fireWingActiveAt(g, r)) return;
         if(!(_layers>0 && _perTurn>0)) return;
-        const _rem = Math.max(0, numR - 1 - r);
-        crimsonByRound[r] += (_layers * _perTurn) * _rem * 3.0 * enemies * _sets;
+        /* ★P130（2026-10-02 用户裁定）：祭典红莲的「剩余回合数」= 真红【自身】的剩余回合（active.endRound - r + 1，即刷新/施加重算后的持续窗口，真红 3 回合 ⇒ 恒按 3 回合起算），而不是「本组到战斗最后一回合还剩几回合」。炎灵刷新真红会【延长持续】，红莲必须跟着真红窗口走，否则刷新后会一路结到战斗结束、凭空多算回合。 */
+        /* ★P132（2026-10-02 用户报障）：红莲「剩余回合数」必须按真红【实际】剩余回合算 ——
+           active.endRound 是按【起跳回合 startRound】（敌方先手时 = r+1）推算的，旧式 endRound - r + 1
+           会把起跳顺延的那 1 回合也结进来 ⇒ 真红 3 回合却按 4 回合结算（探针实测 rem=4，用户判定「最多 3 回合」）。
+           正确口径 = endRound − max(r, startRound) + 1（未顺延时 == dotTurns；尾回合被战斗截断时取实际剩余）。 */
+        const _rem = Math.max(0, ((active && typeof active.endRound === 'number') ? (active.endRound - ((typeof active.startRound === 'number' && active.startRound > r) ? active.startRound : r) + 1) : (numR - 1 - r)));
+        /* ★P129（2026-10-02 用户需求）：祭典的红莲【吃增伤 + 易伤】—— 取结算回合 r 的团队 buff + 施放者自身 buff：
+           增伤 = teamBuffAt(r,g).dmgUp + selfDmgUpEffective(sk)；易伤 = 团队 vuln + 自身 vuln。
+           ★与创伤区分：创伤只吃增伤、不吃易伤；红莲是普通伤害段（额外出伤），增伤/易伤都吃。
+           ★P129b（2026-10-02 追加需求）：红莲同样【吃暴击】——与心象（P103）同口径，
+           在 calcScores 的 critGain / burstGain 按 cr·cd（期望暴击率×暴伤）计入，
+           本段自身不再乘暴击，避免与 baseScore 的 traumaDmg 通道重复计数。 */
+        const _rbC = (typeof teamBuffAt==='function') ? teamBuffAt(r, g) : {};
+        const _sbC = (Array.isArray(state.selfBuffs) && state.selfBuffs[r] && state.selfBuffs[r][g]) || {};
+        const _crimDmgUp = (+_rbC.dmgUp||0) + (typeof selfDmgUpEffective==='function' ? selfDmgUpEffective(_sbC, sk, (ai&&ai.actorId)) : 0);
+        const _crimVuln  = (+_rbC.vuln||0) + (+_sbC.vuln||0);
+        const _crimMul   = (1 + _crimDmgUp/100) * (1 + _crimVuln/100);
+        const _crimRaw   = (_layers * _perTurn) * _rem * 3.0 * enemies * _sets;
+        const _crimSeg   = (typeof extraSegDmgMult==='function') ? extraSegDmgMult(g, r, (typeof getConfirm==='function' ? getConfirm(r,g) : null), sk) : 1;
+        crimsonByRound[r] += _crimRaw * _crimMul * _crimSeg;
+        /* P128：逐回合红莲明细（纯展示；val 与 crimsonByRound 同源，便于用户核对） */
+        if(!crimsonPartsByRound[r]) crimsonPartsByRound[r] = [];
+        crimsonPartsByRound[r].push({ layers: _layers, perTurn: _perTurn, rem: _rem, enemies: enemies, sets: _sets, dmgUp: _crimDmgUp, vuln: _crimVuln, val: _crimRaw * _crimMul * _crimSeg });
       };
       if(isDot || isRefresh){
 
@@ -23158,7 +23255,7 @@ function simulateGroupTrauma(g){
 
           active = {layers: stackCount, perTurn: _pt, startRound: startRound, endRound: endRound, gain: 0, slow: _enemyFirst, actorId: ai.actorId, sk: sk};
           /* P107：祭典的红莲 4件套——火翼讨伐者增益期间 + 施放技能施加/刷新「真红」→ 立即结算「真红」显示值 × 剩余回合数 × 300%
-             （独立伤害段：不暴击、不受其他效果影响；与创伤同源双写，理论/评分两侧均调 simulateGroupTrauma ⇒ 铁律自保持）。
+             （独立伤害段：不暴击；★P129 起吃增伤/易伤；与创伤同源双写，理论/评分两侧均调 simulateGroupTrauma ⇒ 铁律自保持）。
              触发=本组装备 crimson 且 fireWingActiveAt 且本回合施加/刷新真红（isDot）；lump 计入 crimsonByRound（已×敌人数，未×增易伤）。 */
           _crimSettle(active.layers, active.perTurn);
 
@@ -23190,7 +23287,7 @@ function simulateGroupTrauma(g){
 
       pctByRound[r] += pct;
 
-      traumaByRound[r] += pct * enemies * (1 + _dmgUp/100);  /* 评分：×敌人数 ×(1+增伤)（创伤不暴击但吃增伤/加攻，不吃易伤/减防） */
+      traumaByRound[r] += pct * enemies * (1 + _dmgUp/100) * (typeof extraSegDmgMult==='function' ? extraSegDmgMult(g, r, (typeof getConfirm==='function' ? getConfirm(r,g) : null), _tk.sk) : 1);  /* 评分：×敌人数 ×(1+增伤)（创伤不暴击但吃增伤/加攻，不吃易伤/减防） */
 
       gainByRound[r] = _dmgUp;                          /* 快照=当前回合增伤%，供手动覆盖 diff 同口径 */
 
@@ -23200,7 +23297,7 @@ function simulateGroupTrauma(g){
 
   }
 
-  return {byRound: traumaByRound, pctByRound: pctByRound, layersByRound: layersByRound, gainByRound: gainByRound, stackSnapByRound: stackSnapByRound, crimsonByRound: crimsonByRound};
+  return {byRound: traumaByRound, pctByRound: pctByRound, layersByRound: layersByRound, gainByRound: gainByRound, stackSnapByRound: stackSnapByRound, crimsonByRound: crimsonByRound, crimsonPartsByRound: crimsonPartsByRound};
 
 }
 
@@ -23263,7 +23360,7 @@ function simulateGroupBackfire(g){
       const _sb = (Array.isArray(state.selfBuffs) && state.selfBuffs[r] && state.selfBuffs[r][g]) || {};
       const _dmgUp = (+_rb.dmgUp||0) + (typeof selfDmgUpEffective==='function' ? selfDmgUpEffective(_sb, _tk.sk, _tk.actorId) : 0);
       pctByRound[r] += _tk.pct;
-      byRound[r] += _tk.pct * enemies * (1 + _dmgUp/100);
+      byRound[r] += _tk.pct * enemies * (1 + _dmgUp/100) * (typeof extraSegDmgMult==='function' ? extraSegDmgMult(g, r, (typeof getConfirm==='function' ? getConfirm(r,g) : null), _tk.sk) : 1);
       gainByRound[r] = _dmgUp;
       activeByRound[r] = _tk.pct;
     }
@@ -23566,6 +23663,33 @@ function kuronekoGetProofDmg(g){
   return arr.reduce((s,v)=>s+(v||0), 0);
 }
 
+/* ★P129c（2026-10-02 用户复核）：「惩罚 → 引爆（证明之铁）」累积基数的补齐通道。
+   原实现 _dmgByRound 只记【技能本体 + 手动创伤覆盖】两段 ⇒ 心象 / 祭典红莲 / 自动创伤 / 反噬 四段全漏，
+   18.12% 的引爆基数系统性偏小（实测：心象折算 6054、红莲折算 36941 ⇒ 对 proofDmg 贡献恒 0）。
+   ★单位口径（探针实测 + 源码核对）：这四个 sim 的返回都是「已 ×敌人数」形式——
+     自动创伤 byRound / 祭典红莲 crimsonByRound / 反噬 byRound 是【倍率】（再 ×面板/100 才成真实伤害）；
+     心象 dmgByRound 已漏到面板，是【真实伤害】；
+     _dmgByRound 按既有注释（见 computeGroupScores 的 per-enemy 口径）⇒ 统一 ÷敌人数，倍率类再 ×面板/100。
+   门控：无对应通道（心象空库 / 未装备 crimson / 开关关闭）时各段恒 0，不影响既有断言。 */
+function kuronekoAddExtra(g, arr, traumaSim){
+  const nR = (state.rounds || []).length;
+  if(!Array.isArray(arr) || !nR) return;
+  const enN = (state.enemies > 0) ? state.enemies : 1;
+  let panel = 0;
+  try{ panel = ((typeof groupPanelAtk==='function') ? groupPanelAtk(g) : 0) + ((typeof groupEquipPanel==='function') ? groupEquipPanel((state.groups && state.groups[g]) || {}) : 0); }catch(e){ panel = 0; }
+  /* dmgSide=true ⇒ src 已是真实伤害（心象）；否则按倍率折算（创伤 / 红莲 / 反噬） */
+  const _add = (src, dmgSide)=>{
+    if(!src) return;
+    for(let r=0; r<nR; r++){
+      const v = +src[r] || 0;
+      if(v) arr[r] = (+arr[r] || 0) + v / enN * (dmgSide ? 1 : panel / 100);
+    }
+  };
+  try{ _add(traumaSim && traumaSim.crimsonByRound, false); }catch(e){}
+  try{ _add(traumaSim && traumaSim.byRound, false); }catch(e){}
+  try{ _add((typeof simulateGroupXinxiang==='function') ? simulateGroupXinxiang(g).dmgByRound : null, true); }catch(e){}
+  try{ _add((typeof simulateGroupBackfire==='function') ? simulateGroupBackfire(g).byRound : null, false); }catch(e){}
+}
 function computeGroupTheory(g){
 
   /* 每技能实例：(基础+额外[星加成/附加]) × (1 + 增益)；额外=创伤 不计入此理论值，单独按 敌人数×回合 加入（与评分一致） */
@@ -23712,7 +23836,10 @@ function computeGroupTheory(g){
 
   }
 
-  s += traumaSim.byRound.reduce((x,v)=>x+(v||0), 0) + (traumaSim.crimsonByRound ? traumaSim.crimsonByRound.reduce((x,v)=>x+(v||0), 0) : 0);
+  /* ★P133（2026-10-02 用户裁决 A）：祭典红莲【彻底退出倍率合计】—— 与心象 / 神猫引爆同口径，
+     不再进 theory / totalMult，改走 baseScore 的「真实伤害」计分通道（见下方 baseScore 的 _crimSc）。
+     ★分数零漂移依据：旧通道 红莲倍率×面板/10000 与补回项逐字同式（都用 p.panel），严格等价。 */
+  s += traumaSim.byRound.reduce((x,v)=>x+(v||0), 0);
 
   /* 单元格创伤手动覆盖：按 per-round 差值调整（与自动 tick 同口径：×敌人数×(1+增伤)——创伤吃加攻+增伤，不吃易伤） */
 
@@ -24074,7 +24201,8 @@ function computeGroupScores(g){
 
   /* 创伤自动乘算：所有回合的 tick 都计入（无论该回合是否有行动），= 每回合创伤% × 敌人数 × 持续回合 */
 
-  traumaDmg += traumaSim.byRound.reduce((s,v)=>s+(v||0), 0) + (traumaSim.crimsonByRound ? traumaSim.crimsonByRound.reduce((s,v)=>s+(v||0), 0) : 0);
+  /* ★P133：见 computeGroupTheory 同名注释 —— 祭典红莲退出倍率合计，改走 baseScore 真实伤害通道。 */
+  traumaDmg += traumaSim.byRound.reduce((s,v)=>s+(v||0), 0);
 
   /* v3.0.9：反噬伤害自动乘算（与创伤同口径：所有回合的 tick 都计入） */
 
@@ -24107,7 +24235,9 @@ function computeGroupScores(g){
 
   /* 神猫黑猫「惩罚/证明之铁」：仅缓存本组单回合【对敌人的总伤害】；证明之铁在 calcScores 三组数据齐全后统一结算回填 */
   kuronekoCacheCheck();
+  kuronekoAddExtra(g, _dmgByRound, traumaSim);
   kuronekoCacheGroupDmg(g, _dmgByRound);
+
 
   /* v2.6.6.8：心象伤害——独立额外伤害段（倍率口径，per-enemy）：与技能/创伤并列计入总倍率，
      再统一 ×面板（★P103：心象段可暴击——吃该段所属组的暴击率/暴伤；仍不计终伤）。空库 / 未携带 ⇒ 恒 0，不影响既有分数。 */
@@ -24117,6 +24247,19 @@ function computeGroupScores(g){
      ✦ 不再并入倍率合计 totalMult；baseScore 走 +xxDmgValue/100（外层 ×10 ⇒ 实贡献 = 真伤/10，等价于旧倍率通道）；
        暴击/完美暴击分走 cr·cd·xxDmgValue/100（等价旧 v2.6.6.8 倍率口径，数值不变）。 */
   const xxDmgValue = (+xxSim.dmgTotal || 0);
+
+  /* ★P129：祭典红莲折算【真实伤害】展示值 —— 红莲以倍率口径（吃增伤/易伤后）并入 traumaDmg（已在 totalMult 内），
+     此处只折算成与心象同族的「额外伤害」展示数字（×组面板/100）供导出报表「额外伤害区」独立成行；
+     不二次计入倍率、不影响任何分数（纯展示通道）。 */
+  let crimDmgValue = 0;
+  try{
+    if(traumaSim && traumaSim.crimsonByRound) crimDmgValue = traumaSim.crimsonByRound.reduce((a, v) => a + (+v || 0), 0) * (groupPanelAtk(g) + groupEquipPanel(state.groups && state.groups[g])) / 100;
+  }catch(e){ crimDmgValue = 0; }
+
+  let crimDmgMult = 0;
+  try{
+    if(traumaSim && traumaSim.crimsonByRound) crimDmgMult = traumaSim.crimsonByRound.reduce((a, v) => a + (+v || 0), 0);
+  }catch(e){ crimDmgMult = 0; }
 
   const totalMult = theory + traumaDmg + backfireDmg;
 
@@ -24133,7 +24276,7 @@ function computeGroupScores(g){
   /* v2.6.6.3：「全队 / 全体」口径的暴击增益 → 由 crossGroupCrit() 汇总，三组各自叠加（对齐「全队=所有」） */
   const _xgCrit = crossGroupCrit();
 
-  return {theory, baseSum, talentDmg, traumaDmg, backfireDmg, kurooDmg, wpnDmg, totalMult, critBase, proofDmg: 0, xxDmg, xxDmgValue,
+  return {theory, baseSum, talentDmg, traumaDmg, backfireDmg, kurooDmg, wpnDmg, totalMult, critBase, proofDmg: 0, xxDmg, xxDmgValue, crimDmgValue, crimDmgMult,
     panelBase:_panelBase, relic:_relic, atkOnPanel:atkOnPanel, xFBar:_xFBar, panelEquiv:panelEquiv,
     fcTheory, fcCritDmg: fcTheory>0 ? fcWrathW/fcTheory : 0,
     wCritTheory, wCritDmg, wCritRate, tCritTheory, tCritDmg,
@@ -24179,7 +24322,10 @@ function calcScores(){
     const _eq  = (p.panelEquiv!=null) ? p.panelEquiv : p.panel;
     const _skill = (+p.theory||0) * _eq;
     const _other = (+p.traumaDmg||0) * p.panel;   /* P112b:心象段退出倍率通道（改走真实伤害 /10 通道） */
-    return s + (_skill + _other)/10000 + (p.proofDmg||0)/100 + (+p.xxDmgValue||0)/100;
+    /* ★P133：祭典红莲退出倍率合计后，其计分按 crimDmgMult×面板/10000 通道补回（crimDmgMult 已不进 totalMult）；
+       与旧 traumaDmg 口径逐字等价 ⇒ baseScore 零漂移；展示层另走 crimDmgValue「额外伤害」数字。 */
+    const _crimSc = ((typeof xiangDmgFxOn==='function' && !xiangDmgFxOn()) ? 0 : (+p.crimDmgMult||0) * (+p.panel||0) / 10000);
+    return s + (_skill + _other + _crimSc)/10000 + (p.proofDmg||0)/100 + (+p.xxDmgValue||0)/100;
   }, 0)*10;
 
   /* 暴击收益：武装暴伤/暴率只在其生效窗口内的回合成立，
@@ -24206,6 +24352,8 @@ function calcScores(){
     let g = (cr*outW*cd + crW*inW*cdW + cr*inT*cdT + crCad*inCad*cdCad + cr*inGoddess*cdG + cdF*_fcT) * ((p.panelEquiv!=null)?p.panelEquiv:p.panel)/10000;   /* P107：CAD/冥府女神 暴击窗口纳入 */
     /* P103：心象伤害段可暴击（用户裁决 A：吃该段所属组的暴击率/暴伤；与技能同口径，用真实总面板 panel） */
     g += cr*cd*(+p.xxDmgValue||0)/100;   /* P112b:心象伤害可暴击（真实伤害口径，等价旧 cr·cd·xxDmg·panel/10000×10） */
+    /* ★P129b：祭典红莲段可暴击（与心象同口径；整体按 cr·cd 期望计入，不拆武装/战术进化窗口） */
+    g += cr*cd*(+p.crimDmgValue||0)/100;
     /* 神猫证明之铁(真实伤害)同样受暴击影响：按窗口比例拆分 proof，施加暴击增益 */
     const pd = (+p.proofDmg||0);
     if(pd>0){
@@ -24240,6 +24388,8 @@ function calcScores(){
     let g = (outW*cd + inW*cdW + inT*cdT + inCad*cdCad + inGoddess*cdG + cdF*_fcT) * ((p.panelEquiv!=null)?p.panelEquiv:p.panel)/10000;   /* P107：CAD/冥府女神 暴击窗口纳入 */
     /* P103：心象伤害段可暴击（满暴击口径） */
     g += cd*(+p.xxDmgValue||0)/100;
+    /* ★P129b：祭典红莲段满暴击口径下的暴伤加成（与心象同式） */
+    g += cd*(+p.crimDmgValue||0)/100;
     /* 神猫证明之铁(真实伤害)同样受突破影响 */
     const pd = (+p.proofDmg||0);
     if(pd>0){
@@ -25338,7 +25488,7 @@ function exportEquipChipHTML(eqType){
     cad:        ['CAD','#e0f2fe','#0ea5e9','CAD：上回合末战斗演算≥1 层 → 本组暴击率 +11%'],
     goddess:    ['冥府女神','#fae8ff','#d946ef','冥府女神：心跳加速≥2 层 → 本组暴伤 +17%'],
     wonderland: ['梦游仙境','#dcfce7','#22c55e','梦游仙境：爱丽丝援护技施放时「雨缘之印」=20 层 → 援护技倍率 +31%'],
-    crimson:    ['红莲','#fee2e2','#ef4444','祭典的红莲：火翼讨伐者增益期间 + 技能刷新「真红」→ 真红显示值×剩余回合×300% 独立伤害段（不暴击）']
+    crimson:    ['红莲','#fee2e2','#ef4444','祭典的红莲：火翼讨伐者增益期间 + 技能刷新「真红」→ 真红显示值×剩余回合×300% 独立伤害段（吃增伤/易伤/暴击）']
   })[eqType] || null;
   if(!_sp) return '';
   const _ico = (typeof EQUIP_IMG !== 'undefined' && EQUIP_IMG[eqType] && EQUIP_IMG[eqType].tiles && EQUIP_IMG[eqType].tiles[0])
@@ -25556,7 +25706,9 @@ function exportActionHTML(opts){
     const _proof = _proofCache[g];
 
     const _xx1 = xxDmgValueOf(g);
-    h+=`<td style="text-align:center;font-weight:600">${sm.toFixed(2)}${_proof>0?` <span style="color:#9333ea;font-size:10px">(额外伤害:${_proof.toFixed(0)})</span>`:''}${_xx1>0?` <span style="color:#0d9488;font-size:10px">(心象伤害:${_xx1.toFixed(0)})</span>`:''}</td>`;
+
+    const _crim1 = crimDmgValueOf(g);
+    h+=`<td style="text-align:center;font-weight:600">${sm.toFixed(2)}${_proof>0?` <span style="color:#9333ea;font-size:10px">(额外伤害:${_proof.toFixed(0)})</span>`:''}${_xx1>0?` <span style="color:#0d9488;font-size:10px">(心象伤害:${_xx1.toFixed(0)})</span>`:''}${_crim1>0?` <span style="color:#ef4444;font-size:10px">(祭典红莲:${_crim1.toFixed(0)})</span>`:''}</td>`;
 
   }
 
@@ -25643,7 +25795,8 @@ function exportActionText(){
   for(const g of _gi){
     const _proof = kuronekoGetProofDmg(g);
     const _xx2 = xxDmgValueOf(g);
-    t += `${computeGroupTheory(g).toFixed(2)}` + (_proof>0?` (额外伤害:${_proof.toFixed(0)})`:'') + (_xx2>0?` (心象伤害:${_xx2.toFixed(0)})`:'') + (g<_gi.length-1?' | ':'');
+    const _crim2 = crimDmgValueOf(g);
+    t += `${computeGroupTheory(g).toFixed(2)}` + (_proof>0?` (额外伤害:${_proof.toFixed(0)})`:'') + (_xx2>0?` (心象伤害:${_xx2.toFixed(0)})`:'') + (_crim2>0?` (祭典红莲:${_crim2.toFixed(0)})`:'') + (g<_gi.length-1?' | ':'');
   }
 
   return t;
@@ -26170,15 +26323,19 @@ function exportReportTotalHTML(){
      故必须在重算前取走，否则紧邻的 kuronekoGetProofDmg 读到 null → 0。 */
   const _proofCache = {};
   for(const g of _gi) _proofCache[g] = kuronekoGetProofDmg(g);
-  const _vals = {}, _proofs = {}, _xxs = {};
-  let _sumAll = 0, _proofAll = 0, _xxAll = 0;
+  const _vals = {}, _proofs = {}, _xxs = {}, _crims = {}, _crimM = {};
+  let _sumAll = 0, _proofAll = 0, _xxAll = 0, _crimAll = 0, _extraAll = 0;
   for(const g of _gi){
     _vals[g] = +computeGroupTheory(g) || 0;
     _proofs[g] = +_proofCache[g] || 0;
     _xxs[g] = xxDmgValueOf(g);
+    _crims[g] = crimDmgValueOf(g);
+    _crimM[g] = crimDmgMultOf(g);
     _sumAll += _vals[g];
     _proofAll += _proofs[g];
     _xxAll += _xxs[g];
+    _crimAll += _crims[g];
+    _extraAll += (_proofs[g] + _xxs[g] + _crims[g]);
   }
   /* v3.5.0 P29：与出招排表 / 各组基础面板**同栅格**——原「独立小表」（92px + N + 104px 三列几何）
      的列心与上方 flex 栅格对不齐，是报告里最后一个未对齐的 per-group 块；
@@ -26197,17 +26354,21 @@ function exportReportTotalHTML(){
   for(const g of _gi){
     h += '<div style="' + _CELL + ';font-weight:600">' + _vals[g].toFixed(2)
       + (_proofs[g] > 0 ? ' <span style="color:#4338ca;font-size:10px">(' + esc('\u989d\u5916\u4f24\u5bb3') + ':' + _proofs[g].toFixed(0) + ')</span>' : '')
-      + (_xxs[g] > 0 ? ' <span style="color:#0d9488;font-size:10px">(' + esc('\u5fc3\u8c61\u4f24\u5bb3') + ':' + _xxs[g].toFixed(0) + ')</span>' : '') + '</div>';
+      + (_xxs[g] > 0 ? ' <span style="color:#0d9488;font-size:10px">(' + esc('\u5fc3\u8c61\u4f24\u5bb3') + ':' + _xxs[g].toFixed(0) + ')</span>' : '')
+      + '</div>';
   }
   h += '</div>';
-  /* P113：心象伤害【独立一行】——真实伤害数字，不计入倍率合计；至少一组 >0 才输出。
-     与上方神猫「额外伤害」小字同族但各自成项：神猫是内嵌附注，心象另起一行便于核对。 */
-  if(_xxAll > 0){
-    h += '<div style="display:flex"><div style="' + _LBL + '">' + esc('\u5fc3\u8c61\u4f24\u5bb3') + '</div>';
+  /* ★P133（2026-10-02 用户裁决 A·B）：额外伤害【三通道合并成一行】—— 神猫引爆 / 心象 / 祭典红莲
+     在【同一格内】小字并列（神猫·证明之铁 紫 / 心象 青 / 祭典红莲 红），构成
+     「一行倍率 + 一行额外伤害区」两段式；至少一组有值才输出。 */
+  if(_extraAll > 0){
+    h += '<div style="display:flex"><div style="' + _LBL + '">' + esc('额外伤害') + '</div>';
     for(const g of _gi){
-      h += '<div style="' + _CELL + '">' + (_xxs[g] > 0
-        ? '<span style="color:#0d9488;font-weight:600" title="\u5fc3\u8c61\u771f\u5b9e\u4f24\u5bb3\uff08\u4e0d\u8ba1\u5165\u500d\u7387\u5408\u8ba1\uff1b\u53ef\u66b4\u51fb\uff09">' + _xxs[g].toFixed(0) + '</span>'
-        : '<span style="color:#94a3b8">\u2014</span>') + '</div>';
+      let _ps = '';
+      if(_proofs[g] > 0) _ps += '<span style="color:#4338ca;font-weight:600" title="神猫黑猫·证明之铁 真实伤害（不计入倍率合计）">' + esc('神猫引爆') + ':' + _proofs[g].toFixed(0) + '</span> ';
+      if(_xxs[g] > 0)    _ps += '<span style="color:#0d9488;font-weight:600" title="心象真实伤害（不计入倍率合计；可暴击）">' + esc('心象') + ':' + _xxs[g].toFixed(0) + '</span> ';
+      if(_crims[g] > 0)  _ps += '<span style="color:#ef4444;font-weight:600" title="祭典红莲真实伤害（★P133 起退出倍率合计，改走 baseScore 真实伤害通道；含增伤/易伤，可暴击）">' + esc('祭典红莲') + ':' + _crims[g].toFixed(0) + '</span>';
+      h += '<div style="' + _CELL + '">' + (_ps ? _ps : '<span style="color:#94a3b8">\u2014</span>') + '</div>';
     }
     h += '</div>';
   }
@@ -26222,6 +26383,44 @@ function xxDmgValueOf(g){
     const sc = (typeof calcScores === 'function') ? calcScores() : null;
     const p = (sc && sc.per) ? sc.per[g] : null;
     return p ? (+p.xxDmgValue || 0) : 0;
+  }catch(e){ return 0; }
+}
+/** P129 / ★P133：取某组【祭典红莲折算真实伤害】（×面板/100）—— 导出层「额外伤害区」展示数字；
+ *  本函数只给导出层取「额外伤害区」的展示数字（×面板/100），不二次计入倍率、不影响分数。 */
+function crimDmgValueOf(g){
+  try{
+    const sc = (typeof calcScores === 'function') ? calcScores() : null;
+    const p = (sc && sc.per) ? sc.per[g] : null;
+    return p ? (+p.crimDmgValue || 0) : 0;
+  }catch(e){ return 0; }
+}
+/* ★P131（2026-10-02 用户裁决）：取某组【祭典红莲倍率】——红莲是【藏品·独立额外段】，
+   此前它和角色技能倍率混在 theory / 倍率合计同一格里，看不出藏品的贡献。
+   本函数只给【显示层】拆列用（总倍率 / 评分口径不动 ⇒ 分数零漂移）。 */
+function crimMultOf(g){
+  try{
+    const sim = (typeof simulateGroupTrauma==='function') ? simulateGroupTrauma(g) : null;
+    return (sim && sim.crimsonByRound) ? sim.crimsonByRound.reduce((a, v) => a + (+v || 0), 0) : 0;
+  }catch(e){ return 0; }
+}
+/* ★P131b（2026-10-02）：取某组【第 r 回合】的祭典红莲倍率（逐回合口径）。
+   合计格是按回合拆列的，必须按回合取红莲——若用全场合计（crimMultOf）去减逐回合技能合计，
+   回合技能合计 < 全场红莲合计 ⇒ 合计格会显示成负数。
+   独立行 / 评分行仍用 crimMultOf（全场口径）。 */
+function crimMultAt(g, r){
+  try{
+    const sim = (typeof simulateGroupTrauma==='function') ? simulateGroupTrauma(g) : null;
+    const arr = (sim && sim.crimsonByRound) ? sim.crimsonByRound : null;
+    if(!arr) return 0;
+    const v = +(arr[r] || 0);
+    return isFinite(v) ? v : 0;
+  }catch(e){ return 0; }
+}
+function crimDmgMultOf(g){
+  try{
+    const sc = (typeof calcScores === 'function') ? calcScores() : null;
+    const p = (sc && sc.per) ? sc.per[g] : null;
+    return p ? (+p.crimDmgMult || 0) : 0;
   }catch(e){ return 0; }
 }
 function exportDamageHTML(){
@@ -35723,7 +35922,7 @@ window.__build = buildDefaultCharDB;
 
 <script data-auth-gate="1">
 /* ============================================================================
-   Canan Wiki · 访问口令闸门（v3.7.3 · 服务端校验 + 每日临时口令 + 池可勾选）
+   Canan Wiki · 访问口令闸门（v3.7.4 · 服务端校验 + 每日临时口令 + 池可勾选）
    ---------------------------------------------------------------------------
    机制
      · 口令由服务端校验（Cloudflare Pages Functions：/api/auth 与 /api/verify）；
